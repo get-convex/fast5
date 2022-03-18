@@ -1,10 +1,10 @@
 import { Id, dbWriter, eq, field } from "@convex-dev/server";
-import { FULL_SCORES, STOLEN_SCORES, WORDS, ALL_WORDS } from "../lib/types"
+import { FULL_SCORES, STOLEN_SCORES, WORDS, ALL_WORDS } from "../lib/game/constants"
 
 export default async function guessWord(gameId: Id, user: string, word: string): Promise<boolean> {
     const lword = word.toLocaleLowerCase().trim();
     console.log("guess is " + lword);
-    const matchesWord = (w) => { return w === lword; };
+    const matchesWord = (w: any) => { return w === lword; };
     if (ALL_WORDS.findIndex(matchesWord) === -1) {
         // Not a valid word.
         return false;
@@ -36,6 +36,8 @@ export default async function guessWord(gameId: Id, user: string, word: string):
         var otherUserRound = round.user1;
         var userId = 2;
         var otherId = 1;
+    } else {
+        throw 'invalid user'
     }
 
     // Must be room for another guess, if the winner is not decided.

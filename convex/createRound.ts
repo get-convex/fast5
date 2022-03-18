@@ -1,5 +1,5 @@
 import { Id, dbWriter, eq, field } from "@convex-dev/server";
-import { WORDS } from "../lib/types"
+import { WORDS } from "../lib/game/constants"
 
 export default async function createRound(gameId: Id, next: number) {
     console.log("round created...");

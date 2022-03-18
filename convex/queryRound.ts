@@ -1,12 +1,12 @@
 
 import { Id, db, eq, field } from "@convex-dev/server";
-import { FULL_SCORES, STOLEN_SCORES } from "../lib/types"
+import { FULL_SCORES, STOLEN_SCORES } from "../lib/game/constants"
 
 export default async function queryRound(gameId: Id, user: string) {
     console.log("query round...");
     const game = await db.get(gameId);
     if (game.currentRound === -1) {
-        return {};
+        return null;
     }
     console.log("continuing...");
     const roundId = game.rounds[game.currentRound];
@@ -31,12 +31,12 @@ export default async function queryRound(gameId: Id, user: string) {
             scores: scores2,
             stolen: round.user2.stolen,
         },
-        winner: round.winner || null,
+        winner: round.winner ?? null,
         overflow: round.overflow,
     }
 }
 
-function buildLetters(round, user, stolen, isMe, done): string[][] {
+function buildLetters(round: any, user: any, stolen: boolean, isMe: boolean, done: boolean): string[][] {
     const word = round.word;
     const canSee = isMe || stolen || done;
     var boardSide = [];

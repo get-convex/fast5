@@ -1,8 +1,13 @@
 import { Id, dbWriter, eq, field } from "@convex-dev/server";
+import { validateIds } from "./validateIds"
 
 export default async function joinGame(
     user: string,
     gameName: string): Promise<Id | null> {
+    
+    if (!validateIds(user, gameName)) {
+        return null; // Refuse to create invalid game or user
+    }
     
     var existing = await dbWriter
         .table("games")

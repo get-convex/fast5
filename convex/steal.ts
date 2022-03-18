@@ -1,5 +1,5 @@
 import { Id, dbWriter, eq, field } from "@convex-dev/server";
-import { FULL_SCORES, STOLEN_SCORES, WORDS } from "../lib/types"
+import { FULL_SCORES, STOLEN_SCORES, WORDS } from "../lib/game/constants"
 
 export default async function steal(gameId: Id, user: string) {
     var game = await dbWriter.get(gameId);

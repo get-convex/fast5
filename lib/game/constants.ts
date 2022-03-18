@@ -13779,3 +13779,5 @@ export const ALL_WORDS = [
 	"zymes",
 	"zymic",
 ];
+
+const ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

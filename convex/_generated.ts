@@ -8,11 +8,15 @@ import type joinGame from "./joinGame";
 import type queryGame from "./queryGame";
 import type queryRound from "./queryRound";
 import type steal from "./steal";
+import type validateIds from "./validateIds";
+import type {validateIds as validateIds__validateIds} from "./validateIds";
 
 type ConvexAPI = {
   queries: {
     queryGame: typeof queryGame;
     queryRound: typeof queryRound;
+    validateIds: typeof validateIds;
+    "validateIds:validateIds": typeof validateIds__validateIds;
   };
   mutations: {
     createRound: typeof createRound;
