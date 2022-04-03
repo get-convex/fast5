@@ -293,7 +293,6 @@ const Round = (props: any) => {
 
 const KeyBoard = () => {
   const keyMap = useRecoilValue(keyboardUsedState);
-  console.log(`km = ${JSON.stringify(keyMap)}`);
   const rows = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
 
   return (
@@ -508,7 +507,7 @@ const GameFlowDriver = () => {
   useEffect(() => {
     if (me !== null && me.board !== null) {
       if (me.board!.serverCount > serverRows) {
-        console.log('new server side row');
+        dlog('new server side row');
         setCurrentLetters([]);
         setSubmittedRow(-1);
         setServerRows(me.board!.serverCount);

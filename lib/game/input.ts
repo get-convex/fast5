@@ -72,7 +72,6 @@ export function handleGameInput(
   setToasts: any
 ) {
   return (event: KeyboardEvent) => {
-    //    console.log(event);
     if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
       (event.keyCode >= 97 && event.keyCode <= 122)

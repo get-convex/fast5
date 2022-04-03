@@ -52,7 +52,7 @@ export const canEdit: RecoilValueReadOnly<boolean> = selector({
   key: 'canEdit',
   get: ({ get }) => {
     const backendRound = get(backendRoundState);
-    console.log(backendRound);
+    dlog('new backend round', backendRound);
     if (backendRound === null) {
       return false;
     }
@@ -213,7 +213,6 @@ export const keyboardUsedState = selector({
     const roundState = get(backendRoundState);
     var letterState = new Map();
     if (roundState === null) {
-      console.log('empty keymap');
       return letterState;
     }
 
@@ -241,7 +240,7 @@ export const keyboardUsedState = selector({
         }
       }
     }
-    console.log(`keymap = ${JSON.stringify(letterState)}`);
+    dlog(`keymap = ${JSON.stringify(letterState)}`);
     return letterState;
   },
 });

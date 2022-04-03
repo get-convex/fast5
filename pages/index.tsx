@@ -19,7 +19,6 @@ const Home: NextPage = () => {
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(username, game);
     const validateAndGo = async () => {
       // TODO -- need better support for one-offs from react-convex land.
       convex

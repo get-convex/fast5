@@ -25,15 +25,15 @@ export async function boot(
   setGameId: any,
   setUsername: any
 ) {
-  enableDebugLogging(); // hax
+  //enableDebugLogging(); // hax
   dlog(params);
   const me: string = params['user'] as string;
   const gamename: string = params['game'] as string;
-  console.log(`me = ${me}, gamename = ${gamename}`);
+  dlog(`me = ${me}, gamename = ${gamename}`);
   const gid = await joinGame(me, gamename);
-  console.log(`Got gid = ${gid}`);
+  dlog(`Got gid = ${gid}`);
   if (gid === null) {
-    console.log('Failed to join game...');
+    dlog('Failed to join game...');
   } else {
     setGameId(gid.toString());
     setUsername(me);
@@ -46,7 +46,7 @@ export function addToast(
   category: string,
   durationMs: number
 ) {
-  console.log('Add toast');
+  dlog('Add toast');
   setToasts((origTx: Toast[]) => {
     var tx = [...origTx];
     tx.splice(0, 0, {
