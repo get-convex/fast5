@@ -1,22 +1,22 @@
-import { atom, RecoilState, RecoilValueReadOnly, selector } from "recoil";
-import { BackendGame, BackendRound } from "./proto";
-import { BoardSide, buildBoardSide, dlog } from "./util";
+import { atom, RecoilState, RecoilValueReadOnly, selector } from 'recoil';
+import { BackendGame, BackendRound } from './proto';
+import { BoardSide, buildBoardSide, dlog } from './util';
 
 // Server-set atoms.
 export const backendGameState: RecoilState<null | BackendGame> = atom({
   key: 'backendMatchState',
-  default: null as (null | BackendGame),
+  default: null as null | BackendGame,
 });
 
 export const backendRoundState: RecoilState<null | BackendRound> = atom({
   key: 'backendRoundState',
-  default: null as (null | BackendRound),
+  default: null as null | BackendRound,
 });
 
 // URL-derived static atoms.
 export const gameId: RecoilState<string | null> = atom({
   key: 'gameId',
-  default: null as (string | null),
+  default: null as string | null,
 });
 
 export const username: RecoilState<string> = atom({
@@ -36,10 +36,10 @@ export const currentLetters: RecoilState<string[]> = atom({
 });
 
 export interface Toast {
-    message: string;
-    category: string;
-    expires: number;
-    start: Date;
+  message: string;
+  category: string;
+  expires: number;
+  start: Date;
 }
 
 export const toasts: RecoilState<Toast[]> = atom({
@@ -50,7 +50,7 @@ export const toasts: RecoilState<Toast[]> = atom({
 // Derived game states from atoms.
 export const canEdit: RecoilValueReadOnly<boolean> = selector({
   key: 'canEdit',
-  get: ({get}) => {
+  get: ({ get }) => {
     const backendRound = get(backendRoundState);
     console.log(backendRound);
     if (backendRound === null) {
@@ -67,104 +67,104 @@ export const canEdit: RecoilValueReadOnly<boolean> = selector({
     const user = maybeUser as User;
     const maybeBoard = user.board;
     if (maybeBoard === null) {
-        return false
+      return false;
     }
     const myRows = (maybeBoard as BoardSide).rows;
     if (myRows.length === submitted) {
       return false;
     }
     return true;
-  }
+  },
 });
 
 const whoami: RecoilValueReadOnly<number | null> = selector({
-    key: 'whoami',
-    get: ({get}) => {
-        const me = get(username);
-        const backendGame = get(backendGameState);
-        if (me === '') {
-            return null;
-        }
-        if (backendGame === null) {
-            return null;
-        } 
-        if (me === backendGame.user1.displayName) {
-            return 1;
-        } else if (me === backendGame.user2.displayName) {
-            return 2;
-        } 
-        throw 'username does not game either user in backend';
-    },
+  key: 'whoami',
+  get: ({ get }) => {
+    const me = get(username);
+    const backendGame = get(backendGameState);
+    if (me === '') {
+      return null;
+    }
+    if (backendGame === null) {
+      return null;
+    }
+    if (me === backendGame.user1.displayName) {
+      return 1;
+    } else if (me === backendGame.user2.displayName) {
+      return 2;
+    }
+    throw 'username does not game either user in backend';
+  },
 });
 
 export const needNewRound: RecoilValueReadOnly<boolean> = selector({
-    key: 'needNewRound',
-    get: ({get}) => {
-        const game = get(gameState);
-        if (game === null || !game.ready) {
-            return false;
-        } 
-        // Game is over? No more rounds.
-        if (game.winner !== 0) {
-            return false;
-        }
-        // Need to start initial round.
-        if (game.board === null) {
-            return true;
-        }
-        // Otherwise, does this round have a winner?
-        return game.board.winner !== null;
-    },
+  key: 'needNewRound',
+  get: ({ get }) => {
+    const game = get(gameState);
+    if (game === null || !game.ready) {
+      return false;
+    }
+    // Game is over? No more rounds.
+    if (game.winner !== 0) {
+      return false;
+    }
+    // Need to start initial round.
+    if (game.board === null) {
+      return true;
+    }
+    // Otherwise, does this round have a winner?
+    return game.board.winner !== null;
+  },
 });
 
 export const roundWinner: RecoilValueReadOnly<string | null> = selector({
-    key: 'roundWinner',
-    get: ({get}) => {
-        const game = get(gameState);
-        if (game === null) {
-            return null;
-        } 
-        // Need to start initial round.
-        if (game.board === null) {
-            return null;
-        }
-        
-        if (game.board.winner === 1) {
-            return game.user1.displayName;
-        }
-        if (game.board.winner === 2) {
-            return game.user2!.displayName;
-        }
-        return null;
-    },
+  key: 'roundWinner',
+  get: ({ get }) => {
+    const game = get(gameState);
+    if (game === null) {
+      return null;
+    }
+    // Need to start initial round.
+    if (game.board === null) {
+      return null;
+    }
+
+    if (game.board.winner === 1) {
+      return game.user1.displayName;
+    }
+    if (game.board.winner === 2) {
+      return game.user2!.displayName;
+    }
+    return null;
+  },
 });
 
 export interface BoardState {
-    user1: BoardSide;
-    user2: BoardSide;
-    winner: number | null;
-    overflow: boolean;
+  user1: BoardSide;
+  user2: BoardSide;
+  winner: number | null;
+  overflow: boolean;
 }
 export interface GameState {
-    round: number;
-    user1: {
-        displayName: string;
-        score: number;
-    };
-    user2: null | {
-        displayName: string;
-        score: number;
-    };
-    inRound: boolean;
-    ready: boolean;
-    over: boolean;
-    winner: number;
-    board: null | BoardState;
+  round: number;
+  user1: {
+    displayName: string;
+    score: number;
+  };
+  user2: null | {
+    displayName: string;
+    score: number;
+  };
+  inRound: boolean;
+  ready: boolean;
+  over: boolean;
+  winner: number;
+  board: null | BoardState;
 }
 
 export const gameState: RecoilValueReadOnly<null | GameState> = selector({
   key: 'gameState',
-  get: ({get}) => {
+  get: ({ get }) => {
     const backendGame = get(backendGameState);
     const backendRound = get(backendRoundState);
     const who = get(whoami);
@@ -174,34 +174,46 @@ export const gameState: RecoilValueReadOnly<null | GameState> = selector({
     const submitted = get(submittedRow);
 
     if (backendGame === null || who === null) {
-        return null;
-    } 
+      return null;
+    }
     var output = {
-        ...backendGame,
-        board: null as (null | BoardState),
+      ...backendGame,
+      board: null as null | BoardState,
     };
     if (backendRound !== null) {
-        let u1 = buildBoardSide(backendRound.user1, who === 1 ? current! : -1, cell, letters, submitted);
-        let u2 = buildBoardSide(backendRound.user2, who === 2 ? current! : -1, cell, letters, submitted);
-        const board = {
-            user1: u1,
-            user2: u2,
-            winner: backendRound.winner,
-            overflow: backendRound.overflow,
-        };
-        output.board = board;
+      let u1 = buildBoardSide(
+        backendRound.user1,
+        who === 1 ? current! : -1,
+        cell,
+        letters,
+        submitted
+      );
+      let u2 = buildBoardSide(
+        backendRound.user2,
+        who === 2 ? current! : -1,
+        cell,
+        letters,
+        submitted
+      );
+      const board = {
+        user1: u1,
+        user2: u2,
+        winner: backendRound.winner,
+        overflow: backendRound.overflow,
+      };
+      output.board = board;
     }
     return output;
-  }
+  },
 });
 
 export const keyboardUsedState = selector({
   key: 'keyboardUsedState',
-  get: ({get}) => {
+  get: ({ get }) => {
     const roundState = get(backendRoundState);
     var letterState = new Map();
     if (roundState === null) {
-      console.log("empty keymap");
+      console.log('empty keymap');
       return letterState;
     }
 
@@ -209,7 +221,10 @@ export const keyboardUsedState = selector({
       for (const pair of row) {
         const letter = pair[1];
         const state = pair[0];
-        if (letter !== '?' && (!letterState.has(letter) || state > letterState.get(letter))) {
+        if (
+          letter !== '?' &&
+          (!letterState.has(letter) || state > letterState.get(letter))
+        ) {
           letterState.set(letter, state);
         }
       }
@@ -218,7 +233,10 @@ export const keyboardUsedState = selector({
       for (const pair of row) {
         const letter = pair[1];
         const state = pair[0];
-        if (letter !== '?' && (!letterState.has(letter) || state > letterState.get(letter))) {
+        if (
+          letter !== '?' &&
+          (!letterState.has(letter) || state > letterState.get(letter))
+        ) {
           letterState.set(letter, state);
         }
       }
@@ -229,66 +247,66 @@ export const keyboardUsedState = selector({
 });
 
 export interface User {
-    displayName: string;
-    score: number;
-    number: number;
-    key: string;
-    board: BoardSide | null;
+  displayName: string;
+  score: number;
+  number: number;
+  key: string;
+  board: BoardSide | null;
 }
 
 export const userMe: RecoilValueReadOnly<null | User> = selector({
   key: 'userMe',
-  get: ({get}) => {
-      return userGetter(get, false);
+  get: ({ get }) => {
+    return userGetter(get, false);
   },
 });
 
 export const userThem: RecoilValueReadOnly<null | User> = selector({
   key: 'userThem',
-  get: ({get}) => {
-      return userGetter(get, true);
+  get: ({ get }) => {
+    return userGetter(get, true);
   },
 });
 
 function userGetter(get: any, them: boolean): null | User {
-    const game = get(gameState);
-    const who = get(whoami);
+  const game = get(gameState);
+  const who = get(whoami);
 
-    if (who === null || game === null) {
-        return null;
-    }
-    var number = who;
-
-    var grec = game.user1;
-    var uboard = game.board === null ? null : game.board.user1;
-    var key = "user1";
-    if ((who === 2 && !them) || (who === 1 && them)) {
-        grec = game.user2;
-        uboard = game.board === null ? null : game.board.user2;
-        key = "user2";
-    } 
-
-    if (them) {
-        number = who == 2 ? 1 : 2;
-    }
-
-    return {
-        displayName: grec.displayName,
-        score: grec.score,
-        number: number,
-        key: key,
-        board: uboard,
-    }
+  if (who === null || game === null) {
+    return null;
   }
+  var number = who;
+
+  var grec = game.user1;
+  var uboard = game.board === null ? null : game.board.user1;
+  var key = 'user1';
+  if ((who === 2 && !them) || (who === 1 && them)) {
+    grec = game.user2;
+    uboard = game.board === null ? null : game.board.user2;
+    key = 'user2';
+  }
+
+  if (them) {
+    number = who == 2 ? 1 : 2;
+  }
+
+  return {
+    displayName: grec.displayName,
+    score: grec.score,
+    number: number,
+    key: key,
+    board: uboard,
+  };
+}
 
 export const currentRow = selector({
   key: 'currentRow',
-  get: ({get}) => {
+  get: ({ get }) => {
     const userId = get(whoami);
     const round = get(backendRoundState);
     const who = get(whoami) as number;
     if (round === null || who === null) {
-        return null;
+      return null;
     }
     if (who === 1) {
       return round.user1.guesses.length;
@@ -301,8 +319,8 @@ export const currentRow = selector({
 
 export const highlightedCell = selector({
   key: 'highlightedCell',
-  get: ({get}) => {
-      const letters = get(currentLetters);
-      return letters.length >= 5 ? 4 : letters.length;
+  get: ({ get }) => {
+    const letters = get(currentLetters);
+    return letters.length >= 5 ? 4 : letters.length;
   },
 });

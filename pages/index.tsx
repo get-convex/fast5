@@ -1,19 +1,18 @@
-
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import type { NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react'
-import { useConvex } from "../convex/_generated";
+import { useState } from 'react';
+import { useConvex } from '../convex/_generated';
 
 const Home: NextPage = () => {
-  const [username, setUsername] = useState("");
-  const [game, setGame] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [game, setGame] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
   const convex = useConvex();
   const handleTextChange = (f: any) => {
     return (e: any) => {
-      setError("");
+      setError('');
       e.preventDefault();
       f(e.target.value);
     };
@@ -23,15 +22,19 @@ const Home: NextPage = () => {
     console.log(username, game);
     const validateAndGo = async () => {
       // TODO -- need better support for one-offs from react-convex land.
-      convex.query("validateIds").watch(username, game).onUpdate(
-        (ok) => {
+      convex
+        .query('validateIds')
+        .watch(username, game)
+        .onUpdate((ok) => {
           if (!ok) {
-            setError("Invalid username and/or game id. 5+ characters of only letters and number");
+            setError(
+              'Invalid username and/or game id. 5+ characters of only letters and number'
+            );
           } else {
             router.push(`${username}/${game}`);
           }
-      })
-    }
+        });
+    };
     validateAndGo();
   };
 
@@ -48,26 +51,37 @@ const Home: NextPage = () => {
         </div>
         <form>
           <div className="flex flex-col w-80 mx-auto my-5 items-center">
+            <div className="flex my-2">Join or create a game!</div>
+            <div className="text-red-500 text-sm">{error ?? ''}</div>
             <div className="flex my-2">
-              Join or create a game!
-            </div>
-            <div className="text-red-500 text-sm">
-              {error ?? ""}
-            </div>
-            <div className="flex my-2">
-              <input placeholder="Username" className="p-1 w-50 bg-slate-100 border-2 mx-3" value={username} onChange={handleTextChange(setUsername)} />
-            </div>
-            <div className="flex my-2">
-              <input placeholder="Room ID" className="p-1 w-50 bg-slate-100 border-2 mx-3" value={game} onChange={handleTextChange(setGame)} />
+              <input
+                placeholder="Username"
+                className="p-1 w-50 bg-slate-100 border-2 mx-3"
+                value={username}
+                onChange={handleTextChange(setUsername)}
+              />
             </div>
             <div className="flex my-2">
-              <input className="rounded bg-orange-400 shadow p-3" type="button" onClick={handleSubmit} value="Create/Join Game" />
+              <input
+                placeholder="Room ID"
+                className="p-1 w-50 bg-slate-100 border-2 mx-3"
+                value={game}
+                onChange={handleTextChange(setGame)}
+              />
+            </div>
+            <div className="flex my-2">
+              <input
+                className="rounded bg-orange-400 shadow p-3"
+                type="button"
+                onClick={handleSubmit}
+                value="Create/Join Game"
+              />
             </div>
           </div>
         </form>
       </main>
     </div>
-  )
-}
+  );
+};
 
 export default Home;

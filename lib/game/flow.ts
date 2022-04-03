@@ -1,34 +1,59 @@
-import { Id } from "@convex-dev/server";
-import { create } from "domain";
-import { BackendGame, BackendRound } from "./proto";
-import { backendGameState, backendRoundState, BoardState, currentLetters, currentRow, gameId, GameState, gameState, submittedRow, Toast, toasts, User, userMe, username } from "./state";
-import { BoardSide, dlog, enableDebugLogging } from "./util";
+import { Id } from '@convex-dev/server';
+import { create } from 'domain';
+import { BackendGame, BackendRound } from './proto';
+import {
+  backendGameState,
+  backendRoundState,
+  BoardState,
+  currentLetters,
+  currentRow,
+  gameId,
+  GameState,
+  gameState,
+  submittedRow,
+  Toast,
+  toasts,
+  User,
+  userMe,
+  username,
+} from './state';
+import { BoardSide, dlog, enableDebugLogging } from './util';
 
-export async function boot(params: any, joinGame: any, setGameId: any, setUsername: any) {
-    enableDebugLogging(); // hax
-    dlog(params);
-    const me: string = params['user'] as string;
-    const gamename: string = params['game'] as string;
-    console.log(`me = ${me}, gamename = ${gamename}`);
-    const gid = await joinGame(me, gamename);
-    console.log(`Got gid = ${gid}`);
-    if (gid === null) {
-        console.log("Failed to join game...");
-    } else {
-        setGameId(gid.toString());
-        setUsername(me);
-    }
+export async function boot(
+  params: any,
+  joinGame: any,
+  setGameId: any,
+  setUsername: any
+) {
+  enableDebugLogging(); // hax
+  dlog(params);
+  const me: string = params['user'] as string;
+  const gamename: string = params['game'] as string;
+  console.log(`me = ${me}, gamename = ${gamename}`);
+  const gid = await joinGame(me, gamename);
+  console.log(`Got gid = ${gid}`);
+  if (gid === null) {
+    console.log('Failed to join game...');
+  } else {
+    setGameId(gid.toString());
+    setUsername(me);
+  }
 }
 
-export function addToast(setToasts: any, message: string, category: string, durationMs: number) {
-  console.log("Add toast");
+export function addToast(
+  setToasts: any,
+  message: string,
+  category: string,
+  durationMs: number
+) {
+  console.log('Add toast');
   setToasts((origTx: Toast[]) => {
     var tx = [...origTx];
     tx.splice(0, 0, {
-        message: message,
-        category: category,
-        expires: durationMs,
-        start: new Date(),
+      message: message,
+      category: category,
+      expires: durationMs,
+      start: new Date(),
     });
     return tx;
   });

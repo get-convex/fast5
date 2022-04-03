@@ -45,4 +45,3 @@ export default async function incrementCounter(
 The convex cli is your friend. See everything it can do by running
 `npx convex -h` in your project root directory. To learn more, launch the docs
 with `npx convex docs`.
-

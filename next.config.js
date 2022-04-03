@@ -9,6 +9,6 @@ const nextConfig = {
     ];
     return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
