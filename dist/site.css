@@ -779,6 +779,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   font-weight: 400;
 }
 
+.lowercase {
+  text-transform: lowercase;
+}
+
 .text-yellow-600 {
   --tw-text-opacity: 1;
   color: rgb(202 138 4 / var(--tw-text-opacity));

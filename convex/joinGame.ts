@@ -5,6 +5,8 @@ export default async function joinGame(
   user: string,
   gameName: string
 ): Promise<Id | null> {
+  var user = user.toLocaleLowerCase().trim();
+  var gameName = gameName.toLocaleLowerCase().trim();
   if (!validateIds(user, gameName)) {
     return null; // Refuse to create invalid game or user
   }

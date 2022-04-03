@@ -27,7 +27,7 @@ const Home: NextPage = () => {
         .onUpdate((ok) => {
           if (!ok) {
             setError(
-              'Invalid username and/or game id. 5+ characters of only letters and number'
+              'Invalid username and/or game id. 5+ characters of only lowercase letters and numbers'
             );
           } else {
             router.push(`${username}/${game}`);
