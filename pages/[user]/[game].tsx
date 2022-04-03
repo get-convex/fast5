@@ -41,7 +41,7 @@ const Game: NextPage = () => {
     if (Object.keys(params).length !== 0) {
       boot(params, joinGame, setGid, setUsername);
     }
-  }, [router, joinGame]);
+  }, [router, joinGame, setGid, setUsername]);
 
   if (gid === null) {
     var body = <div></div>;
@@ -81,12 +81,12 @@ const MatchContainer = (props: any) => {
     if (gameQuery !== undefined) {
       setBackendGame(gameQuery as BackendGame);
     }
-  }, [gameQuery]);
+  }, [gameQuery, setBackendGame, setBackendRound]);
   useEffect(() => {
     if (roundQuery !== undefined) {
       setBackendRound(roundQuery as BackendRound);
     }
-  }, [roundQuery]);
+  }, [roundQuery, setBackendRound]);
 
   return (
     <div>
@@ -476,7 +476,7 @@ const GameFlowDriver = () => {
       setCurrentLetters([]);
       setSubmittedRow(-1);
     }
-  }, [rwinner]);
+  }, [rwinner, setCurrentLetters, setSubmittedRow, setToasts]);
 
   // Look for a new stolen state from either side to notify via toast.
   useEffect(() => {
@@ -502,7 +502,7 @@ const GameFlowDriver = () => {
         );
       }
     }
-  });
+  }, [setToasts, game, round, rwinner, user1Stolen, user2Stolen]);
 
   // Look for a new row of ours from the server -- if it's there, our submission was accepted
   useEffect(() => {
@@ -514,7 +514,7 @@ const GameFlowDriver = () => {
         setServerRows(me.board!.serverCount);
       }
     }
-  });
+  }, [setServerRows, me, serverRows, setCurrentLetters, setSubmittedRow]);
 
   useTimeoutWhen(
     () => {
