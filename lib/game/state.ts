@@ -51,7 +51,8 @@ export const toasts: RecoilState<Toast[]> = atom({
 export const canEdit: RecoilValueReadOnly<boolean> = selector({
   key: 'canEdit',
   get: ({get}) => {
-    const backendRound = get(backendRoundState) as BackendRound;
+    const backendRound = get(backendRoundState);
+    console.log(backendRound);
     if (backendRound === null) {
       return false;
     }
@@ -93,6 +94,48 @@ const whoami: RecoilValueReadOnly<number | null> = selector({
             return 2;
         } 
         throw 'username does not game either user in backend';
+    },
+});
+
+export const needNewRound: RecoilValueReadOnly<boolean> = selector({
+    key: 'needNewRound',
+    get: ({get}) => {
+        const game = get(gameState);
+        if (game === null || !game.ready) {
+            return false;
+        } 
+        // Game is over? No more rounds.
+        if (game.winner !== 0) {
+            return false;
+        }
+        // Need to start initial round.
+        if (game.board === null) {
+            return true;
+        }
+        // Otherwise, does this round have a winner?
+        return game.board.winner !== null;
+    },
+});
+
+export const roundWinner: RecoilValueReadOnly<string | null> = selector({
+    key: 'roundWinner',
+    get: ({get}) => {
+        const game = get(gameState);
+        if (game === null) {
+            return null;
+        } 
+        // Need to start initial round.
+        if (game.board === null) {
+            return null;
+        }
+        
+        if (game.board.winner === 1) {
+            return game.user1.displayName;
+        }
+        if (game.board.winner === 2) {
+            return game.user2!.displayName;
+        }
+        return null;
     },
 });
 

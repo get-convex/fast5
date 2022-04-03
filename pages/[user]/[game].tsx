@@ -1,40 +1,39 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import {
+  useRecoilState,
   useRecoilValue,
 } from 'recoil';
-import { useEffect } from 'react';
-import { getRecoil, setRecoil } from "recoil-nexus";
-import { useMutation, useConvex } from "../../convex/_generated";
+import { useEffect, useState } from 'react';
+import { useMutation, useConvex, useQuery } from "../../convex/_generated";
 import { Id } from '@convex-dev/react';
 import { create } from 'domain';
-import { watchKeys } from '../../lib/game/input';
-import { boot, handleBackendGameUpdate, handleBackendRoundUpdate } from '../../lib/game/flow';
-import { backendGameState, gameId, gameState, keyboardUsedState, toasts, User, userMe, username, userThem } from '../../lib/game/state';
+import { ALL_KEYS, handleGameInput } from '../../lib/game/input';
+import { addToast, boot, pruneToasts } from '../../lib/game/flow';
+import { backendGameState, backendRoundState, canEdit, currentLetters, currentRow, gameId, gameState, keyboardUsedState, needNewRound, roundWinner, submittedRow, toasts, User, userMe, username, userThem } from '../../lib/game/state';
 import { dlog } from '../../lib/game/util';
 import classNames from 'classnames';
 import { useRouter } from 'next/router';
+import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
+import { BackendGame, BackendRound } from '../../lib/game/proto';
 
 const Game: NextPage = () => {
-  console.log("starting");
   const router = useRouter();
   const joinGame = useMutation("joinGame");
-  const guessWord = useMutation("guessWord");
-  const steal = useMutation("steal");
-  const createRound = useMutation("createRound");
+  const [gid, setGid] = useRecoilState(gameId);
+  const [un, setUsername] = useRecoilState(username);
   useEffect(() => {
     const params = router.query;
     if (Object.keys(params).length !== 0) {
-      boot(params, joinGame, guessWord, steal, createRound);
+      boot(params, joinGame, setGid, setUsername);
     }
-  }, [router, joinGame, guessWord, steal, createRound]);
+  }, [router, joinGame]);
 
-  const gid = useRecoilValue(gameId);
 
   if (gid === null) {
     var body = <div></div>;
   } else {
-    var body = <MatchContainer gid={gid} />;
+    var body = <MatchContainer gid={gid} me={un} />;
   }
 
   return (
@@ -56,11 +55,31 @@ const Game: NextPage = () => {
 
 const MatchContainer = (props: any) => {
   const gid = props.gid;
-  const me = useRecoilValue(username);
-  useConvex().query("queryGame").watch(Id.fromString(gid)).onUpdate(handleBackendGameUpdate);
-  useConvex().query("queryRound").watch(Id.fromString(gid), me).onUpdate(handleBackendRoundUpdate);
+  const me = props.me;
 
-  return (<div><div className="flex">
+  // Backend updates.
+  const gameQuery = useQuery("queryGame", Id.fromString(gid));
+  const roundQuery = useQuery("queryRound", Id.fromString(gid), me);
+
+  // Connect to recoil atoms. TODO -- replace with nicer recoil-sync stuff
+  const [ , setBackendGame] = useRecoilState(backendGameState);
+  const [ , setBackendRound] = useRecoilState(backendRoundState);
+  useEffect(() => {
+    if (gameQuery !== undefined) {
+      setBackendGame(gameQuery as BackendGame);
+    }
+  }, [gameQuery]);
+  useEffect(() => {
+    if (roundQuery !== undefined) {
+      setBackendRound(roundQuery as BackendRound);
+    }
+  }, [roundQuery]);
+
+
+  return (<div>
+    <GameFlowDriver />
+    <InputHandler />
+    <div className="flex">
     <Match />
   </div>
   <div className="flex h-14">
@@ -75,8 +94,13 @@ const MatchContainer = (props: any) => {
 }
 
 const Toasts = () => {
+  const [tx, setTx] = useRecoilState(toasts);
+
+  useIntervalWhen(() => {
+    pruneToasts(tx, setTx);
+  }, 1000, true);
+
   var tels = [];
-  const tx = useRecoilValue(toasts);
   var i = 0;
   for (const t of tx) {
     i += 1;
@@ -327,5 +351,96 @@ const Cell = (props: any) => {
   }
   return (<div key={`cell-${props.key}`} className={classNames(cellClasses)}>{char}</div>)
 }
+
+const ROUND_START_DELAY = 7000;
+
+const GameFlowDriver = () => {
+  const needRound = useRecoilValue(needNewRound);
+  const rwinner = useRecoilValue(roundWinner);
+  const round = useRecoilValue(backendRoundState);
+  const game = useRecoilValue(backendGameState);
+  const me = useRecoilValue(userMe);
+  const gid = useRecoilValue(gameId);
+
+  // Let's use these to track what's been "seen" or not.
+  const [serverRows, setServerRows] = useState(-1);
+  const [user1Stolen, setUser1Stolen] = useState(false);
+  const [user2Stolen, setUser2Stolen] = useState(false);
+
+  const [ , setCurrentLetters] = useRecoilState(currentLetters);
+  const [ , setSubmittedRow] = useRecoilState(submittedRow);
+  const [ , setToasts] = useRecoilState(toasts);
+
+  // 
+  const createRound = useMutation("createRound");
+
+  // Check for winner to notify via toast.
+  useEffect(() => {
+    if (rwinner !== null) {
+      addToast(setToasts, `${rwinner} won the round!`, "guessed", 6000);
+      setServerRows(-1);
+      setUser1Stolen(false);
+      setUser2Stolen(false);
+      setCurrentLetters([]);
+      setSubmittedRow(-1);
+    }
+  }, [rwinner])
+
+  // Look for a new stolen state from either side to notify via toast.
+  useEffect(() => {
+    if (round !== null && rwinner === null) {
+      if (round.user1.stolen && !user1Stolen) {
+        setUser1Stolen(true);
+        const stolenName = game!.user1.displayName;
+        addToast(setToasts, `${stolenName} is stealing answers!`, "steal", 6000);
+      }
+      if (round.user2.stolen && !user2Stolen) {
+        setUser2Stolen(true);
+        const stolenName = game!.user2!.displayName;
+        addToast(setToasts, `${stolenName} is stealing answers!`, "steal", 6000);
+      }
+    }
+  });
+
+  // Look for a new row of ours from the server -- if it's there, our submission was accepted
+  useEffect(() => {
+    if (me !== null && me.board !== null) {
+      if (me.board!.serverCount > serverRows) {
+        console.log("new server side row");
+        setCurrentLetters([]);
+        setSubmittedRow(-1);
+        setServerRows(me.board!.serverCount);
+      }
+    }
+  });
+
+  useTimeoutWhen(() => {
+    createRound(Id.fromString(gid!), game!.round);
+  }, ROUND_START_DELAY, needRound);
+
+  return <></>;
+}
+
+const InputHandler = () => {
+  // Dependent getters and setters of atoms / selectors.
+  const gid = useRecoilValue(gameId);
+  const me = useRecoilValue(username);
+  const ce = useRecoilValue(canEdit);
+  const [cl, setCl] = useRecoilState(currentLetters);
+  const cr = useRecoilValue(currentRow);
+  const [ , setSr] = useRecoilState(submittedRow);
+  const [ , setToasts] = useRecoilState(toasts);
+
+  // Methods we might invoke in response to input.
+  const guessWord = useMutation("guessWord");
+  const steal = useMutation("steal");
+
+  useKey(ALL_KEYS, handleGameInput(
+    guessWord, steal, gid, me, ce, cl, setCl,
+    cr, setSr, setToasts));
+
+  return <></>;
+}
+
 
 export default Game;

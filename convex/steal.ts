@@ -8,6 +8,9 @@ export default async function steal(gameId: Id, user: string) {
     }
     let roundId = game.rounds[game.currentRound];
     var round = await dbWriter.get(roundId.id());
+    if (typeof round.winner === "number") {
+        return; // Round is over.
+    }
 
     // Which user is this?
     if (game.user1 === user) {
