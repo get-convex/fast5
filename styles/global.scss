@@ -1,0 +1,15 @@
+// Global styles, not scoped to any particular component.
+
+body {
+  background: url('/stonewall.png'),
+    radial-gradient(
+      77.22% 80.99% at 50% 49.93%,
+      #673cd0 0%,
+      #4e29a3 25%,
+      #3c1c84 46%,
+      #361778 58%,
+      #230049 100%
+    );
+  background-size: cover;
+  min-height: 100vh;
+}

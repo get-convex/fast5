@@ -10,10 +10,8 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body className="h-full">
-          <div className="container mx-auto">
-            <Main />
-          </div>
+        <body>
+          <Main />
           <NextScript />
         </body>
       </Html>
