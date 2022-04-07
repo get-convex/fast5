@@ -1,5 +1,22 @@
-// Global styles, not scoped to any particular component.
+// Variables.
+:root {
+  --font-size-huge: 26px;
+  --font-size-largest: 24px;
+  --font-size-larger: 22px;
+  --font-size-large: 20px;
+  --font-size-regular: 18px;
+  --font-size-small: 16px;
+  --font-size-smaller: 14px;
+  --font-size-smallest: 12px;
 
+  --font-weight-black: 900;
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-regular: 400;
+}
+
+// Global styles, not scoped to any particular component.
 body {
   background: url('/stonewall.png'),
     radial-gradient(
