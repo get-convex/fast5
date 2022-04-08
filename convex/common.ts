@@ -17,7 +17,6 @@ export const getUser = async (db: any, auth: any): Promise<User> => {
 };
 
 const LETTERS = [
-  'a',
   'b',
   'c',
   'd',
@@ -46,7 +45,7 @@ const LETTERS = [
 export const randomGameName = (): string => {
   var acc = [];
   for (var i = 0; i < 6; i++) {
-    acc.push(LETTERS[Math.floor(Math.random() * 25)]);
+    acc.push(LETTERS[Math.floor(Math.random() * 24)]);
   }
   console.log(JSON.stringify(acc));
   return acc.join('');
