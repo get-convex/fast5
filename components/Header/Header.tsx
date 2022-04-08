@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import LoginLogout from '../LoginLogout/LogInLogOut';
+import LoginLogout from '../LoginLogout/LoginLogout';
 import styles from './Header.module.scss';
 
 function Header() {
