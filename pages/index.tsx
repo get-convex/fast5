@@ -3,6 +3,7 @@ import { Id } from '@convex-dev/server';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import Button from '../components/Button/Button';
 import Modal from '../components/Modal/Modal';
@@ -42,7 +43,8 @@ const Home: NextPage = () => {
     }
   }, [isAuthenticated, isLoading, getIdTokenClaims, convex, storeUser]);
 
-  const handleCreateGame = () => {
+  const handleCreateGame = (e: any) => {
+    e.preventDefault();
     const go = async () => {
       const gameName = await createGame();
       router.push(`game/${gameName}`);
@@ -50,14 +52,16 @@ const Home: NextPage = () => {
     go();
   };
 
-  const handleJoinGame = () => {
+  const handleJoinGame = (e: any) => {
+    e.preventDefault();
     const go = async () => {
       router.push(`join`);
     };
     go();
   };
 
-  const handleRandom = () => {
+  const handleRandom = (e: any) => {
+    e.preventDefault();
     const go = async () => {
       const gameName = await createOrJoinRandom();
       router.push(`game/${gameName}`);
