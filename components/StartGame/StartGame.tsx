@@ -38,6 +38,7 @@ function StartGame() {
   return (
     <Modal>
       <div className={styles.instructions}>
+        <h1>How to Play</h1>
         <p>
           Fast5 is a word racing game. Play against a friend, or a friendly
           Internet stranger!
