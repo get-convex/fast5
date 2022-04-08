@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';
 import { useMutation, useConvex, useQuery } from '../../convex/_generated';
 import { Id } from '@convex-dev/react';
@@ -14,6 +14,8 @@ import {
   currentLetters,
   currentRow,
   gameId,
+  gameName,
+  gameOver,
   gameState,
   keyboardUsedState,
   needNewRound,
@@ -26,17 +28,46 @@ import {
 } from '../../lib/game/state';
 import { dlog } from '../../lib/game/util';
 import classNames from 'classnames';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
 import { BackendGame, BackendRound } from '../../lib/game/proto';
 import { useAuth0 } from '@auth0/auth0-react';
+import Image from 'next/image';
 
 const Game: NextPage = () => {
   const router = useRouter();
   const joinGame = useMutation('joinGame');
   const convex = useConvex();
   const [gid, setGid] = useRecoilState(gameId);
+  const [_, setGameName] = useRecoilState(gameName);
   let { isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
+
+  // Reseting game state
+  const resetBackendGameState = useResetRecoilState(backendGameState);
+  const resetBackendRoundState = useResetRecoilState(backendRoundState);
+  const resetGameId = useResetRecoilState(gameId);
+  const resetGameName = useResetRecoilState(gameName);
+  const resetSubmittedRow = useResetRecoilState(submittedRow);
+  const resetCurrentLetters = useResetRecoilState(currentLetters);
+  const resetToasts = useResetRecoilState(toasts);
+  useEffect(() => {
+    resetBackendGameState();
+    resetBackendRoundState();
+    resetGameId();
+    resetGameName();
+    resetSubmittedRow();
+    resetCurrentLetters();
+    resetToasts();
+  }, [
+    resetBackendGameState,
+    resetBackendRoundState,
+    resetGameId,
+    resetGameName,
+    resetSubmittedRow,
+    resetCurrentLetters,
+    resetToasts,
+  ]);
+
   useEffect(() => {
     if (isLoading) {
       return;
@@ -59,9 +90,9 @@ const Game: NextPage = () => {
     console.log('should boot?');
     if (isAuthenticated && Object.keys(params).length !== 0) {
       console.log('booting');
-      boot(params, joinGame, setGid);
+      boot(params, joinGame, setGid, setGameName);
     }
-  }, [router, joinGame, setGid, isAuthenticated]);
+  }, [router, joinGame, setGid, isAuthenticated, setGameName]);
 
   if (gid === null) {
     var body = <div></div>;
@@ -289,10 +320,21 @@ const MatchUser = (props: any) => {
     var winnerMark = <span></span>;
   }
 
+  console.log('image props', props.user);
+
   return (
     <div className="flex-auto m-4">
       <div>
         {winnerMark}
+        {props.user?.photoUrl && (
+          <Image
+            className="rounded-full border border-gray-400 shadow"
+            src={props.user.photoUrl}
+            width={48}
+            height={48}
+            alt="User profile image"
+          />
+        )}
         <strong>{props.user.displayName}</strong>
       </div>
       <div className={classNames(scoreClasses)}>Score: {props.user.score}</div>
@@ -358,8 +400,24 @@ const Board = () => {
   const game = useRecoilValue(gameState);
   const me = useRecoilValue(userMe);
   const them = useRecoilValue(userThem);
+  const gname = useRecoilValue(gameName);
   if (game?.board === null || me === null || them === null) {
-    return <div className="flex w-full"></div>;
+    if (game?.ready) {
+      return <div className="flex w-full">Get Ready!</div>;
+    }
+    if (game?.public) {
+      return (
+        <div className="flex w-full">
+          Waiting for a friendly Internet stranger...
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex w-full">
+          Share this game code with your friend: {gname?.toLocaleUpperCase()}
+        </div>
+      );
+    }
   }
   return (
     <div className="flex w-full">
@@ -468,10 +526,13 @@ const ROUND_START_DELAY = 7000;
 const GameFlowDriver = () => {
   const needRound = useRecoilValue(needNewRound);
   const rwinner = useRecoilValue(roundWinner);
+  const gover = useRecoilValue(gameOver);
   const round = useRecoilValue(backendRoundState);
   const game = useRecoilValue(backendGameState);
   const me = useRecoilValue(userMe);
   const gid = useRecoilValue(gameId);
+
+  const router = useRouter();
 
   // Let's use these to track what's been "seen" or not.
   const [serverRows, setServerRows] = useState(-1);
@@ -548,6 +609,14 @@ const GameFlowDriver = () => {
     },
     ROUND_START_DELAY,
     needRound
+  );
+
+  useTimeoutWhen(
+    () => {
+      router.push('/');
+    },
+    ROUND_START_DELAY,
+    gover
   );
 
   return <></>;

@@ -15,3 +15,39 @@ export const getUser = async (db: any, auth: any): Promise<User> => {
     .unique();
   return user;
 };
+
+const LETTERS = [
+  'a',
+  'b',
+  'c',
+  'd',
+  'f',
+  'g',
+  'h',
+  'j',
+  'k',
+  'l',
+  'm',
+  'n',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'v',
+  'w',
+  'x',
+  'z',
+  '2',
+  '5',
+  '6',
+  '9',
+];
+export const randomGameName = (): string => {
+  var acc = [];
+  for (var i = 0; i < 6; i++) {
+    acc.push(LETTERS[Math.floor(Math.random() * 25)]);
+  }
+  console.log(JSON.stringify(acc));
+  return acc.join('');
+};

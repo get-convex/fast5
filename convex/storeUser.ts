@@ -1,5 +1,6 @@
-import { mutation, Id } from '@convex-dev/server';
+import { mutation, Id, UserIdentity } from '@convex-dev/server';
 import { User } from '../lib/game/proto';
+import md5 from 'md5';
 
 // Insert or update the user in a Convex table then return the document's Id.
 //
@@ -39,7 +40,14 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
   return db.insert('users', {
     name: identity.name!,
     displayName: identity.givenName!,
+    photoUrl: createGravatarUrl(identity),
     tokenIdentifier: identity.tokenIdentifier,
     // The `_id` field will be assigned by the backend.
   });
 });
+
+function createGravatarUrl(identity: UserIdentity): string {
+  const email = identity.email!.trim().toLocaleLowerCase();
+  const hash = md5(email);
+  return `https://www.gravatar.com/avatar/${hash}?d=monsterid`;
+}

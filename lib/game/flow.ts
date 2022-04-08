@@ -18,9 +18,15 @@ import {
 } from './state';
 import { BoardSide, dlog, enableDebugLogging } from './util';
 
-export async function boot(params: any, joinGame: any, setGameId: any) {
+export async function boot(
+  params: any,
+  joinGame: any,
+  setGameId: any,
+  setGameName: any
+) {
   // enableDebugLogging(); // hax
   const gamename: string = params['game'] as string;
+  setGameName(gamename);
   const gid = await joinGame(gamename);
   dlog(`Got gid = ${gid}`);
   if (gid === null) {

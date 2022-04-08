@@ -20,6 +20,12 @@ export const gameId: RecoilState<string | null> = atom({
   default: null as string | null,
 });
 
+// URL-derived static atoms.
+export const gameName: RecoilState<string | null> = atom({
+  key: 'gameName',
+  default: null as string | null,
+});
+
 // Locally-set in-game atoms.
 export const submittedRow: RecoilState<number> = atom({
   key: 'submittedRow',
@@ -44,6 +50,14 @@ export const toasts: RecoilState<Toast[]> = atom({
 });
 
 // Derived game states from atoms.
+export const gameOver: RecoilValueReadOnly<boolean> = selector({
+  key: 'gameOver',
+  get: ({ get }) => {
+    const backendGame = get(backendGameState);
+    return backendGame?.over ?? false;
+  },
+});
+
 export const canEdit: RecoilValueReadOnly<boolean> = selector({
   key: 'canEdit',
   get: ({ get }) => {
@@ -147,6 +161,7 @@ export interface GameState {
     displayName: string;
     score: number;
   };
+  public: boolean;
   inRound: boolean;
   ready: boolean;
   over: boolean;
@@ -239,6 +254,7 @@ export const keyboardUsedState = selector({
 
 export interface User {
   displayName: string;
+  photoUrl: string;
   score: number;
   number: number;
   key: string;
@@ -283,6 +299,7 @@ function userGetter(get: any, them: boolean): null | User {
 
   return {
     displayName: grec.displayName,
+    photoUrl: grec.photoUrl,
     score: grec.score,
     number: number,
     key: key,

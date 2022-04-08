@@ -15,6 +15,8 @@ const Home: NextPage = () => {
   let { isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
   const [userId, setUserId] = useState<Id | null>(null);
   const storeUser = useMutation('storeUser');
+  const createGame = useMutation('createGame');
+  const createOrJoinRandom = useMutation('createOrJoinRandom');
 
   useEffect(() => {
     if (isLoading) {
@@ -38,50 +40,57 @@ const Home: NextPage = () => {
       setUserId(null);
     }
   }, [isAuthenticated, isLoading, getIdTokenClaims, convex, storeUser]);
-  const handleTextChange = (f: any) => {
-    return (e: any) => {
-      setError('');
-      e.preventDefault();
-      f(e.target.value);
-    };
-  };
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const validateAndGo = async () => {
-      // TODO -- need better support for one-offs from react-convex land.
-      convex
-        .query('validateIds')
-        .watch(game)
-        .onUpdate((ok) => {
-          if (!ok) {
-            setError(
-              'Invalid game id. 5+ characters of only lowercase letters and numbers'
-            );
-          } else {
-            router.push(`game/${game}`);
-          }
-        });
-    };
-    validateAndGo();
-  };
 
+  const handleCreateGame = (e: any) => {
+    e.preventDefault();
+    const go = async () => {
+      const gameName = await createGame();
+      router.push(`game/${gameName}`);
+    };
+    go();
+  };
+  const handleJoinGame = (e: any) => {
+    e.preventDefault();
+    const go = async () => {
+      router.push(`join`);
+    };
+    go();
+  };
+  const handleRandom = (e: any) => {
+    e.preventDefault();
+    const go = async () => {
+      const gameName = await createOrJoinRandom();
+      router.push(`game/${gameName}`);
+    };
+    go();
+  };
   if (userId !== null) {
     var startGame = (
       <>
+        <div className="flex my-2">Join or create a game!</div>
+        <div className="text-red-500 text-sm">{error ?? ''}</div>
         <div className="flex my-2">
           <input
-            placeholder="Room ID"
-            className="p-1 w-50 bg-slate-100 border-2 mx-3"
-            value={game}
-            onChange={handleTextChange(setGame)}
+            className="rounded bg-orange-400 shadow p-3"
+            type="button"
+            onClick={handleCreateGame}
+            value="Create a game to play a friend"
           />
         </div>
         <div className="flex my-2">
           <input
             className="rounded bg-orange-400 shadow p-3"
             type="button"
-            onClick={handleSubmit}
-            value="Create/Join Game"
+            onClick={handleJoinGame}
+            value="Join a friend's game"
+          />
+        </div>
+        <div className="flex my-2">
+          <input
+            className="rounded bg-orange-400 shadow p-3"
+            type="button"
+            onClick={handleRandom}
+            value="Play a friendly Internet stranger"
           />
         </div>
       </>
@@ -101,13 +110,11 @@ const Home: NextPage = () => {
         <div className="justify-center bg-slate-900 text-yellow-600 p-2 flex">
           <div className="">Fast5</div>
         </div>
+        <div className="flex my-2">
+          <LoginLogout />
+        </div>
         <form>
           <div className="flex flex-col w-80 mx-auto my-5 items-center">
-            <div className="flex my-2">Join or create a game!</div>
-            <div className="text-red-500 text-sm">{error ?? ''}</div>
-            <div className="flex my-2">
-              <LoginLogout />
-            </div>
             {startGame}
           </div>
         </form>
@@ -122,7 +129,11 @@ function LoginLogout() {
   let { isAuthenticated, isLoading, loginWithRedirect, logout, user } =
     useAuth0();
   if (isLoading) {
-    return <button className="btn btn-primary">Loading...</button>;
+    return (
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Loading...
+      </button>
+    );
   }
   if (isAuthenticated) {
     return (
@@ -131,7 +142,7 @@ function LoginLogout() {
         might not. */}
         <p>Logged in as {user!.name}</p>
         <button
-          className="btn btn-primary"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => logout({ returnTo: window.location.origin })}
         >
           Log out
@@ -140,7 +151,10 @@ function LoginLogout() {
     );
   } else {
     return (
-      <button className="btn btn-primary" onClick={loginWithRedirect}>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={loginWithRedirect}
+      >
         Log in
       </button>
     );
