@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { start } from 'repl';
+import Modal from '../components/Modal/Modal';
 import { useConvex, useMutation } from '../convex/_generated';
 
 const Home: NextPage = () => {
@@ -66,7 +66,7 @@ const Home: NextPage = () => {
   };
   if (userId !== null) {
     var startGame = (
-      <>
+      <Modal>
         <div className="flex my-2">Join or create a game!</div>
         <div className="text-red-500 text-sm">{error ?? ''}</div>
         <div className="flex my-2">
@@ -93,7 +93,7 @@ const Home: NextPage = () => {
             value="Play a friendly Internet stranger"
           />
         </div>
-      </>
+      </Modal>
     );
   } else {
     var startGame = <></>;
