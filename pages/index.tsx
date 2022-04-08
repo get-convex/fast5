@@ -107,9 +107,6 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="px-0">
-        <div className="justify-center bg-slate-900 text-yellow-600 p-2 flex">
-          <div className="">Fast5</div>
-        </div>
         <div className="flex my-2">
           <LoginLogout />
         </div>
