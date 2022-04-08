@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Button from '../components/Button/Button';
 import Modal from '../components/Modal/Modal';
 import { useConvex, useMutation } from '../convex/_generated';
 
@@ -41,57 +42,45 @@ const Home: NextPage = () => {
     }
   }, [isAuthenticated, isLoading, getIdTokenClaims, convex, storeUser]);
 
-  const handleCreateGame = (e: any) => {
-    e.preventDefault();
+  const handleCreateGame = () => {
     const go = async () => {
       const gameName = await createGame();
       router.push(`game/${gameName}`);
     };
     go();
   };
-  const handleJoinGame = (e: any) => {
-    e.preventDefault();
+
+  const handleJoinGame = () => {
     const go = async () => {
       router.push(`join`);
     };
     go();
   };
-  const handleRandom = (e: any) => {
-    e.preventDefault();
+
+  const handleRandom = () => {
     const go = async () => {
       const gameName = await createOrJoinRandom();
       router.push(`game/${gameName}`);
     };
     go();
   };
+
   if (userId !== null) {
     var startGame = (
       <Modal>
-        <div className="flex my-2">Join or create a game!</div>
         <div className="text-red-500 text-sm">{error ?? ''}</div>
         <div className="flex my-2">
-          <input
-            className="rounded bg-orange-400 shadow p-3"
-            type="button"
-            onClick={handleCreateGame}
-            value="Create a game to play a friend"
-          />
+          <Button onClick={handleCreateGame}>
+            Create a Game to Play a Friend
+          </Button>
         </div>
         <div className="flex my-2">
-          <input
-            className="rounded bg-orange-400 shadow p-3"
-            type="button"
-            onClick={handleJoinGame}
-            value="Join a friend's game"
-          />
+          <Button onClick={handleJoinGame}>Join a Friend&rsquo;s Game</Button>
         </div>
         <div className="flex my-2">
-          <input
-            className="rounded bg-orange-400 shadow p-3"
-            type="button"
-            onClick={handleRandom}
-            value="Play a friendly Internet stranger"
-          />
+          <Button onClick={handleRandom}>
+            Play a Friendly Internet Stranger
+          </Button>
         </div>
       </Modal>
     );
