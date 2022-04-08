@@ -39,7 +39,7 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
   // If it's a new identity, create a new `User`.
   return db.insert('users', {
     name: identity.name!,
-    displayName: identity.givenName!,
+    displayName: identity.givenName ?? identity.name!,
     photoUrl: createGravatarUrl(identity),
     tokenIdentifier: identity.tokenIdentifier,
     // The `_id` field will be assigned by the backend.
