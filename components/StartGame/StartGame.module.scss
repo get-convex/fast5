@@ -1,0 +1,18 @@
+.instructions {
+  color: var(--color-white);
+  margin-bottom: 36px;
+
+  p {
+    font-size: var(--font-size-regular);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.75;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
