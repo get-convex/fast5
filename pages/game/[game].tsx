@@ -22,7 +22,6 @@ import {
   toasts,
   User,
   userMe,
-  username,
   userThem,
 } from '../../lib/game/state';
 import { dlog } from '../../lib/game/util';
@@ -30,23 +29,44 @@ import classNames from 'classnames';
 import { useRouter } from 'next/router';
 import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
 import { BackendGame, BackendRound } from '../../lib/game/proto';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Game: NextPage = () => {
   const router = useRouter();
   const joinGame = useMutation('joinGame');
+  const convex = useConvex();
   const [gid, setGid] = useRecoilState(gameId);
-  const [un, setUsername] = useRecoilState(username);
+  let { isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+    if (isAuthenticated) {
+      getIdTokenClaims().then(async (claims) => {
+        // Get the raw ID token from the claims.
+        let token = claims!.__raw;
+        // Pass it to the Convex client.
+        convex.setAuth(token);
+      });
+    } else {
+      // Tell the Convex client to clear all authentication state.
+      convex.clearAuth();
+      router.push('/'); // Go back to login.
+    }
+  }, [isAuthenticated, isLoading, getIdTokenClaims, convex, router]);
   useEffect(() => {
     const params = router.query;
-    if (Object.keys(params).length !== 0) {
-      boot(params, joinGame, setGid, setUsername);
+    console.log('should boot?');
+    if (isAuthenticated && Object.keys(params).length !== 0) {
+      console.log('booting');
+      boot(params, joinGame, setGid);
     }
-  }, [router, joinGame, setGid, setUsername]);
+  }, [router, joinGame, setGid, isAuthenticated]);
 
   if (gid === null) {
     var body = <div></div>;
   } else {
-    var body = <MatchContainer gid={gid} me={un} />;
+    var body = <MatchContainer gid={gid} />;
   }
 
   return (
@@ -68,17 +88,17 @@ const Game: NextPage = () => {
 
 const MatchContainer = (props: any) => {
   const gid = props.gid;
-  const me = props.me;
 
   // Backend updates.
   const gameQuery = useQuery('queryGame', Id.fromString(gid));
-  const roundQuery = useQuery('queryRound', Id.fromString(gid), me);
+  const roundQuery = useQuery('queryRound', Id.fromString(gid));
 
   // Connect to recoil atoms. TODO -- replace with nicer recoil-sync stuff
   const [, setBackendGame] = useRecoilState(backendGameState);
   const [, setBackendRound] = useRecoilState(backendRoundState);
   useEffect(() => {
     if (gameQuery !== undefined) {
+      console.log(gameQuery);
       setBackendGame(gameQuery as BackendGame);
     }
   }, [gameQuery, setBackendGame, setBackendRound]);
@@ -506,14 +526,21 @@ const GameFlowDriver = () => {
   // Look for a new row of ours from the server -- if it's there, our submission was accepted
   useEffect(() => {
     if (me !== null && me.board !== null) {
-      if (me.board!.serverCount > serverRows) {
-        dlog('new server side row');
+      if (me.board!.serverCount > serverRows && rwinner === null) {
+        console.log('new server side row');
         setCurrentLetters([]);
         setSubmittedRow(-1);
         setServerRows(me.board!.serverCount);
       }
     }
-  }, [setServerRows, me, serverRows, setCurrentLetters, setSubmittedRow]);
+  }, [
+    setServerRows,
+    rwinner,
+    me,
+    serverRows,
+    setCurrentLetters,
+    setSubmittedRow,
+  ]);
 
   useTimeoutWhen(
     () => {
@@ -529,7 +556,6 @@ const GameFlowDriver = () => {
 const InputHandler = () => {
   // Dependent getters and setters of atoms / selectors.
   const gid = useRecoilValue(gameId);
-  const me = useRecoilValue(username);
   const ce = useRecoilValue(canEdit);
   const [cl, setCl] = useRecoilState(currentLetters);
   const cr = useRecoilValue(currentRow);
@@ -542,18 +568,7 @@ const InputHandler = () => {
 
   useKey(
     ALL_KEYS,
-    handleGameInput(
-      guessWord,
-      steal,
-      gid,
-      me,
-      ce,
-      cl,
-      setCl,
-      cr,
-      setSr,
-      setToasts
-    )
+    handleGameInput(guessWord, steal, gid, ce, cl, setCl, cr, setSr, setToasts)
   );
 
   return <></>;

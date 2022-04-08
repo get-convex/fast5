@@ -1,10 +1,9 @@
-import { Id, dbWriter, eq, field } from '@convex-dev/server';
+import { Id, mutation } from '@convex-dev/server';
 import { WORDS } from '../lib/game/constants';
 import { dlog } from '../lib/game/util';
 
-export default async function createRound(gameId: Id, next: number) {
-  dlog('round created...');
-  var game = await dbWriter.get(gameId);
+export default mutation(async ({ db }, gameId: Id, next: number) => {
+  var game = await db.get(gameId);
   if (game.user2 == undefined) {
     // Still waiting on the other party.
     return;
@@ -17,12 +16,10 @@ export default async function createRound(gameId: Id, next: number) {
     // Lost the race to create the round.
     return;
   }
-  dlog('making round!');
   if (game.rounds.length > 0) {
     const lastId = game.rounds[game.rounds.length - 1];
-    const lastRound = await dbWriter.get(lastId.id());
+    const lastRound = await db.get(lastId.id());
     if (typeof lastRound.winner !== 'number') {
-      dlog('Tried to advance rounds, but no winner yet');
       // Last round, no one won yet!
       return;
     }
@@ -41,8 +38,8 @@ export default async function createRound(gameId: Id, next: number) {
     winner: null,
     overflow: false,
   };
-  const r = await dbWriter.insert('rounds', round);
-  game.rounds.push(r._id.strongRef());
+  const id = await db.insert('rounds', round);
+  game.rounds.push(id);
   game.currentRound = game.rounds.length - 1;
-  await dbWriter.update(game._id, game);
-}
+  await db.update(game._id, game);
+});

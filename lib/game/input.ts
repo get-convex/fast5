@@ -63,7 +63,6 @@ export function handleGameInput(
   guessWord: any,
   steal: any,
   gid: any,
-  me: any,
   canEdit: any,
   currentLetters: any,
   setCurrentLetters: any,
@@ -100,7 +99,7 @@ export function handleGameInput(
         let letters = currentLetters;
         const tryGuess = async () => {
           let tryWord = letters.join('');
-          let validGuess = await guessWord(Id.fromString(gid!), me, tryWord);
+          let validGuess = await guessWord(Id.fromString(gid!), tryWord);
           if (!validGuess) {
             addToast(setToasts, `Invalid word '${tryWord}'`, 'error', 5000);
             setSubmittedRow(-1);
@@ -112,7 +111,7 @@ export function handleGameInput(
     } else if (event.key === '!') {
       const doSteal = async () => {
         if (gid !== null) {
-          await steal(Id.fromString(gid), me);
+          await steal(Id.fromString(gid));
         }
       };
       if (canEdit) {

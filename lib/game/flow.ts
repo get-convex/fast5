@@ -15,28 +15,18 @@ import {
   toasts,
   User,
   userMe,
-  username,
 } from './state';
 import { BoardSide, dlog, enableDebugLogging } from './util';
 
-export async function boot(
-  params: any,
-  joinGame: any,
-  setGameId: any,
-  setUsername: any
-) {
-  //enableDebugLogging(); // hax
-  dlog(params);
-  const me: string = params['user'] as string;
+export async function boot(params: any, joinGame: any, setGameId: any) {
+  // enableDebugLogging(); // hax
   const gamename: string = params['game'] as string;
-  dlog(`me = ${me}, gamename = ${gamename}`);
-  const gid = await joinGame(me, gamename);
+  const gid = await joinGame(gamename);
   dlog(`Got gid = ${gid}`);
   if (gid === null) {
     dlog('Failed to join game...');
   } else {
     setGameId(gid.toString());
-    setUsername(me);
   }
 }
 

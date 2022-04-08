@@ -1,7 +1,9 @@
-import { Id, db, eq, field } from '@convex-dev/server';
+import { Id, query } from '@convex-dev/server';
 import { FULL_SCORES, STOLEN_SCORES } from '../lib/game/constants';
+import { getUser } from './common';
 
-export default async function queryRound(gameId: Id, user: string) {
+export default query(async ({ db, auth }, gameId: Id) => {
+  const user = await getUser(db, auth);
   console.log('query round...');
   const game = await db.get(gameId);
   if (game.currentRound === -1) {
@@ -17,7 +19,7 @@ export default async function queryRound(gameId: Id, user: string) {
     round,
     round.user1,
     round.user2.stolen,
-    game.user1 === user,
+    user._id.equals(game.user1),
     over
   );
 
@@ -26,7 +28,7 @@ export default async function queryRound(gameId: Id, user: string) {
     round,
     round.user2,
     round.user1.stolen,
-    game.user2 === user,
+    user._id.equals(game.user2),
     over
   );
 
@@ -45,7 +47,7 @@ export default async function queryRound(gameId: Id, user: string) {
     winner: round.winner ?? null,
     overflow: round.overflow,
   };
-}
+});
 
 function buildLetters(
   round: any,

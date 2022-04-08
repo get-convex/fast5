@@ -1,3 +1,4 @@
+import { Id } from '@convex-dev/server';
 import { atom, RecoilState, RecoilValueReadOnly, selector } from 'recoil';
 import { BackendGame, BackendRound } from './proto';
 import { BoardSide, buildBoardSide, dlog } from './util';
@@ -17,11 +18,6 @@ export const backendRoundState: RecoilState<null | BackendRound> = atom({
 export const gameId: RecoilState<string | null> = atom({
   key: 'gameId',
   default: null as string | null,
-});
-
-export const username: RecoilState<string> = atom({
-  key: 'username',
-  default: '',
 });
 
 // Locally-set in-game atoms.
@@ -80,20 +76,16 @@ export const canEdit: RecoilValueReadOnly<boolean> = selector({
 const whoami: RecoilValueReadOnly<number | null> = selector({
   key: 'whoami',
   get: ({ get }) => {
-    const me = get(username);
     const backendGame = get(backendGameState);
-    if (me === '') {
-      return null;
-    }
     if (backendGame === null) {
       return null;
     }
-    if (me === backendGame.user1.displayName) {
+    if (backendGame.user1.isYou) {
       return 1;
-    } else if (me === backendGame.user2.displayName) {
+    } else if (backendGame.user2.isYou) {
       return 2;
     }
-    throw 'username does not game either user in backend';
+    throw 'neither user is us?';
   },
 });
 
@@ -304,6 +296,7 @@ export const currentRow = selector({
     const userId = get(whoami);
     const round = get(backendRoundState);
     const who = get(whoami) as number;
+    console.log('current row =', who);
     if (round === null || who === null) {
       return null;
     }
