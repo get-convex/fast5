@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';
 import { useMutation, useConvex, useQuery } from '../../convex/_generated';
 import { Id } from '@convex-dev/react';
@@ -14,6 +14,8 @@ import {
   currentLetters,
   currentRow,
   gameId,
+  gameName,
+  gameOver,
   gameState,
   keyboardUsedState,
   needNewRound,
@@ -22,31 +24,80 @@ import {
   toasts,
   User,
   userMe,
-  username,
   userThem,
 } from '../../lib/game/state';
 import { dlog } from '../../lib/game/util';
 import classNames from 'classnames';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
 import { BackendGame, BackendRound } from '../../lib/game/proto';
+import { useAuth0 } from '@auth0/auth0-react';
+import Image from 'next/image';
 
 const Game: NextPage = () => {
   const router = useRouter();
   const joinGame = useMutation('joinGame');
+  const convex = useConvex();
   const [gid, setGid] = useRecoilState(gameId);
-  const [un, setUsername] = useRecoilState(username);
+  const [_, setGameName] = useRecoilState(gameName);
+  let { isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
+
+  // Reseting game state
+  const resetBackendGameState = useResetRecoilState(backendGameState);
+  const resetBackendRoundState = useResetRecoilState(backendRoundState);
+  const resetGameId = useResetRecoilState(gameId);
+  const resetGameName = useResetRecoilState(gameName);
+  const resetSubmittedRow = useResetRecoilState(submittedRow);
+  const resetCurrentLetters = useResetRecoilState(currentLetters);
+  const resetToasts = useResetRecoilState(toasts);
+  useEffect(() => {
+    resetBackendGameState();
+    resetBackendRoundState();
+    resetGameId();
+    resetGameName();
+    resetSubmittedRow();
+    resetCurrentLetters();
+    resetToasts();
+  }, [
+    resetBackendGameState,
+    resetBackendRoundState,
+    resetGameId,
+    resetGameName,
+    resetSubmittedRow,
+    resetCurrentLetters,
+    resetToasts,
+  ]);
+
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+    if (isAuthenticated) {
+      getIdTokenClaims().then(async (claims) => {
+        // Get the raw ID token from the claims.
+        let token = claims!.__raw;
+        // Pass it to the Convex client.
+        convex.setAuth(token);
+      });
+    } else {
+      // Tell the Convex client to clear all authentication state.
+      convex.clearAuth();
+      router.push('/'); // Go back to login.
+    }
+  }, [isAuthenticated, isLoading, getIdTokenClaims, convex, router]);
   useEffect(() => {
     const params = router.query;
-    if (Object.keys(params).length !== 0) {
-      boot(params, joinGame, setGid, setUsername);
+    console.log('should boot?');
+    if (isAuthenticated && Object.keys(params).length !== 0) {
+      console.log('booting');
+      boot(params, joinGame, setGid, setGameName);
     }
-  }, [router, joinGame, setGid, setUsername]);
+  }, [router, joinGame, setGid, isAuthenticated, setGameName]);
 
   if (gid === null) {
     var body = <div></div>;
   } else {
-    var body = <MatchContainer gid={gid} me={un} />;
+    var body = <MatchContainer gid={gid} />;
   }
 
   return (
@@ -68,17 +119,17 @@ const Game: NextPage = () => {
 
 const MatchContainer = (props: any) => {
   const gid = props.gid;
-  const me = props.me;
 
   // Backend updates.
   const gameQuery = useQuery('queryGame', Id.fromString(gid));
-  const roundQuery = useQuery('queryRound', Id.fromString(gid), me);
+  const roundQuery = useQuery('queryRound', Id.fromString(gid));
 
   // Connect to recoil atoms. TODO -- replace with nicer recoil-sync stuff
   const [, setBackendGame] = useRecoilState(backendGameState);
   const [, setBackendRound] = useRecoilState(backendRoundState);
   useEffect(() => {
     if (gameQuery !== undefined) {
+      console.log(gameQuery);
       setBackendGame(gameQuery as BackendGame);
     }
   }, [gameQuery, setBackendGame, setBackendRound]);
@@ -269,10 +320,21 @@ const MatchUser = (props: any) => {
     var winnerMark = <span></span>;
   }
 
+  console.log('image props', props.user);
+
   return (
     <div className="flex-auto m-4">
       <div>
         {winnerMark}
+        {props.user?.photoUrl && (
+          <Image
+            className="rounded-full border border-gray-400 shadow"
+            src={props.user.photoUrl}
+            width={48}
+            height={48}
+            alt="User profile image"
+          />
+        )}
         <strong>{props.user.displayName}</strong>
       </div>
       <div className={classNames(scoreClasses)}>Score: {props.user.score}</div>
@@ -338,8 +400,24 @@ const Board = () => {
   const game = useRecoilValue(gameState);
   const me = useRecoilValue(userMe);
   const them = useRecoilValue(userThem);
+  const gname = useRecoilValue(gameName);
   if (game?.board === null || me === null || them === null) {
-    return <div className="flex w-full"></div>;
+    if (game?.ready) {
+      return <div className="flex w-full">Get Ready!</div>;
+    }
+    if (game?.public) {
+      return (
+        <div className="flex w-full">
+          Waiting for a friendly Internet stranger...
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex w-full">
+          Share this game code with your friend: {gname?.toLocaleUpperCase()}
+        </div>
+      );
+    }
   }
   return (
     <div className="flex w-full">
@@ -448,10 +526,13 @@ const ROUND_START_DELAY = 7000;
 const GameFlowDriver = () => {
   const needRound = useRecoilValue(needNewRound);
   const rwinner = useRecoilValue(roundWinner);
+  const gover = useRecoilValue(gameOver);
   const round = useRecoilValue(backendRoundState);
   const game = useRecoilValue(backendGameState);
   const me = useRecoilValue(userMe);
   const gid = useRecoilValue(gameId);
+
+  const router = useRouter();
 
   // Let's use these to track what's been "seen" or not.
   const [serverRows, setServerRows] = useState(-1);
@@ -506,14 +587,21 @@ const GameFlowDriver = () => {
   // Look for a new row of ours from the server -- if it's there, our submission was accepted
   useEffect(() => {
     if (me !== null && me.board !== null) {
-      if (me.board!.serverCount > serverRows) {
-        dlog('new server side row');
+      if (me.board!.serverCount > serverRows && rwinner === null) {
+        console.log('new server side row');
         setCurrentLetters([]);
         setSubmittedRow(-1);
         setServerRows(me.board!.serverCount);
       }
     }
-  }, [setServerRows, me, serverRows, setCurrentLetters, setSubmittedRow]);
+  }, [
+    setServerRows,
+    rwinner,
+    me,
+    serverRows,
+    setCurrentLetters,
+    setSubmittedRow,
+  ]);
 
   useTimeoutWhen(
     () => {
@@ -523,13 +611,20 @@ const GameFlowDriver = () => {
     needRound
   );
 
+  useTimeoutWhen(
+    () => {
+      router.push('/');
+    },
+    ROUND_START_DELAY,
+    gover
+  );
+
   return <></>;
 };
 
 const InputHandler = () => {
   // Dependent getters and setters of atoms / selectors.
   const gid = useRecoilValue(gameId);
-  const me = useRecoilValue(username);
   const ce = useRecoilValue(canEdit);
   const [cl, setCl] = useRecoilState(currentLetters);
   const cr = useRecoilValue(currentRow);
@@ -542,18 +637,7 @@ const InputHandler = () => {
 
   useKey(
     ALL_KEYS,
-    handleGameInput(
-      guessWord,
-      steal,
-      gid,
-      me,
-      ce,
-      cl,
-      setCl,
-      cr,
-      setSr,
-      setToasts
-    )
+    handleGameInput(guessWord, steal, gid, ce, cl, setCl, cr, setSr, setToasts)
   );
 
   return <></>;

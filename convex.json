@@ -1,5 +1,10 @@
 {
-  "authInfo": [],
+  "authInfo": [
+    {
+      "domain": "https://dev-cmcijui1.us.auth0.com",
+      "applicationID": "8LDbMeli4aE9BcJ2djy6vrxTn4SYdJ1P"
+    }
+  ],
   "functions": "convex/",
   "instanceName": "loyal-antelope-491",
   "origin": "https://loyal-antelope-491.convex.cloud"

@@ -1,13 +1,20 @@
+import { Id } from '@convex-dev/server';
+
 export interface BackendGame {
   round: number;
   user1: {
     displayName: string;
+    photoUrl: string;
     score: number;
+    isYou: boolean;
   };
   user2: {
     displayName: string;
+    photoUrl: string;
     score: number;
+    isYou: boolean;
   };
+  public: boolean;
   ready: boolean;
   inRound: boolean;
   winner: number;
@@ -28,4 +35,11 @@ export interface BackendRound {
   };
   winner: number | null;
   overflow: boolean;
+}
+export interface User {
+  _id: Id;
+  name: string;
+  displayName: string;
+  photoUrl: string;
+  tokenIdentifier: string;
 }
