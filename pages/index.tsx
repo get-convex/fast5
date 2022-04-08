@@ -107,9 +107,6 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="px-0">
-        <div className="flex my-2">
-          <LoginLogout />
-        </div>
         <form>
           <div className="flex flex-col w-80 mx-auto my-5 items-center">
             {startGame}
@@ -121,39 +118,3 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
-function LoginLogout() {
-  let { isAuthenticated, isLoading, loginWithRedirect, logout, user } =
-    useAuth0();
-  if (isLoading) {
-    return (
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Loading...
-      </button>
-    );
-  }
-  if (isAuthenticated) {
-    return (
-      <div>
-        {/* We know that Auth0 provides the user's name, but another provider
-        might not. */}
-        <p>Logged in as {user!.name}</p>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => logout({ returnTo: window.location.origin })}
-        >
-          Log out
-        </button>
-      </div>
-    );
-  } else {
-    return (
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={loginWithRedirect}
-      >
-        Log in
-      </button>
-    );
-  }
-}

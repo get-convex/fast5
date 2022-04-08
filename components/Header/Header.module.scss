@@ -1,8 +1,23 @@
 .root {
-  align-items: center;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 0px 0px 12px 12px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   height: 60px;
+  padding: 0 24px;
+}
+
+.left,
+.center,
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.center {
   justify-content: center;
+}
+
+.right {
+  justify-content: flex-end;
 }
