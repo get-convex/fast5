@@ -48,13 +48,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Word racing at its finest" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="px-0">
-        <form>
-          <div className="flex flex-col w-80 mx-auto my-5 items-center">
-            {userId !== null && <StartGame />}
-          </div>
-        </form>
-      </main>
+      {userId ? <StartGame /> : <p>TODO: Logged-out content.</p>}
     </div>
   );
 };

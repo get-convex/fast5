@@ -1,0 +1,29 @@
+.root {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.key {
+  background: white;
+  height: 48px;
+  width: 40px;
+}
+
+.keyWide {
+  width: 64px;
+}
+
+.keyLetterNotFound {
+  background: #576065;
+}
+
+.keyLetterFound {
+  background: #4fa033;
+}
