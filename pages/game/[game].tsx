@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
-import BoardCell from '../../components/Board/BoardCell/BoardCell';
+import BoardSide from '../../components/Board/BoardSide/BoardSide';
 import Keyboard from '../../components/Keyboard/Keyboard';
 import { useConvex, useMutation, useQuery } from '../../convex/_generated';
 import { addToast, boot, pruneToasts } from '../../lib/game/flow';
@@ -28,7 +28,6 @@ import {
   roundWinner,
   submittedRow,
   toasts,
-  User,
   userMe,
   userThem,
 } from '../../lib/game/state';
@@ -389,61 +388,6 @@ const Board = () => {
         user={them}
         isWinner={game?.board.winner === them!.number}
       />
-    </div>
-  );
-};
-
-const BoardSide = (props: any) => {
-  const user: User = props.user as User;
-  var rows = [];
-  var scoreRow = props.isOverflow
-    ? user.board!.serverCount
-    : user.board!.serverCount - 1;
-  for (var i = 0; i < 6; i++) {
-    let row = user.board!.rows[i];
-    const isWrong =
-      i < scoreRow || (i === user.board!.serverCount - 1 && !props.isWinner);
-    rows.push(
-      BoardRow({
-        cells: row.cells,
-        key: i,
-        score: row.score,
-        isWinner: props.isWinner && scoreRow == i,
-        isWrong: isWrong,
-      })
-    );
-  }
-
-  if (props.isWinner) {
-    return <div className="w-full mx-8 bg-yellow-50">{rows}</div>;
-  } else {
-    return <div className="w-full mx-8">{rows}</div>;
-  }
-};
-
-const BoardRow = (props: any) => {
-  var cells = [];
-  for (var i = 0; i < 5; i++) {
-    cells.push(BoardCell({ code: props.cells[i], key: i }));
-  }
-
-  var scoreClasses = ['flex-initial', 'w-16'];
-  if (props.isWinner) {
-    scoreClasses.push('text-green-500');
-    var score = (
-      <div className="flex-initial w-16 text-green-500">{props.score}</div>
-    );
-  } else if (props.isWrong) {
-    scoreClasses.push('line-through');
-    var score = (
-      <div className="flex-initial w-16 line-through">{props.score}</div>
-    );
-  }
-
-  return (
-    <div key={`row-${props.key}`} className="flex w-1/8 h-12 my-4">
-      {cells}
-      <div className={classNames(scoreClasses)}>{props.score}</div>
     </div>
   );
 };
