@@ -1,0 +1,41 @@
+.root {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.key {
+  background: var(--color-neutral-2);
+  height: 48px;
+  width: 40px;
+  border-radius: 4px;
+  box-shadow: inset 0px -2px 0px rgba(0, 0, 0, 0.2);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+}
+
+.keyWide {
+  width: 64px;
+}
+
+.keyLetterNotFound {
+  background: linear-gradient(
+    var(--color-neutral-4) 0%,
+    var(--color-neutral-3) 100%
+  );
+  color: var(--color-white);
+}
+
+.keyLetterFound {
+  background: linear-gradient(
+    var(--color-beer-garden) 0%,
+    var(--color-green-flash) 100%
+  );
+  color: var(--color-white);
+}

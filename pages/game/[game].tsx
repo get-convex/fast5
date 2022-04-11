@@ -1,12 +1,18 @@
+import { useAuth0 } from '@auth0/auth0-react';
+import { Id } from '@convex-dev/react';
+import classNames from 'classnames';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useMutation, useConvex, useQuery } from '../../convex/_generated';
-import { Id } from '@convex-dev/react';
-import { create } from 'domain';
-import { ALL_KEYS, handleGameInput } from '../../lib/game/input';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
+import Keyboard from '../../components/Keyboard/Keyboard';
+import { useConvex, useMutation, useQuery } from '../../convex/_generated';
 import { addToast, boot, pruneToasts } from '../../lib/game/flow';
+import { ALL_KEYS, handleGameInput } from '../../lib/game/input';
+import { BackendGame, BackendRound } from '../../lib/game/proto';
 import {
   backendGameState,
   backendRoundState,
@@ -17,7 +23,6 @@ import {
   gameName,
   gameOver,
   gameState,
-  keyboardUsedState,
   needNewRound,
   roundWinner,
   submittedRow,
@@ -26,13 +31,6 @@ import {
   userMe,
   userThem,
 } from '../../lib/game/state';
-import { dlog } from '../../lib/game/util';
-import classNames from 'classnames';
-import Router, { useRouter } from 'next/router';
-import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
-import { BackendGame, BackendRound } from '../../lib/game/proto';
-import { useAuth0 } from '@auth0/auth0-react';
-import Image from 'next/image';
 
 const Game: NextPage = () => {
   const router = useRouter();
@@ -152,7 +150,6 @@ const MatchContainer = (props: any) => {
       <div className="flex">
         <Board />
       </div>
-      <KeyBoard />
     </div>
   );
 };
@@ -353,49 +350,6 @@ const Round = (props: any) => {
   return <div className="flex-auto align-middle">{message}</div>;
 };
 
-const KeyBoard = () => {
-  const keyMap = useRecoilValue(keyboardUsedState);
-  const rows = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
-
-  return (
-    <div className="w-1/2 mx-auto items-center">
-      <KeyBoardRow rowkey={0} letters={rows[0]} keyMap={keyMap} />
-      <KeyBoardRow rowkey={1} letters={rows[1]} keyMap={keyMap} />
-      <KeyBoardRow rowkey={2} letters={rows[2]} keyMap={keyMap} />
-    </div>
-  );
-};
-
-const KeyBoardRow = (props: any) => {
-  var keys = [];
-  for (const letter of props.letters) {
-    const state = props.keyMap.get(letter);
-    const key = `kb-${letter}`;
-    const cellClasses = ['flex-auto', 'w-8', 'text-center', 'm-1', 'rounded'];
-    if (!state) {
-      var cls = classNames(cellClasses, 'bg-gray-200');
-    } else if (state === '0') {
-      var cls = classNames(cellClasses, 'bg-gray-400');
-    } else if (state === '1') {
-      var cls = classNames(cellClasses, 'bg-yellow-400');
-    } else if (state === '2') {
-      var cls = classNames(cellClasses, 'bg-green-400');
-    } else {
-      throw 'Unknown key state';
-    }
-    keys.push(
-      <div key={key} className={cls}>
-        {letter}
-      </div>
-    );
-  }
-  return (
-    <div key={props.rowkey} className="flex">
-      {keys}
-    </div>
-  );
-};
-
 const Board = () => {
   const game = useRecoilValue(gameState);
   const me = useRecoilValue(userMe);
@@ -421,11 +375,14 @@ const Board = () => {
   }
   return (
     <div className="flex w-full">
-      <BoardSide
-        isOverflow={game?.board.overflow}
-        user={me}
-        isWinner={game?.board.winner === me!.number}
-      />
+      <div className="w-full mx-8">
+        <BoardSide
+          isOverflow={game?.board.overflow}
+          user={me}
+          isWinner={game?.board.winner === me!.number}
+        />
+        <Keyboard />
+      </div>
       <BoardSide
         isOverflow={game?.board.overflow}
         user={them}

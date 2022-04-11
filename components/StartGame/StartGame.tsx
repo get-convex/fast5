@@ -59,7 +59,7 @@ function StartGame() {
         </p>
         <p>After 5 rounds, the racer with the most points wins!</p>
       </div>
-      <div className={styles.actions}>
+      <form className={styles.actions}>
         <Button onClick={handleCreateGame}>
           Create a Game to Play a Friend
         </Button>
@@ -67,7 +67,7 @@ function StartGame() {
         <Button onClick={handleRandom}>
           Play a Friendly Internet Stranger
         </Button>
-      </div>
+      </form>
     </Modal>
   );
 }
