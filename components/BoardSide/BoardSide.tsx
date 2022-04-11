@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { useRecoilValue } from 'recoil';
-import { User, userMe } from '../../../lib/game/state';
+import { User, userMe } from '../../lib/game/state';
 import BoardRow from '../BoardRow/BoardRow';
 import styles from './BoardSide.module.scss';
 

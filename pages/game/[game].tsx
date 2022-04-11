@@ -8,8 +8,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
-import BoardSide from '../../components/Board/BoardSide/BoardSide';
-import Keyboard from '../../components/Keyboard/Keyboard';
+import Board from '../../components/Board/Board';
 import { useConvex, useMutation, useQuery } from '../../convex/_generated';
 import { addToast, boot, pruneToasts } from '../../lib/game/flow';
 import { ALL_KEYS, handleGameInput } from '../../lib/game/input';
@@ -147,9 +146,7 @@ const MatchContainer = (props: any) => {
       <div className="flex h-14">
         <Toasts />
       </div>
-      <div className="flex">
-        <Board />
-      </div>
+      <Board />
     </div>
   );
 };
@@ -348,48 +345,6 @@ const Round = (props: any) => {
     var message = <div>Get ready...</div>;
   }
   return <div className="flex-auto align-middle">{message}</div>;
-};
-
-const Board = () => {
-  const game = useRecoilValue(gameState);
-  const me = useRecoilValue(userMe);
-  const them = useRecoilValue(userThem);
-  const gname = useRecoilValue(gameName);
-  if (game?.board === null || me === null || them === null) {
-    if (game?.ready) {
-      return <div className="flex w-full">Get Ready!</div>;
-    }
-    if (game?.public) {
-      return (
-        <div className="flex w-full">
-          Waiting for a friendly Internet stranger...
-        </div>
-      );
-    } else {
-      return (
-        <div className="flex w-full">
-          Share this game code with your friend: {gname?.toLocaleUpperCase()}
-        </div>
-      );
-    }
-  }
-  return (
-    <div className="flex w-full">
-      <div className="w-full mx-8">
-        <BoardSide
-          isOverflow={game?.board.overflow}
-          user={me}
-          isWinner={game?.board.winner === me!.number}
-        />
-        <Keyboard />
-      </div>
-      <BoardSide
-        isOverflow={game?.board.overflow}
-        user={them}
-        isWinner={game?.board.winner === them!.number}
-      />
-    </div>
-  );
 };
 
 const ROUND_START_DELAY = 7000;
