@@ -375,7 +375,7 @@ const Board = () => {
   }
   return (
     <div className="flex w-full">
-      <div>
+      <div className="w-full mx-8">
         <BoardSide
           isOverflow={game?.board.overflow}
           user={me}
