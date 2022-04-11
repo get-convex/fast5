@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
+import BoardCell from '../../components/Board/BoardCell/BoardCell';
 import Keyboard from '../../components/Keyboard/Keyboard';
 import { useConvex, useMutation, useQuery } from '../../convex/_generated';
 import { addToast, boot, pruneToasts } from '../../lib/game/flow';
@@ -423,7 +424,7 @@ const BoardSide = (props: any) => {
 const BoardRow = (props: any) => {
   var cells = [];
   for (var i = 0; i < 5; i++) {
-    cells.push(Cell({ code: props.cells[i], key: i }));
+    cells.push(BoardCell({ code: props.cells[i], key: i }));
   }
 
   var scoreClasses = ['flex-initial', 'w-16'];
@@ -443,37 +444,6 @@ const BoardRow = (props: any) => {
     <div key={`row-${props.key}`} className="flex w-1/8 h-12 my-4">
       {cells}
       <div className={classNames(scoreClasses)}>{props.score}</div>
-    </div>
-  );
-};
-
-const Cell = (props: any) => {
-  if (props.code[1] !== '?') {
-    var char = props.code[1] as string;
-  } else {
-    var char = '';
-  }
-  var cellClasses = ['rounded', 'm-1', 'flex-auto', 'text-2xl', 'text-center'];
-  if (props.code[0] === '?') {
-    cellClasses.push('bg-gray-200');
-  } else if (props.code[0] === '0') {
-    cellClasses.push('bg-gray-400');
-  } else if (props.code[0] === '1') {
-    cellClasses.push('bg-yellow-400');
-  } else if (props.code[0] === '2') {
-    cellClasses.push('bg-green-400');
-  } else if (props.code[0] === 'A') {
-    cellClasses.push('bg-gray-100');
-  } else if (props.code[0] === 'H') {
-    cellClasses.push('bg-amber-100');
-  } else if (props.code[0] === 'P') {
-    cellClasses.push('bg-sky-100', 'shadow-md', 'text-gray-600');
-  } else {
-    throw 'unknown cell formatting code';
-  }
-  return (
-    <div key={`cell-${props.key}`} className={classNames(cellClasses)}>
-      {char}
     </div>
   );
 };
