@@ -1,14 +1,30 @@
 .base {
-  box-shadow: inset 0px 4px 8px rgba(82, 108, 123, 0.15);
-  width: 60px;
-  height: 60px;
+  align-items: center;
   border-radius: 16px;
-  font-size: var(--font-size-huge);
-  font-weight: var(--font-weight-semibold);
+  box-shadow: inset 0px 4px 8px rgba(82, 108, 123, 0.15);
   color: var(--color-white);
   display: flex;
-  align-items: center;
+  font-size: var(--font-size-huge);
+  font-weight: var(--font-weight-semibold);
+  height: 60px;
   justify-content: center;
+  position: relative;
+  user-select: none;
+  width: 60px;
+
+  &::after {
+    border-radius: 8px;
+    bottom: 10px;
+    content: '';
+    left: 10px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+}
+
+.letter {
+  z-index: 1;
 }
 
 .unplayed {
@@ -18,26 +34,43 @@
 .notFound {
   background: #666e72;
   box-shadow: 0px 2px 8px rgba(82, 108, 123, 0.2);
+
+  &::after {
+    background: linear-gradient(180deg, #576065 0%, #788084 100%);
+  }
 }
 
 .found {
   background: #deb13e;
   box-shadow: 0px 2px 8px rgba(82, 108, 123, 0.2);
+
+  &::after {
+    background: linear-gradient(180deg, #cfa333 0%, #efc351 100%);
+  }
 }
 
 .foundExact {
   background: #61b544;
   box-shadow: 0px 2px 8px rgba(82, 108, 123, 0.2);
+
+  &::after {
+    background: linear-gradient(180deg, #4fa033 0%, #75c857 100%);
+  }
 }
 
 .activeWord {
   background: var(--color-neutral-2);
   color: var(--color-black);
+
+  &::after {
+    background: linear-gradient(180deg, #bcc7ce 0%, #fbfbfb 100%);
+  }
 }
 
 .focused {
   background: var(--color-white);
   color: var(--color-black);
+  border: 4px inset var(--color-black);
 }
 
 .submitting {

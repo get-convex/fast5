@@ -31,7 +31,7 @@ function BoardCell({ code, key }: BoardCellProps) {
       key={key}
       className={classNames(styles.base, styleForState[tileState])}
     >
-      {tileLetter}
+      <span className={styles.letter}>{tileLetter}</span>
     </div>
   );
 }
