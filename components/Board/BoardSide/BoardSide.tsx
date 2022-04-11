@@ -1,36 +1,43 @@
 import classNames from 'classnames';
-import { User } from '../../../lib/game/state';
+import { useRecoilValue } from 'recoil';
+import { User, userMe } from '../../../lib/game/state';
 import BoardRow from '../BoardRow/BoardRow';
 import styles from './BoardSide.module.scss';
 
-function Board(props: any) {
-  const user: User = props.user as User;
+type BoardSideProps = {
+  user: User;
+  isWinner: boolean;
+  isOverflow?: boolean;
+};
+
+function BoardSide({ user, isOverflow, isWinner }: BoardSideProps) {
+  const currentUser = useRecoilValue(userMe);
+
   var rows = [];
-  var scoreRow = props.isOverflow
+  var scoreRow = isOverflow
     ? user.board!.serverCount
     : user.board!.serverCount - 1;
   for (var i = 0; i < 6; i++) {
     let row = user.board!.rows[i];
     const isWrong =
-      i < scoreRow || (i === user.board!.serverCount - 1 && !props.isWinner);
+      i < scoreRow || (i === user.board!.serverCount - 1 && !isWinner);
     rows.push(
       BoardRow({
-        cells: row.cells,
+        cellCodes: row.cells,
         key: i,
         score: row.score,
-        isWinner: props.isWinner && scoreRow == i,
+        isWinner: isWinner && scoreRow == i,
         isWrong: isWrong,
+        showScore: user.number === currentUser?.number,
       })
     );
   }
 
   return (
-    <div
-      className={classNames(styles.root, { [styles.winner]: props.isWinner })}
-    >
+    <div className={classNames(styles.root, { [styles.winner]: isWinner })}>
       {rows}
     </div>
   );
 }
 
-export default Board;
+export default BoardSide;
