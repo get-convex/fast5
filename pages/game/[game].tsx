@@ -150,7 +150,6 @@ const MatchContainer = (props: any) => {
       <div className="flex">
         <Board />
       </div>
-      <Keyboard />
     </div>
   );
 };
@@ -376,11 +375,14 @@ const Board = () => {
   }
   return (
     <div className="flex w-full">
-      <BoardSide
-        isOverflow={game?.board.overflow}
-        user={me}
-        isWinner={game?.board.winner === me!.number}
-      />
+      <div>
+        <BoardSide
+          isOverflow={game?.board.overflow}
+          user={me}
+          isWinner={game?.board.winner === me!.number}
+        />
+        <Keyboard />
+      </div>
       <BoardSide
         isOverflow={game?.board.overflow}
         user={them}
