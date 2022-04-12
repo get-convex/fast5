@@ -1,5 +1,12 @@
 .root {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr min-content 1fr;
   gap: 32px;
+}
+
+.message {
+  color: white;
+  font-size: var(--font-size-huge);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
 }
