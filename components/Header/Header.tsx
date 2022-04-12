@@ -1,15 +1,18 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { gameState } from '../../lib/game/state';
+import { gameState, userMe, userThem } from '../../lib/game/state';
 import Button from '../Button/Button';
 import Instructions from '../Instructions/Instructions';
 import LoginLogout from '../LoginLogout/LoginLogout';
 import Modal from '../Modal/Modal';
+import PlayerBar from '../PlayerBar/PlayerBar';
 import styles from './Header.module.scss';
 
 function Header() {
   const game = useRecoilValue(gameState);
+  const me = useRecoilValue(userMe);
+  const them = useRecoilValue(userThem);
   const [instructionsOpen, setInstructionsOpen] = useState(false);
 
   // If we're not in a game, show the login/logout button.
@@ -22,15 +25,16 @@ function Header() {
   // If we're in a game, show more details.
   if (game !== null) {
     content = {
-      left: <p>TODO: Player</p>,
+      left: <PlayerBar user={me} />,
       center: (
         <div className={styles.buttonGroup}>
           {/* TODO: Icons instead of text for these. */}
           <Button onClick={() => setInstructionsOpen(true)}>Help</Button>
+          {/* TODO: Make this work. */}
           <Button>Exit</Button>
         </div>
       ),
-      right: <p>TODO: Opponent</p>,
+      right: <PlayerBar user={them} />,
     };
   }
 

@@ -1,0 +1,34 @@
+.root {
+  background: var(--color-pheromone-purple);
+  border: 3px solid var(--color-black);
+  border-radius: 8px;
+  height: 42px;
+  box-shadow: inset 0px -2px 0px rgba(0, 0, 0, 0.2);
+  color: var(--color-white);
+  font-size: var(--font-size-smallest);
+  font-weight: var(--font-weight-semibold);
+  padding: 0 12px 0 51px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  border: 3px solid var(--color-black);
+  border-radius: 8px;
+  left: -3px;
+  bottom: -3px;
+  top: -3px;
+  position: absolute;
+  overflow: hidden;
+  box-shadow: inset 0px -2px 0px rgba(0, 0, 0, 0.2);
+}
+
+.reverse {
+  padding: 0 51px 0 12px;
+
+  .avatar {
+    left: auto;
+    right: -3px;
+  }
+}
