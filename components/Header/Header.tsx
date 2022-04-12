@@ -15,37 +15,47 @@ function Header() {
   const them = useRecoilValue(userThem);
   const [instructionsOpen, setInstructionsOpen] = useState(false);
 
-  // If we're not in a game, show the login/logout button.
-  let content = {
-    left: <></>,
-    center: <Image src="/logo.svg" width="83" height="36" alt="Fast5 logo" />,
-    right: <LoginLogout />,
-  };
-
   // If we're in a game, show more details.
-  if (game !== null) {
-    content = {
-      left: <PlayerBar user={me} />,
-      center: (
-        <div className={styles.buttonGroup}>
-          {/* TODO: Icons instead of text for these. */}
-          <Button onClick={() => setInstructionsOpen(true)}>Help</Button>
-          {/* TODO: Make this work. */}
-          <Button>Exit</Button>
-        </div>
-      ),
-      right: <PlayerBar user={them} />,
-    };
+  if (game?.board && me && them) {
+    return (
+      <>
+        <header className={styles.root}>
+          <div className={styles.left}>
+            <PlayerBar user={me} />
+          </div>
+          <div className={styles.center}>
+            <div className={styles.buttonGroup}>
+              {/* TODO: Icons instead of text for these. */}
+              <Button onClick={() => setInstructionsOpen(true)}>Help</Button>
+              {/* TODO: Make this work. */}
+              <Button>Exit</Button>
+            </div>
+          </div>
+          <div className={styles.right}>
+            <PlayerBar user={them} />
+          </div>
+        </header>
+        <Modal open={instructionsOpen}>
+          <div className={styles.instructions}>
+            <Instructions />
+            <Button onClick={() => setInstructionsOpen(false)}>Close</Button>
+          </div>
+        </Modal>
+      </>
+    );
   }
 
-  console.log('Header', { game });
-
+  // We're not in a game, show the default items.
   return (
     <>
       <header className={styles.root}>
-        <div className={styles.left}>{content.left}</div>
-        <div className={styles.center}>{content.center}</div>
-        <div className={styles.right}>{content.right}</div>
+        <div className={styles.left} />
+        <div className={styles.center}>
+          <Image src="/logo.svg" width="83" height="36" alt="Fast5 logo" />
+        </div>
+        <div className={styles.right}>
+          <LoginLogout />
+        </div>
       </header>
       <Modal open={instructionsOpen}>
         <div className={styles.instructions}>
