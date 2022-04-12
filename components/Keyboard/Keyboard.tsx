@@ -14,7 +14,6 @@ function Keyboard({}: KeyboardProps) {
     ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE'],
   ];
 
-  console.log('Keyboard (new) -> render', { letterStates });
   return (
     <div className={styles.root}>
       {keys.map((row, rowIndex) => (
@@ -22,7 +21,6 @@ function Keyboard({}: KeyboardProps) {
           {row.map((letter) => {
             const state = letterStates.get(letter);
             // TODO: Make these buttons work as an alternative to the keyboard.
-            console.log({ letterStates, letter });
             return (
               <button
                 key={letter}

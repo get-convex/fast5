@@ -1,0 +1,28 @@
+.root {
+  display: flex;
+  gap: 10px;
+  position: relative;
+}
+
+.score {
+  align-items: center;
+  color: var(--color-deep-daishin-yellow);
+  display: flex;
+  font-size: var(--font-size-huge);
+  font-weight: var(--font-weight-medium);
+  height: 100%;
+  justify-content: end;
+  left: -64px;
+  position: absolute;
+  width: 40px;
+}
+
+.scoreWrong {
+  text-decoration: line-through;
+  color: white;
+}
+
+.scoreRight {
+  // TODO: Design needed.
+  background: yellow;
+}
