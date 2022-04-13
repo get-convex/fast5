@@ -21,3 +21,14 @@
 .right {
   justify-content: flex-end;
 }
+
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

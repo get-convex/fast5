@@ -28,6 +28,15 @@ function Board() {
       );
     }
   }
+
+  let message = 'Get ready...';
+  if (game?.winner !== null) {
+    message = 'Game over!';
+  }
+  if (game?.round) {
+    message = `Round: ${game?.round}`;
+  }
+
   return (
     <div className={styles.root}>
       <div>
@@ -38,6 +47,7 @@ function Board() {
         />
         <Keyboard />
       </div>
+      <p className={styles.message}>{message}</p>
       <BoardSide
         isOverflow={game?.board.overflow}
         user={them}

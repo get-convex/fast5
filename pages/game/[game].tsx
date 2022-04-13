@@ -104,12 +104,7 @@ const Game: NextPage = () => {
         <meta name="description" content="Word racing at its finest" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="px-0">
-        <div className="justify-center bg-slate-900 text-yellow-600 p-2 flex">
-          <div className="">Fast5</div>
-        </div>
-        {body}
-      </main>
+      {body}
     </div>
   );
 };
@@ -140,9 +135,6 @@ const MatchContainer = (props: any) => {
     <div>
       <GameFlowDriver />
       <InputHandler />
-      <div className="flex">
-        <Match />
-      </div>
       <div className="flex h-14">
         <Toasts />
       </div>
@@ -276,64 +268,6 @@ const Toasts = () => {
     );
   }
   return <div className="flex">{tels}</div>;
-};
-
-const Match = () => {
-  const game = useRecoilValue(gameState);
-  const me = useRecoilValue(userMe)!;
-  const them = useRecoilValue(userThem)!;
-  if (game === null) {
-    return <div className="flex justify-center w-full bg-purple-100" />;
-  }
-  return (
-    <div className="flex justify-center w-full bg-purple-100">
-      <MatchUser
-        user={me}
-        isWinner={game.board?.winner === me.number}
-        overallWinner={game.winner === me.number}
-      />
-      <Round round={game.round} over={game.winner ?? false} />
-      <MatchUser
-        user={them}
-        isWinner={game.board?.winner === them.number}
-        overallWinner={game.winner === them.number}
-      />
-    </div>
-  );
-};
-
-const MatchUser = (props: any) => {
-  var scoreClasses = [];
-  if (props.isWinner) {
-    scoreClasses.push('text-green-500');
-  }
-
-  if (props.overallWinner) {
-    var winnerMark = <span>&#11088;</span>;
-  } else {
-    var winnerMark = <span></span>;
-  }
-
-  console.log('image props', props.user);
-
-  return (
-    <div className="flex-auto m-4">
-      <div>
-        {winnerMark}
-        {props.user?.photoUrl && (
-          <Image
-            className="rounded-full border border-gray-400 shadow"
-            src={props.user.photoUrl}
-            width={48}
-            height={48}
-            alt="User profile image"
-          />
-        )}
-        <strong>{props.user.displayName}</strong>
-      </div>
-      <div className={classNames(scoreClasses)}>Score: {props.user.score}</div>
-    </div>
-  );
 };
 
 const Round = (props: any) => {

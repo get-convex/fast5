@@ -1,12 +1,14 @@
+import classNames from 'classnames';
 import styles from './Modal.module.scss';
 
 type ModalProps = {
   children: React.ReactNode;
+  open: boolean;
 };
 
-function Modal({ children }: ModalProps) {
+function Modal({ children, open = false }: ModalProps) {
   return (
-    <div className={styles.root}>
+    <div className={classNames(styles.root, { [styles.closed]: !open })}>
       <div className={styles.modal}>{children}</div>
     </div>
   );
