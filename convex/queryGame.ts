@@ -1,4 +1,5 @@
-import { Id, query } from '@convex-dev/server';
+import { query } from 'convex-dev/server';
+import { Id } from 'convex-dev/values';
 import { WORDS } from '../lib/game/constants';
 import { BackendGame } from '../lib/game/proto';
 import { getUser } from './common';

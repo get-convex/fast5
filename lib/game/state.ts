@@ -1,4 +1,3 @@
-import { Id } from '@convex-dev/server';
 import { atom, RecoilState, RecoilValueReadOnly, selector } from 'recoil';
 import { BackendGame, BackendRound } from './proto';
 import { BoardSide, buildBoardSide, dlog } from './util';

@@ -1,4 +1,5 @@
-import { Id, mutation } from '@convex-dev/server';
+import { mutation } from 'convex-dev/server';
+import { Id } from 'convex-dev/values';
 import {
   FULL_SCORES,
   STOLEN_SCORES,

@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Id } from '@convex-dev/server';
+import { Id } from 'convex-dev/values';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -37,16 +37,13 @@ const Home: NextPage = () => {
     e.preventDefault();
     const validateAndGo = async () => {
       // TODO -- need better support for one-offs from react-convex land.
-      convex
-        .query('validateGame')
-        .watch(game)
-        .onUpdate((err) => {
-          if (typeof err === 'string') {
-            setError(`Error joining game: ${err}`);
-          } else {
-            router.push(`game/${game.toLocaleLowerCase().trim()}`);
-          }
-        });
+      convex.watchQuery('validateGame', game).onUpdate((err) => {
+        if (typeof err === 'string') {
+          setError(`Error joining game: ${err}`);
+        } else {
+          router.push(`game/${game.toLocaleLowerCase().trim()}`);
+        }
+      });
     };
     validateAndGo();
   };
