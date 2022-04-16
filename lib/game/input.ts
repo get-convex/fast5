@@ -1,4 +1,4 @@
-import { Id } from '@convex-dev/server';
+import { Id } from 'convex-dev/values';
 import { addToast } from './flow';
 
 export const ALL_KEYS = [

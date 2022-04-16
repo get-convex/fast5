@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Id } from '@convex-dev/react';
 import classNames from 'classnames';
+import { Id } from 'convex-dev/values';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';

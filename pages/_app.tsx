@@ -1,5 +1,5 @@
 import { Auth0Provider } from '@auth0/auth0-react';
-import { ConvexProvider, ConvexReactClient } from '@convex-dev/react';
+import { ConvexProvider, ConvexReactClient } from 'convex-dev/react';
 import type { AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
 import App from '../components/App/App';

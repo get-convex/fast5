@@ -1,6 +1,7 @@
-import { mutation, Id, UserIdentity } from '@convex-dev/server';
+import { mutation, UserIdentity } from 'convex-dev/server';
 import { User } from '../lib/game/proto';
 import md5 from 'md5';
+import { Id } from 'convex-dev/values';
 
 // Insert or update the user in a Convex table then return the document's Id.
 //

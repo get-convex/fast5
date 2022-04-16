@@ -58,57 +58,12 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@convex-dev/browser@0.0.67":
-  version "0.0.67"
-  resolved "https://registry.npmjs.org/@convex-dev/browser/-/browser-0.0.67.tgz"
-  integrity sha512-sbE8wj5FizVPE3pRpeX09Ia60OucgUUWTu+Hb9eRFDzxbI1HDAMGNnlNQAWaMVFIRdYNr1+wsjgsvxor9sfG9Q==
-  dependencies:
-    "@convex-dev/common" "0.0.67"
-    base64-js "^1.5.1"
-    bufferutil "^4.0.3"
-    encoding "^0.1.13"
-    node-fetch "^2.6.1"
-    utf-8-validate "^5.0.5"
-    ws "^7.5.1"
-    zod "^3.11.6"
-
-"@convex-dev/bundler@0.0.67":
-  version "0.0.67"
-  resolved "https://registry.npmjs.org/@convex-dev/bundler/-/bundler-0.0.67.tgz"
-  integrity sha512-m2kgdBOss8eBqlJNuZDaOMRtlFhCQ8Sp73K7MB74m1FhUQLyiVfca89vjHNfDMVa3ql6aHSLnuvCdU9LNmKPWw==
-  dependencies:
-    chalk "4"
-    esbuild "~0.14.16"
-
-"@convex-dev/cli@^0.0.67":
-  version "0.0.67"
-  resolved "https://registry.npmjs.org/@convex-dev/cli/-/cli-0.0.67.tgz"
-  integrity sha512-q3LVHTa6sCKvfuUF/79Gk0EMqvWT5KWXohOzYLu9G6K0A546vlmECEAClK3Xd13PKwHph2OXJGbNT3gPGp5YbA==
-  dependencies:
-    esbuild "~0.14.16"
-
-"@convex-dev/common@0.0.67":
-  version "0.0.67"
-  resolved "https://registry.npmjs.org/@convex-dev/common/-/common-0.0.67.tgz"
-  integrity sha512-X6L1furYxjb+56+cyijNoBLsfW+eLELJm8HOT0l12kHjlxVI7e7a41G0AQiZZzsEGnUYhFipmBUGC2qhaB1YaA==
+"convex-dev/common@0.0.71":
+  version "0.0.71"
+  resolved "https://registry.yarnpkg.com/convex-dev/common/-/common-0.0.71.tgz#12061b7769db881163e8ec4ae6428cdf0037af7b"
+  integrity sha512-k/5TDd/LaEs8rsxJJr+XIWGvf6kPQgBgXMoxMVsyeGMriGKcPC3f9NgD0cdFeKQLl9k22llwV78J/YkRYtyioA==
   dependencies:
     base64-js "^1.5.1"
-
-"@convex-dev/react@^0.0.67":
-  version "0.0.67"
-  resolved "https://registry.npmjs.org/@convex-dev/react/-/react-0.0.67.tgz"
-  integrity sha512-JubIAH1EHkCeMb99TNW0iSm3gfx2DGvtf3tweyl8TdtfiAk5vuvrVWKdSqSq03vYMT4kt1OmMJUJR0+t+YsO8g==
-  dependencies:
-    "@convex-dev/browser" "0.0.67"
-    "@convex-dev/common" "0.0.67"
-
-"@convex-dev/server@^0.0.67":
-  version "0.0.67"
-  resolved "https://registry.npmjs.org/@convex-dev/server/-/server-0.0.67.tgz"
-  integrity sha512-Oiiy+P9fYA7LK6ift5T7dH/+SK+ot0xhX9zQfdGsr79RIdO176zv8B6Le32Ay0/XnJ+F3myZkNDdy+AYcXzcoA==
-  dependencies:
-    "@convex-dev/bundler" "0.0.67"
-    "@convex-dev/common" "0.0.67"
 
 "@eslint/eslintrc@^1.2.0":
   version "1.2.0"
@@ -623,6 +578,23 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
+
+convex-dev@^0.0.71:
+  version "0.0.71"
+  resolved "https://registry.yarnpkg.com/convex-dev/-/convex-dev-0.0.71.tgz#4d7a235d7be2ad0fde5b7f8335336b667d4b2279"
+  integrity sha512-8SVcPyrVcmIIj7Fjmi3SxYsuaRAqO4359ZI8Yx/w301Su+unRjxoX7V3o4BLaXdnI8Zsz3a8GHT2YmOUOywa/g==
+  dependencies:
+    "convex-dev/common" "0.0.71"
+    base64-js "^1.5.1"
+    bufferutil "^4.0.3"
+    chalk "4"
+    encoding "^0.1.13"
+    esbuild "~0.14.16"
+    node-fetch "^2.6.1"
+    utf-8-validate "^5.0.5"
+    uuid "~8.3.2"
+    ws "^7.5.1"
+    zod "^3.11.6"
 
 core-js-pure@^3.20.2:
   version "3.21.1"
@@ -2410,6 +2382,11 @@ util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
+
+uuid@~8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache@^2.0.3:
   version "2.3.0"

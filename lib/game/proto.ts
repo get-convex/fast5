@@ -1,4 +1,4 @@
-import { Id } from '@convex-dev/server';
+import { Id } from 'convex-dev/values';
 
 export interface BackendGame {
   round: number;

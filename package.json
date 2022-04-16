@@ -10,12 +10,11 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.9.0",
-    "@convex-dev/react": "^0.0.67",
-    "@convex-dev/server": "^0.0.67",
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.6",
     "autoprefixer": "^10.4.2",
     "classnames": "^2.3.1",
+    "convex-dev": "^0.0.71",
     "md5": "^2.3.0",
     "next": "12.1.0",
     "postcss": "^8.4.8",
@@ -27,7 +26,6 @@
     "tailwindcss": "^3.0.23"
   },
   "devDependencies": {
-    "@convex-dev/cli": "^0.0.67",
     "@types/md5": "^2.3.2",
     "@types/node": "17.0.21",
     "@types/react": "17.0.39",

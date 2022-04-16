@@ -1,6 +1,7 @@
-import { Id, mutation } from '@convex-dev/server';
+import { mutation } from 'convex-dev/server';
 import { WORDS } from '../lib/game/constants';
 import { dlog } from '../lib/game/util';
+import { Id } from 'convex-dev/values';
 
 export default mutation(async ({ db }, gameId: Id, next: number) => {
   var game = await db.get(gameId);
