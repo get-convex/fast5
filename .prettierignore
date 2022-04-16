@@ -1,0 +1,5 @@
+# Ignore generated convex stubs
+convex/_generated.ts
+
+# Ignore generated css from tailwind
+dist/site.css
