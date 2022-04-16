@@ -37,15 +37,13 @@ const Home: NextPage = () => {
     e.preventDefault();
     const validateAndGo = async () => {
       // TODO -- need better support for one-offs from react-convex land.
-      convex
-        .watchQuery('validateGame', game)
-        .onUpdate((err) => {
-          if (typeof err === 'string') {
-            setError(`Error joining game: ${err}`);
-          } else {
-            router.push(`game/${game.toLocaleLowerCase().trim()}`);
-          }
-        });
+      convex.watchQuery('validateGame', game).onUpdate((err) => {
+        if (typeof err === 'string') {
+          setError(`Error joining game: ${err}`);
+        } else {
+          router.push(`game/${game.toLocaleLowerCase().trim()}`);
+        }
+      });
     };
     validateAndGo();
   };
