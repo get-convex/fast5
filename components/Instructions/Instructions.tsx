@@ -1,9 +1,11 @@
+import Divider from '../Divider/Divider';
 import styles from './Instructions.module.scss';
 
 function Instructions() {
   return (
     <div className={styles.root}>
       <h1>How to Play</h1>
+      <Divider />
       <p>
         Fast5 is a word racing game. Play against a friend, or a friendly
         Internet stranger!
