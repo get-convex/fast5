@@ -3,6 +3,7 @@ import { gameState, userMe, userThem, gameName } from '../../lib/game/state';
 import Keyboard from '../Keyboard/Keyboard';
 import BoardSide from '../BoardSide/BoardSide';
 import styles from './Board.module.scss';
+import WaitingModal from '../WaitingModal/WaitingModal';
 
 function Board() {
   const game = useRecoilValue(gameState);
@@ -15,12 +16,9 @@ function Board() {
       return <div className="flex w-full">Get Ready!</div>;
     }
     if (game?.public) {
-      return (
-        <div className="flex w-full">
-          Waiting for a friendly Internet stranger...
-        </div>
-      );
+      return <WaitingModal />;
     } else {
+      // TODO: This shows up briefly before playing a stranger.
       return (
         <div className="flex w-full">
           Share this game code with your friend: {gname?.toLocaleUpperCase()}
