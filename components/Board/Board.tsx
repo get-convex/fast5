@@ -1,10 +1,11 @@
 import { useRecoilValue } from 'recoil';
-import { gameState, userMe, userThem, gameName } from '../../lib/game/state';
-import Keyboard from '../Keyboard/Keyboard';
+import { gameName, gameState, userMe, userThem } from '../../lib/game/state';
 import BoardSide from '../BoardSide/BoardSide';
-import styles from './Board.module.scss';
-import WaitingModal from '../WaitingModal/WaitingModal';
+import Keyboard from '../Keyboard/Keyboard';
+import RoundMeter from '../RoundMeter/RoundMeter';
 import ShareCodeModal from '../ShareCodeModal/ShadeCodeModal';
+import WaitingModal from '../WaitingModal/WaitingModal';
+import styles from './Board.module.scss';
 
 function Board() {
   const game = useRecoilValue(gameState);
@@ -28,9 +29,6 @@ function Board() {
   if (game?.winner !== null) {
     message = 'Game over!';
   }
-  if (game?.round) {
-    message = `Round: ${game?.round}`;
-  }
 
   return (
     <div className={styles.root}>
@@ -42,7 +40,12 @@ function Board() {
         />
         <Keyboard />
       </div>
-      <p className={styles.message}>{message}</p>
+      {game?.round ? (
+        <RoundMeter round={game.round} />
+      ) : (
+        <p className={styles.message}>{message}</p>
+      )}
+
       <BoardSide
         isOverflow={game?.board.overflow}
         user={them}
