@@ -1,7 +1,9 @@
 .root {
   background: var(--color-deep-daishin-yellow);
-  border: 3px solid var(--color-black);
   border-radius: 8px;
-  padding: 12px 16px;
+  border: 3px solid var(--color-black);
+  color: var(--color-black);
+  font-size: var(--font-size-small);
   font-weight: var(--font-weight-black);
+  padding: 12px 16px;
 }

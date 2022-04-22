@@ -3,32 +3,9 @@
   margin-bottom: 36px;
 
   h1 {
-    border-bottom: 1px solid var(--color-matt-purple);
     font-size: var(--font-size-largest);
     font-weight: var(--font-weight-semibold);
-    margin-bottom: 28px;
-    padding-bottom: 28px;
-    position: relative;
     text-align: center;
-
-    &::before,
-    &::after {
-      background: var(--color-matt-purple);
-      bottom: -4px;
-      content: '';
-      height: 6px;
-      position: absolute;
-      transform: rotate(45deg);
-      width: 6px;
-    }
-
-    &:before {
-      left: 0;
-    }
-
-    &:after {
-      right: 0;
-    }
   }
 
   p {

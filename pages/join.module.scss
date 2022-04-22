@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  color: var(--color-white);
+  font-size: var(--font-size-larger);
+  font-weight: var(--font-weight-semibold);
+}
+
+.codeInput {
+  padding: 16px 20px;
+  box-shadow: inset 0px 4px 8px rgba(82, 108, 123, 0.15);
+  border-radius: 6px;
+  background: var(--color-neutral-1);
+  font-size: var(--font-size-smaller);
+  font-weight: var(--font-weight-black);
+  margin-bottom: 20px;
+}
+
+.error {
+  color: var(--color-white);
+  font-size: var(--font-size-smaller);
+  margin-bottom: 20px;
+}

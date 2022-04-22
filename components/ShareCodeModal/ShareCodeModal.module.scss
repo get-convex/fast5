@@ -1,0 +1,19 @@
+.root {
+  color: var(--color-white);
+  font-size: var(--font-size-larger);
+  font-weight: var(--font-weight-semibold);
+}
+
+.codeWrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  justify-content: center;
+}
+
+.code {
+  text-transform: uppercase;
+  color: var(--color-deep-daishin-yellow);
+  font-size: var(--font-size-huge);
+  font-weight: var(--font-weight-semibold);
+}

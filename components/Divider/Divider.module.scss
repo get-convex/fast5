@@ -1,0 +1,25 @@
+.root {
+  border-bottom: 1px solid var(--color-matt-purple);
+  margin: 24px 0;
+  position: relative;
+  width: 100%;
+
+  &::before,
+  &::after {
+    background: var(--color-matt-purple);
+    bottom: -4px;
+    content: '';
+    height: 6px;
+    position: absolute;
+    transform: rotate(45deg);
+    width: 6px;
+  }
+
+  &:before {
+    left: 0;
+  }
+
+  &:after {
+    right: 0;
+  }
+}
