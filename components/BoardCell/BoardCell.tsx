@@ -6,6 +6,8 @@ const styleForState: { [key: string]: string } = {
   '0': styles.notFound,
   '1': styles.found,
   '2': styles.foundExact,
+  '3': styles.foundNew,
+  '4': styles.foundExactNew,
   A: styles.activeWord,
   H: styles.focused,
   P: styles.submitting,

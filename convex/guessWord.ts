@@ -1,12 +1,8 @@
 import { mutation } from 'convex-dev/server';
 import { Id } from 'convex-dev/values';
-import {
-  FULL_SCORES,
-  STOLEN_SCORES,
-  WORDS,
-  ALL_WORDS,
-} from '../lib/game/constants';
+import { WORDS, ALL_WORDS } from '../lib/game/constants';
 import { getUser } from './common';
+import queryRound, { computeRoundState } from './queryRound';
 
 export default mutation(
   async ({ db, auth }, gameId: Id, word: string): Promise<boolean> => {
@@ -34,22 +30,23 @@ export default mutation(
 
     // Which user is this?
     if (user._id.equals(game.user1)) {
-      var incScore = (v: number) => {
-        game.score1 += v;
+      var incScore = () => {
+        // Get the computed round information.
+        game.score1 += computedRound?.user1.scores.reduce((a, n) => a + n, 0);
       };
-      var incOtherScore = (v: number) => {
-        game.score2 += v;
+      var incOtherScore = () => {
+        game.score2 += computedRound?.user2.scores.reduce((a, n) => a + n, 0);
       };
       var userRound = round.user1;
       var otherUserRound = round.user2;
       var userId = 1;
       var otherId = 2;
     } else if (user._id.equals(game.user2)) {
-      var incScore = (v: number) => {
-        game.score2 += v;
+      var incScore = () => {
+        game.score2 += computedRound?.user2.scores.reduce((a, n) => a + n, 0);
       };
-      var incOtherScore = (v: number) => {
-        game.score1 += v;
+      var incOtherScore = () => {
+        game.score1 += computedRound?.user1.scores.reduce((a, n) => a + n, 0);
       };
       var userRound = round.user2;
       var otherUserRound = round.user1;
@@ -61,25 +58,18 @@ export default mutation(
 
     // Must be room for another guess, if the winner is not decided.
     userRound.guesses.push(lword);
+    const computedRound = computeRoundState(user, game, round);
 
     if (lword === round.word) {
       // Guessed correctly!
       round.winner = userId;
-      incScore(
-        userRound.stolen
-          ? STOLEN_SCORES[userRound.guesses.length - 1]
-          : FULL_SCORES[userRound.guesses.length - 1]
-      );
+      incScore();
       await db.replace(game._id, game);
     } else if (userRound.guesses.length === 6) {
       // They're out of guesses
       round.winner = otherId;
       round.overflow = true;
-      incOtherScore(
-        otherUserRound.stolen
-          ? STOLEN_SCORES[otherUserRound.guesses.length]
-          : FULL_SCORES[otherUserRound.guesses.length]
-      );
+      incOtherScore();
       await db.replace(game._id, game);
     }
     await db.replace(round._id, round);

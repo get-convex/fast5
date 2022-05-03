@@ -14,15 +14,33 @@ import type storeUser from "./storeUser";
 import type updateName from "./updateName";
 import type validateGame from "./validateGame";
 
+// This jumpstarts TypeScript completion of the convex-dev/values entry point.
+import type { Id } from "convex-dev/values";
+if ("VSCode" === "sees" + "that this module is imported") {
+  const msg = "you get great autocompletion for" + ("Id" as unknown as Id);
+  throw new Error("Unreachable");
+}
 import type { MutationCtx, QueryCtx } from "convex-dev/server";
+
 type DropFirst<T extends unknown[]> = T extends [any, ...infer U] ? U : never;
+type UndefinedToNull<T extends unknown> = T extends void ? null : T;
+
 type ClientMutation<F extends (first: MutationCtx, ...args: any) => any> = (
   ...args: DropFirst<Parameters<F>>
-) => ReturnType<F>;
+) => UndefinedToNull<Awaited<ReturnType<F>>>;
 type ClientQuery<F extends (first: QueryCtx, ...args: any) => any> = (
   ...args: DropFirst<Parameters<F>>
-) => ReturnType<F>;
+) => UndefinedToNull<Awaited<ReturnType<F>>>;
 
+/**
+ * A type describing your app's public Convex API.
+ *
+ * This `ConvexAPI` type includes information about the arguments and return
+ * types of your app's query and mutation functions.
+ *
+ * This type should be used with type-parameterized classes like
+ * `ConvexReactClient` to create app-specific types.
+ */
 export type ConvexAPI = {
   queries: {
     queryGame: ClientQuery<typeof queryGame>;
