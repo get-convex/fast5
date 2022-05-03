@@ -1,6 +1,6 @@
 import { query } from 'convex-dev/server';
 import { Id } from 'convex-dev/values';
-import { FULL_SCORES, STOLEN_SCORES } from '../lib/game/constants';
+import { User } from '../lib/game/proto';
 import { getUser } from './common';
 
 export default query(async ({ db, auth }, gameId: Id) => {
@@ -13,25 +13,34 @@ export default query(async ({ db, auth }, gameId: Id) => {
   console.log('continuing...');
   const roundId = game.rounds[game.currentRound];
   const round = await db.get(roundId.id());
+  return computeRoundState(user, game, round);
+});
 
+export function computeRoundState(user: any, game: any, round: any) {
   const over = typeof round.winner === 'number';
-  const scores1 = round.user1.stolen ? STOLEN_SCORES : FULL_SCORES;
-  const guesses1: string[][] = buildLetters(
+
+  var { guesses, scores } = buildGuessState(
     round,
     round.user1,
     round.user2.stolen,
     user._id.equals(game.user1),
     over
   );
+  penalizeScores(round.user1.stolen, scores);
+  const guesses1 = guesses;
+  const scores1 = scores;
 
-  const scores2 = round.user2.stolen ? STOLEN_SCORES : FULL_SCORES;
-  const guesses2: string[][] = buildLetters(
+  var { guesses, scores } = buildGuessState(
     round,
     round.user2,
     round.user1.stolen,
     user._id.equals(game.user2),
     over
   );
+  penalizeScores(round.user2.stolen, scores);
+
+  const guesses2 = guesses;
+  const scores2 = scores;
 
   return {
     word: round.winner ? round.word : null,
@@ -48,19 +57,36 @@ export default query(async ({ db, auth }, gameId: Id) => {
     winner: round.winner ?? null,
     overflow: round.overflow,
   };
-});
+}
 
-function buildLetters(
+const penalizeScores = (stolen: boolean, scores: number[]) => {
+  if (stolen) {
+    for (var i in scores) {
+      scores[i] = scores[i] / 2;
+    }
+  }
+};
+
+interface GuessState {
+  guesses: string[][];
+  scores: number[];
+}
+
+function buildGuessState(
   round: any,
   user: any,
   stolen: boolean,
   isMe: boolean,
   done: boolean
-): string[][] {
+): GuessState {
   const word = round.word;
   const canSee = isMe || stolen || done;
+  var yellows: Set<string> = new Set();
+  var greens: Set<string> = new Set();
   var boardSide = [];
+  var scores = [];
   for (const guess of user.guesses) {
+    var rowScore = 0;
     if (canSee) {
       var result = [
         `0${guess[0].toLocaleUpperCase()}`,
@@ -79,7 +105,13 @@ function buildLetters(
     // Green if it's in the right place.
     for (var i = 0; i < 5; i++) {
       if (guess[i] === word[i]) {
-        result[i] = `2${result[i][1]}`;
+        if (!greens.has(guess[i])) {
+          greens.add(guess[i]);
+          rowScore += 4;
+          result[i] = `4${result[i][1]}`;
+        } else {
+          result[i] = `2${result[i][1]}`;
+        }
       } else {
         unmatchedLetters.push(word[i]);
         unmatchedIndexes.push(i);
@@ -91,11 +123,21 @@ function buildLetters(
     for (const i of unmatchedIndexes) {
       const idx = unmatchedLetters.findIndex((v) => v === guess[i]);
       if (idx !== -1) {
-        result[i] = `1${result[i][1]}`;
+        if (!yellows.has(guess[i])) {
+          yellows.add(guess[i]);
+          rowScore += 2;
+          result[i] = `3${result[i][1]}`;
+        } else {
+          result[i] = `1${result[i][1]}`;
+        }
         unmatchedLetters.splice(idx, 1);
       }
     }
     boardSide.push(result);
+    scores.push(rowScore);
   }
-  return boardSide;
+  return {
+    guesses: boardSide,
+    scores: scores,
+  };
 }

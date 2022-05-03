@@ -802,9 +802,6 @@ export const WORDS = [
   'arbor',
 ];
 
-export const FULL_SCORES = [8, 20, 12, 6, 4, 2];
-export const STOLEN_SCORES = [4, 10, 6, 3, 2, 1];
-
 export const ALL_WORDS = [
   'aahed',
   'aalii',

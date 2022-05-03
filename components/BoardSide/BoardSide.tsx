@@ -19,8 +19,9 @@ function BoardSide({ user, isOverflow, isWinner }: BoardSideProps) {
     : user.board!.serverCount - 1;
   for (var i = 0; i < 6; i++) {
     let row = user.board!.rows[i];
-    const isWrong =
-      i < scoreRow || (i === user.board!.serverCount - 1 && !isWinner);
+    const isWrong = false;
+    //    const isWrong =
+    //     i < scoreRow || (i === user.board!.serverCount - 1 && !isWinner);
     rows.push(
       BoardRow({
         cellCodes: row.cells,

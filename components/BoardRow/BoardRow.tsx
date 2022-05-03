@@ -27,16 +27,7 @@ function BoardRow({
   return (
     <div key={`row-${key}`} className={classNames('flex w-1/8', styles.root)}>
       {cells}
-      {showScore && (
-        <div
-          className={classNames(styles.score, {
-            [styles.scoreWrong]: isWrong,
-            [styles.scoreRight]: isWinner,
-          })}
-        >
-          {score}
-        </div>
-      )}
+      {showScore && <div className={classNames(styles.score, {})}>{score}</div>}
     </div>
   );
 }
