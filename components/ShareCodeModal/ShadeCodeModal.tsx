@@ -20,7 +20,9 @@ function ShareCodeModal() {
   return (
     <Modal open>
       <div className={styles.root}>
-        Share this game code with your friend
+        Share this game code with your friend.
+        <br />
+        The game will begin as soon as they join!
         <Divider />
         <div className={styles.codeWrapper}>
           <span className={styles.code}>{code}</span>
