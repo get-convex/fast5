@@ -215,7 +215,7 @@ const Toasts = () => {
           ></path>
         </svg>
       );
-    } else if (t.category === 'steal') {
+    } else if (t.category === 'spy') {
       var oc = classNames(outerClass, ['dark:bg-yellow-200']);
       var ic = classNames(
         innerClass,
@@ -296,8 +296,8 @@ const GameFlowDriver = () => {
 
   // Let's use these to track what's been "seen" or not.
   const [serverRows, setServerRows] = useState(-1);
-  const [user1Stolen, setUser1Stolen] = useState(false);
-  const [user2Stolen, setUser2Stolen] = useState(false);
+  const [user1Spying, setUser1Spying] = useState(false);
+  const [user2Spying, setUser2Spying] = useState(false);
 
   const [, setCurrentLetters] = useRecoilState(currentLetters);
   const [, setSubmittedRow] = useRecoilState(submittedRow);
@@ -311,38 +311,28 @@ const GameFlowDriver = () => {
     if (rwinner !== null) {
       addToast(setToasts, `${rwinner} won the round!`, 'guessed', 6000);
       setServerRows(-1);
-      setUser1Stolen(false);
-      setUser2Stolen(false);
+      setUser1Spying(false);
+      setUser2Spying(false);
       setCurrentLetters([]);
       setSubmittedRow(-1);
     }
   }, [rwinner, setCurrentLetters, setSubmittedRow, setToasts]);
 
-  // Look for a new stolen state from either side to notify via toast.
+  // Look for a new spying state from either side to notify via toast.
   useEffect(() => {
     if (round !== null && rwinner === null) {
-      if (round.user1.stolen && !user1Stolen) {
-        setUser1Stolen(true);
-        const stolenName = game!.user1.displayName;
-        addToast(
-          setToasts,
-          `${stolenName} is stealing answers!`,
-          'steal',
-          6000
-        );
+      if (round.user1.spying && !user1Spying) {
+        setUser1Spying(true);
+        const spyingName = game!.user1.displayName;
+        addToast(setToasts, `${spyingName} is spying!`, 'spy', 6000);
       }
-      if (round.user2.stolen && !user2Stolen) {
-        setUser2Stolen(true);
-        const stolenName = game!.user2!.displayName;
-        addToast(
-          setToasts,
-          `${stolenName} is stealing answers!`,
-          'steal',
-          6000
-        );
+      if (round.user2.spying && !user2Spying) {
+        setUser2Spying(true);
+        const spyingName = game!.user2!.displayName;
+        addToast(setToasts, `${spyingName} is spying!`, 'spy', 6000);
       }
     }
-  }, [setToasts, game, round, rwinner, user1Stolen, user2Stolen]);
+  }, [setToasts, game, round, rwinner, user1Spying, user2Spying]);
 
   // Look for a new row of ours from the server -- if it's there, our submission was accepted
   useEffect(() => {
@@ -393,11 +383,11 @@ const InputHandler = () => {
 
   // Methods we might invoke in response to input.
   const guessWord = useMutation('guessWord');
-  const steal = useMutation('steal');
+  const spy = useMutation('spy');
 
   useKey(
     ALL_KEYS,
-    handleGameInput(guessWord, steal, gid, ce, cl, setCl, cr, setSr, setToasts)
+    handleGameInput(guessWord, spy, gid, ce, cl, setCl, cr, setSr, setToasts)
   );
 
   return <></>;

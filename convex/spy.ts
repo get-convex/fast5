@@ -1,6 +1,6 @@
 import { mutation } from 'convex-dev/server';
 import { Id } from 'convex-dev/values';
-import { FULL_SCORES, STOLEN_SCORES, WORDS } from '../lib/game/constants';
+import { WORDS } from '../lib/game/constants';
 import { getUser } from './common';
 
 export default mutation(async ({ db, auth }, gameId: Id) => {
@@ -23,6 +23,6 @@ export default mutation(async ({ db, auth }, gameId: Id) => {
   }
 
   // Must be room for another guess, if the winner is not decided.
-  userRound.stolen = true;
+  userRound.spying = true;
   await db.replace(round._id, round);
 });

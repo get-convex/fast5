@@ -28,7 +28,7 @@ export interface BoardSide {
     active: boolean;
     cells: string[];
   }[];
-  stolen: boolean;
+  spying: boolean;
 }
 
 export function buildBoardSide(
@@ -71,6 +71,6 @@ export function buildBoardSide(
   return {
     serverCount: board.guesses.length,
     rows: rows,
-    stolen: board.stolen,
+    spying: board.spying,
   };
 }

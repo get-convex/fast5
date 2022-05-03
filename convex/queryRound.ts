@@ -22,22 +22,22 @@ export function computeRoundState(user: any, game: any, round: any) {
   var { guesses, scores } = buildGuessState(
     round,
     round.user1,
-    round.user2.stolen,
+    round.user2.spying,
     user._id.equals(game.user1),
     over
   );
-  penalizeScores(round.user1.stolen, scores);
+  penalizeScores(round.user1.spying, scores);
   const guesses1 = guesses;
   const scores1 = scores;
 
   var { guesses, scores } = buildGuessState(
     round,
     round.user2,
-    round.user1.stolen,
+    round.user1.spying,
     user._id.equals(game.user2),
     over
   );
-  penalizeScores(round.user2.stolen, scores);
+  penalizeScores(round.user2.spying, scores);
 
   const guesses2 = guesses;
   const scores2 = scores;
@@ -47,20 +47,20 @@ export function computeRoundState(user: any, game: any, round: any) {
     user1: {
       guesses: guesses1,
       scores: scores1,
-      stolen: round.user1.stolen,
+      spying: round.user1.spying,
     },
     user2: {
       guesses: guesses2,
       scores: scores2,
-      stolen: round.user2.stolen,
+      spying: round.user2.spying,
     },
     winner: round.winner ?? null,
     overflow: round.overflow,
   };
 }
 
-const penalizeScores = (stolen: boolean, scores: number[]) => {
-  if (stolen) {
+const penalizeScores = (spying: boolean, scores: number[]) => {
+  if (spying) {
     for (var i in scores) {
       scores[i] = scores[i] / 2;
     }
@@ -75,12 +75,12 @@ interface GuessState {
 function buildGuessState(
   round: any,
   user: any,
-  stolen: boolean,
+  spying: boolean,
   isMe: boolean,
   done: boolean
 ): GuessState {
   const word = round.word;
-  const canSee = isMe || stolen || done;
+  const canSee = isMe || spying || done;
   var yellows: Set<string> = new Set();
   var greens: Set<string> = new Set();
   var boardSide = [];
