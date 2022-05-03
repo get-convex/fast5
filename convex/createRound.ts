@@ -30,11 +30,11 @@ export default mutation(async ({ db }, gameId: Id, next: number) => {
     word: word,
     user1: {
       guesses: [],
-      stolen: false,
+      spying: false,
     },
     user2: {
       guesses: [],
-      stolen: false,
+      spying: false,
     },
     winner: null,
     overflow: false,

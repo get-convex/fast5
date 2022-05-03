@@ -9,7 +9,7 @@ import type guessWord from "./guessWord";
 import type joinGame from "./joinGame";
 import type queryGame from "./queryGame";
 import type queryRound from "./queryRound";
-import type steal from "./steal";
+import type spy from "./spy";
 import type storeUser from "./storeUser";
 import type updateName from "./updateName";
 import type validateGame from "./validateGame";
@@ -53,7 +53,7 @@ export type ConvexAPI = {
     createRound: ClientMutation<typeof createRound>;
     guessWord: ClientMutation<typeof guessWord>;
     joinGame: ClientMutation<typeof joinGame>;
-    steal: ClientMutation<typeof steal>;
+    spy: ClientMutation<typeof spy>;
     storeUser: ClientMutation<typeof storeUser>;
     updateName: ClientMutation<typeof updateName>;
   };

@@ -26,12 +26,12 @@ export interface BackendRound {
   user1: {
     guesses: string[][];
     scores: number[];
-    stolen: boolean;
+    spying: boolean;
   };
   user2: {
     guesses: string[][];
     scores: number[];
-    stolen: boolean;
+    spying: boolean;
   };
   winner: number | null;
   overflow: boolean;

@@ -56,12 +56,12 @@ export const ALL_KEYS = [
   'Z',
   'Backspace',
   'Enter',
-  '!',
+  ' ',
 ];
 
 export function handleGameInput(
   guessWord: any,
-  steal: any,
+  spy: any,
   gid: any,
   canEdit: any,
   currentLetters: any,
@@ -71,6 +71,7 @@ export function handleGameInput(
   setToasts: any
 ) {
   return (event: KeyboardEvent) => {
+    console.log(event.key);
     if (
       (event.keyCode >= 65 && event.keyCode <= 90) ||
       (event.keyCode >= 97 && event.keyCode <= 122)
@@ -108,14 +109,15 @@ export function handleGameInput(
         };
         tryGuess();
       }
-    } else if (event.key === '!') {
-      const doSteal = async () => {
+    } else if (event.key === ' ') {
+      event.preventDefault();
+      const doSpy = async () => {
         if (gid !== null) {
-          await steal(Id.fromString(gid));
+          await spy(Id.fromString(gid));
         }
       };
       if (canEdit) {
-        doSteal();
+        doSpy();
       }
     }
   };
