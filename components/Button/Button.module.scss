@@ -1,4 +1,6 @@
-.root {
+.root,
+.root[type='button'],
+.root[type='submit'] {
   background: var(--color-deep-daishin-yellow);
   border-radius: 8px;
   border: 3px solid var(--color-black);
