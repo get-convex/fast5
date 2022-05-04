@@ -5,6 +5,7 @@
   grid-template-columns: 1fr 1fr 1fr;
   height: 60px;
   padding: 0 24px;
+  z-index: var(--z-index-header);
 }
 
 .left,
