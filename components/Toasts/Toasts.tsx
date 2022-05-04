@@ -30,12 +30,8 @@ function Toasts() {
       'text-gray-500',
       'bg-white',
       'rounded-lg',
-      'divide-x',
-      'divide-gray-200',
       'shadow',
       'dark:text-gray-800',
-      'dark:divide-gray-700',
-      'space-x',
     ];
     var innerClass = [
       'inline-flex',
@@ -124,7 +120,7 @@ function Toasts() {
     tels.push(
       <div key={key} className={oc} role="alert">
         <div className={ic}>{icon}</div>
-        <div className="pl-4 text-sm font-normal">{t.message}</div>
+        <div className="text-sm font-bold whitespace-nowrap">{t.message}</div>
       </div>
     );
   }

@@ -132,7 +132,7 @@ const MatchContainer = (props: any) => {
     <div>
       <GameFlowDriver />
       <InputHandler />
-      <div className="flex h-14">
+      <div className="flex h-14 m-2">
         <Toasts />
       </div>
       <Board />
