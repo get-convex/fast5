@@ -51,7 +51,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Modal open>
-        <div className={styles.root}>
+        <form onSubmit={handleSubmit} className={styles.root}>
           <div className={styles.title}>Join your friend&rsquo;s game</div>
           <Divider />
           <input
@@ -61,8 +61,8 @@ const Home: NextPage = () => {
             onChange={handleTextChange(setGame)}
           />
           {error && <div className={styles.error}>{error}</div>}
-          <Button onClick={handleSubmit}>Join Game</Button>
-        </div>
+          <Button type="submit">Join Game</Button>
+        </form>
       </Modal>
     </div>
   );

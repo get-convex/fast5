@@ -29,6 +29,7 @@ function Keyboard({}: KeyboardProps) {
                   [styles.keyLetterNotFound]: state === '0',
                   [styles.keyLetterFound]: state === '1' || state === '2',
                 })}
+                onClick={() => console.log('clicked key', letter)}
               >
                 {letter === 'DELETE' ? '←' : letter}
               </button>
