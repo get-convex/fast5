@@ -7,10 +7,10 @@ function Footer() {
   return (
     <footer className={styles.root}>
       <Link href="https://convex.dev/" passHref>
-        <div>
+        <a>
           Built with{' '}
           <Image src="/convex.svg" width="94" height="17" alt="Convex logo" />
-        </div>
+        </a>
       </Link>
     </footer>
   );

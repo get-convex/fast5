@@ -5,8 +5,12 @@
   display: flex;
   font-size: var(--font-size-smaller);
   font-weight: var(--font-weight-regular);
-  gap: 4px;
   height: 40px;
   justify-content: center;
   position: relative;
+
+  a {
+    display: flex;
+    gap: 4px;
+  }
 }
