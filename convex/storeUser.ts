@@ -33,15 +33,22 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
     // If we've seen this identity before but the name has changed, update the value.
     if (user.name != identity.name) {
       user.name = identity.name!;
-      db.update(user._id, user);
     }
+    if (typeof identity.pictureUrl === 'string') {
+      if (user.photoUrl != identity.pictureUrl) {
+        user.photoUrl = identity.pictureUrl!;
+      }
+    } else {
+      user.photoUrl = createGravatarUrl(identity);
+    }
+    db.update(user._id, user);
     return user._id;
   }
   // If it's a new identity, create a new `User`.
   return db.insert('users', {
     name: identity.name!,
     displayName: identity.givenName ?? identity.name!,
-    photoUrl: createGravatarUrl(identity),
+    photoUrl: identity.pictureUrl ?? createGravatarUrl(identity),
     tokenIdentifier: identity.tokenIdentifier,
     // The `_id` field will be assigned by the backend.
   });
@@ -50,5 +57,5 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
 function createGravatarUrl(identity: UserIdentity): string {
   const email = identity.email!.trim().toLocaleLowerCase();
   const hash = md5(email);
-  return `https://www.gravatar.com/avatar/${hash}?d=monsterid`;
+  return `https://www.gravatar.com/avatar/${hash}?d=mp`;
 }
