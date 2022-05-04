@@ -37,6 +37,9 @@ function Keyboard({}: KeyboardProps) {
           })}
         </div>
       ))}
+      <button className={classNames(styles.key, styles.keySpacebar)}>
+        SPACEBAR TO SPY
+      </button>
     </div>
   );
 }
