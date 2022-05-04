@@ -4,9 +4,13 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 32px;
+  position: relative;
 }
 
-.winner {
-  // TODO: Need design for this.
-  border: 2px solid yellow;
+.confetti {
+  position: fixed;
+  height: 100vh;
+  width: 50vw;
+  top: 0;
+  z-index: var(--z-index-confetti);
 }

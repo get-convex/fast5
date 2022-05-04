@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import Confetti from 'react-confetti';
 import { useRecoilValue } from 'recoil';
 import { User, userMe } from '../../lib/game/state';
 import BoardRow from '../BoardRow/BoardRow';
@@ -35,7 +35,18 @@ function BoardSide({ user, isOverflow, isWinner }: BoardSideProps) {
   }
 
   return (
-    <div className={classNames(styles.root, { [styles.winner]: isWinner })}>
+    <div className={styles.root}>
+      {isWinner && (
+        <div className={styles.confetti}>
+          <Confetti
+            numberOfPieces={1000}
+            recycle={false}
+            width={window.innerWidth / 2}
+            height={window.innerHeight}
+          />
+        </div>
+      )}
+
       {rows}
     </div>
   );
