@@ -10,7 +10,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['www.gravatar.com'],
+    domains: ['www.gravatar.com', 'lh3.googleusercontent.com'],
   },
 };
 
