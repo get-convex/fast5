@@ -1,8 +1,8 @@
 {
   "authInfo": [
     {
-      "domain": "https://dev-cmcijui1.us.auth0.com",
-      "applicationID": "8LDbMeli4aE9BcJ2djy6vrxTn4SYdJ1P"
+      "domain": "https://fast5game.us.auth0.com",
+      "applicationID": "6KEk73Smc7EYgNTgHQCflY94ZoFx3Zz8"
     }
   ],
   "functions": "convex/",

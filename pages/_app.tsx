@@ -20,8 +20,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <Auth0Provider
         // domain and clientId come from your Auth0 app dashboard
-        domain="dev-cmcijui1.us.auth0.com"
-        clientId="8LDbMeli4aE9BcJ2djy6vrxTn4SYdJ1P"
+        domain="fast5game.us.auth0.com"
+        clientId="6KEk73Smc7EYgNTgHQCflY94ZoFx3Zz8"
         redirectUri={
           typeof window !== 'undefined' ? window.location.origin : ''
         }
