@@ -94,5 +94,11 @@
 }
 
 .submitting {
-  background: red;
+  background: var(--color-neutral-2);
+  color: var(--color-black);
+  opacity: 0.5;
+
+  &::after {
+    background: linear-gradient(180deg, #bcc7ce 0%, #fbfbfb 100%);
+  }
 }
