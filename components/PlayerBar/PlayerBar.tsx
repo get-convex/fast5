@@ -24,7 +24,7 @@ function PlayerBar({ user }: PlayerBarProps) {
       })}
     >
       <div className={styles.avatar}>
-        <Image
+        <img
           src={user.photoUrl}
           width="36"
           height="36"

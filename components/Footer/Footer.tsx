@@ -5,8 +5,9 @@ import styles from './Footer.module.scss';
 function Footer() {
   return (
     <footer className={styles.root}>
-      <a href="https://convex.dev/">Built with{' '}
-      <Image src="/convex.svg" width="94" height="17" alt="Convex logo" />
+      <a href="https://convex.dev/">
+        Built with{' '}
+        <Image src="/convex.svg" width="94" height="17" alt="Convex logo" />
       </a>
     </footer>
   );
