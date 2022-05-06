@@ -6,7 +6,7 @@ import classNames from 'classnames';
 type KeyboardProps = {};
 
 function Keyboard({}: KeyboardProps) {
-  const letterStates: Map<string, '0' | '1' | '2'> =
+  const letterStates: Map<string, '0' | '1' | '2' | '3' | '4'> =
     useRecoilValue(keyboardUsedState);
   const keys = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -27,7 +27,7 @@ function Keyboard({}: KeyboardProps) {
                 className={classNames(styles.key, {
                   [styles.keyWide]: letter.length > 1,
                   [styles.keyLetterNotFound]: state === '0',
-                  [styles.keyLetterFound]: state === '1' || state === '2',
+                  [styles.keyLetterFound]: state !== '0' && state !== undefined,
                 })}
                 onClick={() => console.log('clicked key', letter)}
               >
