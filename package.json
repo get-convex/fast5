@@ -13,6 +13,7 @@
     "@auth0/auth0-react": "^1.9.0",
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.6",
+    "animate.css": "^4.1.1",
     "autoprefixer": "^10.4.2",
     "classnames": "^2.3.1",
     "convex-dev": "^0.0.71",

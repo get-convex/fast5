@@ -1,16 +1,16 @@
 import classNames from 'classnames';
 import styles from './BoardCell.module.scss';
 
-const styleForState: { [key: string]: string } = {
-  '?': styles.unplayed,
-  '0': styles.notFound,
-  '1': styles.found,
-  '2': styles.foundExact,
-  '3': styles.foundNew,
-  '4': styles.foundExactNew,
-  A: styles.activeWord,
-  H: styles.focused,
-  P: styles.submitting,
+const styleForState: { [key: string]: string[] } = {
+  '?': [styles.unplayed],
+  '0': [styles.notFound],
+  '1': [styles.found],
+  '2': [styles.foundExact],
+  '3': [styles.found, "animate__animated animate__bounceIn"],
+  '4': [styles.foundExact, "animate__animated animate__bounceIn"],
+  A: [styles.activeWord],
+  H: [styles.focused],
+  P: [styles.submitting],
 };
 
 type BoardCellProps = {
@@ -33,7 +33,7 @@ function BoardCell({ code, key }: BoardCellProps) {
       key={key}
       className={classNames(styles.base, styleForState[tileState])}
     >
-      <span className={styles.letter}>{tileLetter}</span>
+      <span className={classNames(styles.letter)}>{tileLetter}</span>
     </div>
   );
 }

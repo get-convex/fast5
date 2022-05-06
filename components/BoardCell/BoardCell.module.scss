@@ -58,26 +58,6 @@
   }
 }
 
-// TODO Distinguish with shimmer or something?
-.foundNew {
-  background: #eec15e;
-  box-shadow: 0px 2px 8px rgba(82, 108, 123, 0.2);
-
-  &::after {
-    background: linear-gradient(180deg, #cfa333 0%, #efc351 100%);
-  }
-}
-
-// TODO Distinguish with shimmer or something?
-.foundExactNew {
-  background: #81d564;
-  box-shadow: 0px 2px 8px rgba(82, 108, 123, 0.2);
-
-  &::after {
-    background: linear-gradient(180deg, #4fa033 0%, #75c857 100%);
-  }
-}
-
 .activeWord {
   background: var(--color-neutral-2);
   color: var(--color-black);
