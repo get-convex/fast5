@@ -1,0 +1,23 @@
+.root {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span {
+    color: var(--color-white);
+    font-size: var(--font-size-huge);
+    display: block;
+    margin-bottom: 60px;
+  }
+
+  button[type='button'] {
+    font-size: var(--font-size-large);
+  }
+}

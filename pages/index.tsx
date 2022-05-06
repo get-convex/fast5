@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
+import Splash from '../components/Splash/Splash';
 import StartGame from '../components/StartGame/StartGame';
 import { useConvex, useMutation } from '../convex/_generated';
 
@@ -38,7 +39,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Word racing at its finest" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <StartGame />
+      {isAuthenticated ? <StartGame /> : <Splash />}
     </div>
   );
 };
