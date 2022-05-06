@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import styles from './Footer.module.scss';
 
 // TODO: This should be a link to the Convex showcase page.
