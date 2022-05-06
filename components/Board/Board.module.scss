@@ -10,3 +10,16 @@
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
 }
+
+.getReady {
+  font-size: 50px;
+  color: var(--color-white);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
