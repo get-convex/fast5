@@ -5,9 +5,10 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { useKey, useTimeoutWhen } from 'rooks';
+import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
 import Board from '../../components/Board/Board';
 import Toasts from '../../components/Toasts/Toasts';
+import ping from '../../convex/ping';
 import { useConvex, useMutation, useQuery } from '../../convex/_generated';
 import { addToast, boot } from '../../lib/game/flow';
 import { ALL_KEYS, handleGameInput } from '../../lib/game/input';
@@ -45,13 +46,16 @@ const Game: NextPage = () => {
   const resetCurrentLetters = useResetRecoilState(currentLetters);
   const resetToasts = useResetRecoilState(toasts);
   useEffect(() => {
-    resetBackendGameState();
-    resetBackendRoundState();
-    resetGameId();
-    resetGameName();
-    resetSubmittedRow();
-    resetCurrentLetters();
-    resetToasts();
+    // Reset all this when we navigate away.
+    return () => {
+      resetBackendGameState();
+      resetBackendRoundState();
+      resetGameId();
+      resetGameName();
+      resetSubmittedRow();
+      resetCurrentLetters();
+      resetToasts();
+    };
   }, [
     resetBackendGameState,
     resetBackendRoundState,
@@ -152,6 +156,7 @@ const Round = (props: any) => {
 };
 
 const ROUND_START_DELAY = 7000;
+const PING_INTERVAL = 10000;
 
 const GameFlowDriver = () => {
   const needRound = useRecoilValue(needNewRound);
@@ -173,8 +178,9 @@ const GameFlowDriver = () => {
   const [, setSubmittedRow] = useRecoilState(submittedRow);
   const [, setToasts] = useRecoilState(toasts);
 
-  //
+  // Convex mutations
   const createRound = useMutation('createRound');
+  const pingGame = useMutation('ping');
 
   // Check for winner to notify via toast.
   useEffect(() => {
@@ -237,6 +243,13 @@ const GameFlowDriver = () => {
     },
     ROUND_START_DELAY,
     gover
+  );
+  useIntervalWhen(
+    () => {
+      pingGame(Id.fromString(gid!));
+    },
+    PING_INTERVAL,
+    true
   );
 
   return <></>;

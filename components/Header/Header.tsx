@@ -1,7 +1,10 @@
+import { Id } from 'convex-dev/values';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { gameState, userMe, userThem } from '../../lib/game/state';
+import { useMutation } from '../../convex/_generated';
+import { gameId, gameState, userMe, userThem } from '../../lib/game/state';
 import Button from '../Button/Button';
 import Instructions from '../Instructions/Instructions';
 import LoginLogout from '../LoginLogout/LoginLogout';
@@ -13,7 +16,15 @@ function Header() {
   const game = useRecoilValue(gameState);
   const me = useRecoilValue(userMe);
   const them = useRecoilValue(userThem);
+  const gid = useRecoilValue(gameId);
+  const router = useRouter();
   const [instructionsOpen, setInstructionsOpen] = useState(false);
+  const leaveGame = useMutation('leaveGame');
+  const leaveAndGoHome = (e) => {
+    e.preventDefault();
+    leaveGame(Id.fromString(gid!));
+    router.push('/');
+  };
 
   // If we're in a game, show more details.
   if (game?.board && me && them) {
@@ -25,10 +36,8 @@ function Header() {
           </div>
           <div className={styles.center}>
             <div className={styles.buttonGroup}>
-              {/* TODO: Icons instead of text for these. */}
               <Button onClick={() => setInstructionsOpen(true)}>Help</Button>
-              {/* TODO: Make this work. */}
-              <Button>Exit</Button>
+              <Button onClick={leaveAndGoHome}>Exit</Button>
             </div>
           </div>
           <div className={styles.right}>

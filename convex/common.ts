@@ -50,3 +50,41 @@ export const randomGameName = (): string => {
   console.log(JSON.stringify(acc));
   return acc.join('');
 };
+
+export function abandonGame(game: any) {
+  game.abandoned = true;
+  if (game.ready) {
+    determineGameWinner(game);
+  }
+}
+
+export function determineGameWinner(game: any) {
+  if (game.score1 > game.score2) {
+    game.winner = 1;
+  } else if (game.score2 > game.score1) {
+    game.winner = 2;
+  } else {
+    game.winner = 3;
+  }
+}
+
+export function defaultGame(
+  gameName: string,
+  creator: User,
+  pub: boolean
+): any {
+  const game = {
+    name: gameName,
+    public: pub,
+    ready: false,
+    abandoned: false,
+    user1: creator._id,
+    user1Ping: Math.floor(Date.now() / 1000),
+    score1: 0,
+    score2: 0,
+    currentRound: -1,
+    rounds: [],
+    winner: 0,
+  };
+  return game;
+}

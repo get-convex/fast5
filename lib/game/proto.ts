@@ -16,6 +16,7 @@ export interface BackendGame {
   };
   public: boolean;
   ready: boolean;
+  abandoned: boolean;
   inRound: boolean;
   winner: number;
   over: boolean;
