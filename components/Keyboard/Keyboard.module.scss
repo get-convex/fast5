@@ -36,10 +36,18 @@
   color: var(--color-white);
 }
 
-.keyLetterFound {
+.keyLetterCorrect {
   background: linear-gradient(
     var(--color-beer-garden) 0%,
     var(--color-green-flash) 100%
+  );
+  color: var(--color-white);
+}
+
+.keyLetterFound {
+  background: linear-gradient(
+    var(--color-chinese-gold) 0%,
+    var(--color-deep-daishin-yellow) 100%
   );
   color: var(--color-white);
 }
