@@ -13,6 +13,7 @@ export default query(async ({ db, auth }, gameId: Id): Promise<BackendGame> => {
   var state = {
     round: game.rounds.length,
     public: game.public ?? false,
+    abandoned: game.abandoned ?? false,
     user1: {
       displayName: user1.displayName,
       photoUrl: user1.photoUrl,
@@ -27,21 +28,8 @@ export default query(async ({ db, auth }, gameId: Id): Promise<BackendGame> => {
     },
     ready: user2 !== null,
     inRound: game.currentRound !== -1,
-    winner: 0,
-    over: false,
+    winner: game.winner,
+    over: game.winner > 0,
   };
-  if (state.round == 5) {
-    const finalId = game.rounds[4];
-    const round = await db.get(finalId.id());
-    if (typeof round.winner === 'number') {
-      // Game is over.
-      state.over = true;
-      if (state.user1.score > state.user2.score) {
-        state.winner = 1;
-      } else if (state.user2.score > state.user1.score) {
-        state.winner = 2;
-      }
-    }
-  }
   return state;
 });

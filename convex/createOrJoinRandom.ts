@@ -1,6 +1,6 @@
 import { mutation } from 'convex-dev/server';
 import { Id } from 'convex-dev/values';
-import { getUser, randomGameName } from './common';
+import { defaultGame, getUser, randomGameName } from './common';
 
 export default mutation(async ({ db, auth }): Promise<string | null> => {
   const user = await getUser(db, auth);
@@ -11,7 +11,8 @@ export default mutation(async ({ db, auth }): Promise<string | null> => {
       q.and(
         q.eq(q.field('public'), true),
         q.neq(q.field('user1'), user._id),
-        q.eq(q.field('ready'), false)
+        q.eq(q.field('ready'), false),
+        q.eq(q.field('abandoned'), false)
       )
     )
     .first();
@@ -35,16 +36,7 @@ export default mutation(async ({ db, auth }): Promise<string | null> => {
       break;
     }
   }
-  const game = {
-    name: gameName,
-    public: true,
-    ready: false,
-    user1: user._id,
-    score1: 0,
-    score2: 0,
-    currentRound: -1,
-    rounds: [],
-  };
+  const game = defaultGame(gameName, user, true);
   await db.insert('games', game);
   return gameName;
 });

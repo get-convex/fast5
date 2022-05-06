@@ -1,7 +1,7 @@
 import { mutation } from 'convex-dev/server';
 import { Id } from 'convex-dev/values';
 import { WORDS, ALL_WORDS } from '../lib/game/constants';
-import { getUser } from './common';
+import { determineGameWinner, getUser } from './common';
 import queryRound, { computeRoundState } from './queryRound';
 
 export default mutation(
@@ -64,15 +64,25 @@ export default mutation(
       // Guessed correctly!
       round.winner = userId;
       incScore();
+      checkForFinishedGame(game);
       await db.replace(game._id, game);
     } else if (userRound.guesses.length === 6) {
       // They're out of guesses
       round.winner = otherId;
       round.overflow = true;
       incOtherScore();
+      checkForFinishedGame(game);
       await db.replace(game._id, game);
     }
+
     await db.replace(round._id, round);
     return true;
   }
 );
+
+function checkForFinishedGame(game: any) {
+  // Check for end of game.
+  if (game.rounds.length === 5) {
+    determineGameWinner(game);
+  }
+}
