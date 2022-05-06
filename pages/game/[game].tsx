@@ -144,17 +144,6 @@ const MatchContainer = (props: any) => {
   );
 };
 
-const Round = (props: any) => {
-  if (props.over) {
-    var message = <div>Game over!</div>;
-  } else if (props.round > 0) {
-    var message = <div>Round: {props.round}</div>;
-  } else {
-    var message = <div>Get ready...</div>;
-  }
-  return <div className="flex-auto align-middle">{message}</div>;
-};
-
 const ROUND_START_DELAY = 7000;
 const PING_INTERVAL = 10000;
 
