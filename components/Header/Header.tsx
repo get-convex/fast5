@@ -20,7 +20,7 @@ function Header() {
   const router = useRouter();
   const [instructionsOpen, setInstructionsOpen] = useState(false);
   const leaveGame = useMutation('leaveGame');
-  const leaveAndGoHome = (e) => {
+  const leaveAndGoHome = (e: Event) => {
     e.preventDefault();
     leaveGame(Id.fromString(gid!));
     router.push('/');
