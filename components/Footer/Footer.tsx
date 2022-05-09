@@ -6,7 +6,7 @@ function Footer() {
   return (
     <footer className={styles.root}>
       <a href="https://convex.dev/">
-        Built with{' '}
+        Built on{' '}
         <Image src="/convex.svg" width="94" height="17" alt="Convex logo" />
       </a>
     </footer>

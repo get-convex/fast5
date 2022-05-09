@@ -8,7 +8,7 @@
 ###     ###     ### ########    ###     ########
 ```
 
-Fast5 is a multiplayer word racing game built with Convex (https://convex.dev) and Next.js.
+Fast5 is a multiplayer word racing game built on Convex (https://convex.dev) and Next.js.
 
 The project was created by the Convex team as an example for how to build something like a game using Convex.
 
