@@ -122,7 +122,12 @@ export const needNewRound: RecoilValueReadOnly<boolean> = selector({
   },
 });
 
-export const roundWinner: RecoilValueReadOnly<string | null> = selector({
+interface WinInfo {
+  winner: string;
+  word: string;
+}
+
+export const roundWinner: RecoilValueReadOnly<WinInfo | null> = selector({
   key: 'roundWinner',
   get: ({ get }) => {
     const game = get(gameState);
@@ -135,10 +140,16 @@ export const roundWinner: RecoilValueReadOnly<string | null> = selector({
     }
 
     if (game.board.winner === 1) {
-      return game.user1.displayName;
+      return {
+        winner: game.user1.displayName,
+        word: game.board.word!.toLocaleUpperCase()
+      };
     }
     if (game.board.winner === 2) {
-      return game.user2!.displayName;
+      return {
+        winner: game.user2!.displayName,
+        word: game.board.word!.toLocaleUpperCase()
+      };
     }
     return null;
   },
@@ -148,6 +159,7 @@ export interface BoardState {
   user1: BoardSide;
   user2: BoardSide;
   winner: number | null;
+  word: string | null;
   overflow: boolean;
 }
 export interface GameState {
@@ -205,6 +217,7 @@ export const gameState: RecoilValueReadOnly<null | GameState> = selector({
         user1: u1,
         user2: u2,
         winner: backendRound.winner,
+        word: backendRound.word,
         overflow: backendRound.overflow,
       };
       output.board = board;
