@@ -27,7 +27,8 @@ function Keyboard({}: KeyboardProps) {
                 className={classNames(styles.key, {
                   [styles.keyWide]: letter.length > 1,
                   [styles.keyLetterNotFound]: state === '0',
-                  [styles.keyLetterFound]: state !== '0' && state !== undefined,
+                  [styles.keyLetterFound]: state === '1' || state === '3',
+                  [styles.keyLetterCorrect]: state === '2' || state === '4',
                 })}
                 onClick={() => console.log('clicked key', letter)}
               >
