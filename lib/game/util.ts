@@ -17,7 +17,6 @@ export function dlog(...items: any[]) {
         segs.push(JSON.stringify(i));
       }
     }
-    console.log(segs.join(' | '));
   }
 }
 
@@ -38,7 +37,6 @@ export function buildBoardSide(
   letters: string[],
   submitted: number
 ): BoardSide {
-  console.log(board, current, cell, letters, submitted);
   var rows = [];
   for (var i = 0; i < 6; i++) {
     var cells: string[] = [];

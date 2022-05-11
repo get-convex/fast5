@@ -15,8 +15,6 @@ function PlayerBar({ user }: PlayerBarProps) {
     return null;
   }
 
-  console.log('PlayerBar', { user });
-
   return (
     <div
       className={classNames(styles.root, {

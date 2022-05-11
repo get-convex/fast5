@@ -85,9 +85,7 @@ const Game: NextPage = () => {
   }, [isAuthenticated, isLoading, getIdTokenClaims, convex, router]);
   useEffect(() => {
     const params = router.query;
-    console.log('should boot?');
     if (isAuthenticated && Object.keys(params).length !== 0) {
-      console.log('booting');
       boot(params, joinGame, setGid, setGameName);
     }
   }, [router, joinGame, setGid, isAuthenticated, setGameName]);
@@ -122,7 +120,6 @@ const MatchContainer = (props: any) => {
   const [, setBackendRound] = useRecoilState(backendRoundState);
   useEffect(() => {
     if (gameQuery !== undefined) {
-      console.log(gameQuery);
       setBackendGame(gameQuery as BackendGame);
     }
   }, [gameQuery, setBackendGame, setBackendRound]);
@@ -174,7 +171,12 @@ const GameFlowDriver = () => {
   // Check for winner to notify via toast.
   useEffect(() => {
     if (rwinner !== null && serverRows !== -1) {
-      addToast(setToasts, `${rwinner.winner} won the round! The word was ${rwinner.word}`, 'guessed', 6000);
+      addToast(
+        setToasts,
+        `${rwinner.winner} won the round! The word was ${rwinner.word}`,
+        'guessed',
+        6000
+      );
       setServerRows(-1);
       setUser1Spying(false);
       setUser2Spying(false);
@@ -203,7 +205,6 @@ const GameFlowDriver = () => {
   useEffect(() => {
     if (me !== null && me.board !== null) {
       if (me.board!.serverCount > serverRows && rwinner === null) {
-        console.log('new server side row');
         setCurrentLetters([]);
         setSubmittedRow(-1);
         setServerRows(me.board!.serverCount);
