@@ -44,3 +44,16 @@ export interface User {
   photoUrl: string;
   tokenIdentifier: string;
 }
+
+export interface UserStats {
+  user1: {
+    wins: number;
+    losses: number;
+    ties: number;
+  };
+  user2: {
+    wins: number;
+    losses: number;
+    ties: number;
+  };
+}

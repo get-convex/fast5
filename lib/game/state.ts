@@ -142,13 +142,13 @@ export const roundWinner: RecoilValueReadOnly<WinInfo | null> = selector({
     if (game.board.winner === 1) {
       return {
         winner: game.user1.displayName,
-        word: game.board.word!.toLocaleUpperCase()
+        word: game.board.word!.toLocaleUpperCase(),
       };
     }
     if (game.board.winner === 2) {
       return {
         winner: game.user2!.displayName,
-        word: game.board.word!.toLocaleUpperCase()
+        word: game.board.word!.toLocaleUpperCase(),
       };
     }
     return null;

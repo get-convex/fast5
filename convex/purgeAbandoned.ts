@@ -1,6 +1,6 @@
 import { mutation } from 'convex-dev/server';
 import { Id } from 'convex-dev/values';
-import { abandonGame, getUser } from './common';
+import { abandonGame, getUser, recordGameStats } from './common';
 
 const TIMEOUT_THRESHOLD = 60; // Gone for one minute = abandoned.
 
@@ -20,6 +20,7 @@ export default mutation(async ({ db }) => {
     ) {
       console.log(`Abandoning game ${game.name}`);
       abandonGame(game);
+      await recordGameStats(db, game);
       await db.update(game._id, game);
     }
   }
