@@ -1,7 +1,17 @@
-import styles from './Keyboard.module.scss';
-import { useRecoilValue } from 'recoil';
-import { keyboardUsedState } from '../../lib/game/state';
 import classNames from 'classnames';
+import { Id } from 'convex-dev/values';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { useMutation } from '../../convex/_generated';
+import { addToast } from '../../lib/game/flow';
+import {
+  canEdit,
+  currentLetters,
+  gameId,
+  keyboardUsedState,
+  submittedRow,
+  toasts,
+} from '../../lib/game/state';
+import styles from './Keyboard.module.scss';
 
 type KeyboardProps = {};
 
@@ -14,13 +24,64 @@ function Keyboard({}: KeyboardProps) {
     ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE'],
   ];
 
+  const gameIdValue = useRecoilValue(gameId);
+  const canEditValue = useRecoilValue(canEdit);
+  const [currentLettersValue, setCurrentLetters] =
+    useRecoilState(currentLetters);
+  const [, setSubmittedRow] = useRecoilState(submittedRow);
+  const [, setToasts] = useRecoilState(toasts);
+  const guessWord = useMutation('guessWord');
+  const spy = useMutation('spy');
+
+  const handleKeyPress = (key: string) => {
+    if (!canEditValue) {
+      return;
+    }
+
+    if (key === 'ENTER') {
+      const tryGuess = async () => {
+        const tryWord = currentLettersValue.join('');
+        const validGuess = await guessWord(
+          Id.fromString(gameIdValue!),
+          tryWord
+        );
+        if (!validGuess) {
+          addToast(setToasts, `Invalid word '${tryWord}'`, 'error', 5000);
+          setSubmittedRow(-1);
+          setCurrentLetters([]);
+        }
+      };
+
+      if (currentLettersValue.length === 5) {
+        tryGuess();
+      }
+      return;
+    }
+
+    if (key === 'DELETE') {
+      setCurrentLetters(currentLettersValue.slice(0, -1));
+      return;
+    }
+
+    if (key === 'SPACE') {
+      const doSpy = async () => {
+        if (gameIdValue !== null) {
+          await spy(Id.fromString(gameIdValue));
+        }
+      };
+      doSpy();
+      return;
+    }
+
+    setCurrentLetters([...currentLettersValue, key]);
+  };
+
   return (
     <div className={styles.root}>
       {keys.map((row, rowIndex) => (
         <div key={rowIndex} className={styles.row}>
           {row.map((letter) => {
             const state = letterStates.get(letter);
-            // TODO: Make these buttons work as an alternative to the keyboard.
             return (
               <button
                 key={letter}
@@ -30,7 +91,7 @@ function Keyboard({}: KeyboardProps) {
                   [styles.keyLetterFound]: state === '1' || state === '3',
                   [styles.keyLetterCorrect]: state === '2' || state === '4',
                 })}
-                onClick={() => console.log('clicked key', letter)}
+                onClick={() => handleKeyPress(letter)}
               >
                 {letter === 'DELETE' ? '←' : letter}
               </button>
@@ -38,7 +99,10 @@ function Keyboard({}: KeyboardProps) {
           })}
         </div>
       ))}
-      <button className={classNames(styles.key, styles.keySpacebar)}>
+      <button
+        className={classNames(styles.key, styles.keySpacebar)}
+        onClick={() => handleKeyPress('SPACE')}
+      >
         SPACEBAR TO SPY
       </button>
     </div>
