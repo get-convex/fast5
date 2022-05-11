@@ -174,7 +174,12 @@ const GameFlowDriver = () => {
   // Check for winner to notify via toast.
   useEffect(() => {
     if (rwinner !== null && serverRows !== -1) {
-      addToast(setToasts, `${rwinner.winner} won the round! The word was ${rwinner.word}`, 'guessed', 6000);
+      addToast(
+        setToasts,
+        `${rwinner.winner} won the round! The word was ${rwinner.word}`,
+        'guessed',
+        6000
+      );
       setServerRows(-1);
       setUser1Spying(false);
       setUser2Spying(false);

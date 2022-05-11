@@ -50,6 +50,9 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
     displayName: identity.givenName ?? identity.name!,
     photoUrl: identity.pictureUrl ?? createGravatarUrl(identity),
     tokenIdentifier: identity.tokenIdentifier,
+    wins: 0,
+    losses: 0,
+    ties: 0,
     // The `_id` field will be assigned by the backend.
   });
 });

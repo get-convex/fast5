@@ -1,3 +1,4 @@
+import { DatabaseWriter } from 'convex-dev/server';
 import { User } from '../lib/game/proto';
 
 export const getUser = async (db: any, auth: any): Promise<User> => {
@@ -66,6 +67,28 @@ export function determineGameWinner(game: any) {
   } else {
     game.winner = 3;
   }
+}
+
+export async function recordGameStats(db: DatabaseWriter, game: any) {
+  if (game.winner < 1) {
+    throw "Game doesn't seem to be over";
+  }
+  let user1 = await db.get(game.user1);
+  let user2 = await db.get(game.user2);
+  if (game.winner === 1) {
+    user1.wins = (user1.wins ?? 0) + 1;
+    user2.losses = (user2.losses ?? 0) + 1;
+  } else if (game.winner === 2) {
+    user2.wins = (user2.wins ?? 0) + 1;
+    user1.losses = (user1.losses ?? 0) + 1;
+  } else if (game.winner === 3) {
+    user1.ties = (user1.ties ?? 0) + 1;
+    user2.ties = (user2.ties ?? 0) + 1;
+  } else {
+    throw 'unknown winner code';
+  }
+  db.update(user1._id, user1);
+  db.update(user2._id, user2);
 }
 
 export function defaultGame(
