@@ -325,7 +325,7 @@ export const currentRow = selector({
     const userId = get(whoami);
     const round = get(backendRoundState);
     const who = get(whoami) as number;
-    console.log('current row =', who);
+
     if (round === null || who === null) {
       return null;
     }

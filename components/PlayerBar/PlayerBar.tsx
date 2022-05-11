@@ -15,8 +15,6 @@ function PlayerBar({ user }: PlayerBarProps) {
     return null;
   }
 
-  console.log('PlayerBar', { user });
-
   return (
     <div
       className={classNames(styles.root, {
@@ -29,6 +27,7 @@ function PlayerBar({ user }: PlayerBarProps) {
           width="36"
           height="36"
           alt={`Avatar of ${name}`}
+          referrerPolicy="no-referrer"
         />
       </div>
       {user.displayName} | {user.score} points
