@@ -10,15 +10,15 @@ function Splash() {
   return (
     <div className={styles.root}>
       <div className={classNames(styles.content)}>
-        <div className="animate__animated animate__lightSpeedInLeft">
+        <div className="animate__animated animate__lightSpeedInLeft animate__delay-1s">
           <Image src="/logo.svg" width="600" height="300" alt="Fast5 logo" />
         </div>
-        <span className="animate__animated animate__zoomIn animate__faster animate__delay-1s">
+        <span className="animate__animated animate__zoomIn animate__faster animate__delay-2s">
           The fastest word racing game in town
         </span>
         <Button
           onClick={loginWithRedirect}
-          className="animate__animated animate__flipInX animate__faster animate__delay-2s"
+          className="animate__animated animate__flipInX animate__faster animate__delay-3s"
         >
           Log in to play
         </Button>
