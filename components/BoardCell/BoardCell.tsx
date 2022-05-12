@@ -34,6 +34,7 @@ function BoardCell({ code, key }: BoardCellProps) {
       className={classNames(styles.base, styleForState[tileState])}
     >
       <span className={classNames(styles.letter)}>{tileLetter}</span>
+      <img src="/lock.svg" width="16" height="21" alt="Lock icon" />
     </div>
   );
 }

@@ -534,7 +534,7 @@
   "resolved" "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   "version" "0.0.1"
 
-"convex-dev@^0.1.1":
+"convex-dev@0.1.1":
   "integrity" "sha512-PWJCOinQr8axKmhN/enFNMfGtbph7sWP4fuRodBAfofitEBtHRzzA2HBdD4g9dMJBeZ80HvpAIxC5auY6xQgVA=="
   "resolved" "https://registry.npmjs.org/convex-dev/-/convex-dev-0.1.1.tgz"
   "version" "0.1.1"
