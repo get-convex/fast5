@@ -7,25 +7,34 @@ function Instructions() {
       <h1>How to Play</h1>
       <Divider />
       <p>
-        Fast5 is a word racing game. Play against a friend, or a friendly
-        Internet strangers.
+        Fast5 is a guess-the-word racing game, in loving tribute to wordle. Play
+        against a friend, or a friendly Internet stranger.
       </p>
       <p>
-        Once the round starts, just start typing your guess, and then hit enter
-        to submit it. Each time you guess a new letter found in the word, you
-        get tally some points. When you place a letter in exactly the right
-        spot, you tally even more. The first racer to guess the entire word
-        correctly each round gets to claim their points and add them to their
-        total game score.
+        To play, when each round starts, just type your first guess and hit
+        enter. For each new letter in your guess that exists in the secret word
+        (a "yellow" letter) you collect some round points. If you place the
+        correct letter in exactly the right spot in the word (a "green" letter)
+        you collect even more.
       </p>
       <p>
-        You can’t see exactly what letters the other person is guessing, but you
-        can see how close they’re getting. If you start to get worried they’re
-        going to win, you can spy on their answers by hitting the space bar!
-        This will let you see both your letters and theirs, but the number of
-        points you can win in that round will be cut in half.
+        Use the matching letters from each guess to improve your next move. The
+        first racer to guess the entire word correctly gets to keep their round
+        points, and so they get added to their total game score. Be careful,
+        though! If you run out of guesses without finding the word, your
+        opponent wins the round.
       </p>
-      <p>After 5 rounds, the racer with the most points wins!</p>
+      <p>
+        Now normally, you can’t see exactly which letters the other person is
+        guessing. But you can see their matching tiles, and accordingly can tell
+        how close they’re getting to the correct word. If you start to get
+        worried they’re going to win, you can <i>spy</i> on their answers by
+        hitting the space bar. This will allow you to see both your letters and
+        theirs, and provide a lot more information about the secret word but
+        your round points will halved, so your reward is smaller if you guess
+        correctly.
+      </p>
+      <p>After five rounds, the racer with the most points wins. Good luck!</p>
     </div>
   );
 }
