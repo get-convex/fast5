@@ -5,18 +5,17 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 14
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14
-        cache: 'npm'
-    - run: npm ci
-    - name: Run idle game purge
-      run: npm run purge
-      env:
-        CONVEX_ADMIN_KEY: ${{ secrets.CONVEX_ADMIN_KEY }}
+      - uses: actions/checkout@v3
+      - name: Use Node.js 14
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Run idle game purge
+        run: npm run purge
+        env:
+          CONVEX_ADMIN_KEY: ${{ secrets.CONVEX_ADMIN_KEY }}

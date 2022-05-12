@@ -70,6 +70,10 @@ export function determineGameWinner(game: any) {
 }
 
 export async function recordGameStats(db: DatabaseWriter, game: any) {
+  if (!game.ready) {
+    // Game was never started. No winning.
+    return;
+  }
   if (game.winner < 1) {
     throw "Game doesn't seem to be over";
   }
@@ -111,3 +115,5 @@ export function defaultGame(
   };
   return game;
 }
+
+export const TIMEOUT_THRESHOLD = 60; // Gone for one minute = abandoned.
