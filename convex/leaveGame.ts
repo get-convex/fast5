@@ -7,6 +7,10 @@ const LEAVE_PENALTY = 100;
 export default mutation(async ({ db, auth }, gameId: Id) => {
   const user = await getUser(db, auth);
   var game = await db.get(gameId);
+  if (game.winner > 0) {
+    // Game already has an outcome.
+    return;
+  }
   if (game.ready) {
     // Penalize the user for leaving the game if it's in progress.
     if (user._id.equals(game.user1)) {
