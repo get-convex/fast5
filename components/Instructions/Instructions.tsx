@@ -13,9 +13,9 @@ function Instructions() {
       <p>
         To play, when each round starts, just type your first guess and hit
         enter. For each new letter in your guess that exists in the secret word
-        (a yellow tile) you collect some round points. If you place the
-        correct letter in exactly the right spot in the word (a green tile)
-        you collect even more.
+        (a yellow tile) you collect some round points. If you place the correct
+        letter in exactly the right spot in the word (a green tile) you collect
+        even more.
       </p>
       <p>
         Use the matching letters from each guess to improve your next move. The
@@ -26,13 +26,10 @@ function Instructions() {
       </p>
       <p>
         Now normally, you can’t see exactly which letters the other person is
-        guessing. But you can see their matching tiles, and accordingly can tell
-        how close they’re getting to the correct word. If you start to get
+        guessing. But you can see their matching tiles! If you start to get
         worried they’re going to win, you can <i>spy</i> on their answers by
         hitting the space bar. This will allow you to see both your letters and
-        theirs, and provide a lot more information about the secret word but
-        your round points will halved, so your reward is smaller if you guess
-        correctly.
+        theirs, but your round points will be halved, so you win fewer points.
       </p>
       <p>After five rounds, the racer with the most points wins. Good luck!</p>
     </div>
