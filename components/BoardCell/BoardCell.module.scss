@@ -21,6 +21,12 @@
     right: 10px;
     top: 10px;
   }
+
+  // Hide the lock icon by default.
+  img {
+    display: none;
+    z-index: 1;
+  }
 }
 
 .letter {
@@ -29,6 +35,25 @@
 
 .unplayed {
   background: var(--color-neutral-2);
+  color: var(--color-black);
+
+  &::after {
+    background: linear-gradient(180deg, #bcc7ce 0%, #fbfbfb 100%);
+  }
+}
+
+// Show lock icons on the opponents' side, if the user isn't spying.
+:global {
+  .BoardSide_opponent:not(.BoardSide_spying) {
+    :local {
+      .base {
+        img {
+          display: block;
+          z-index: 5;
+        }
+      }
+    }
+  }
 }
 
 .notFound {

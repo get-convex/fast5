@@ -1,6 +1,12 @@
+import classNames from 'classnames';
 import Confetti from 'react-confetti';
 import { useRecoilValue } from 'recoil';
-import { User, userMe } from '../../lib/game/state';
+import {
+  backendGameState,
+  backendRoundState,
+  User,
+  userMe,
+} from '../../lib/game/state';
 import BoardRow from '../BoardRow/BoardRow';
 import styles from './BoardSide.module.scss';
 
@@ -11,7 +17,9 @@ type BoardSideProps = {
 };
 
 function BoardSide({ user, isOverflow, isWinner }: BoardSideProps) {
-  const currentUser = useRecoilValue(userMe);
+  const currentUserValue = useRecoilValue(userMe);
+  const roundStateValue = useRecoilValue(backendRoundState);
+  const backendGameValue = useRecoilValue(backendGameState);
 
   var rows = [];
   var scoreRow = isOverflow
@@ -29,13 +37,23 @@ function BoardSide({ user, isOverflow, isWinner }: BoardSideProps) {
         score: row.score,
         isWinner: isWinner && scoreRow == i,
         isWrong: isWrong,
-        showScore: user.number === currentUser?.number,
+        showScore: user.number === currentUserValue?.number,
       })
     );
   }
 
+  // Are we playing as user1 or user2?
+  const currentUserSpying =
+    (backendGameValue?.user1.isYou && roundStateValue?.user1?.spying) ||
+    (backendGameValue?.user2.isYou && roundStateValue?.user2?.spying);
+
   return (
-    <div className={styles.root}>
+    <div
+      className={classNames(styles.root, {
+        BoardSide_opponent: user !== currentUserValue,
+        BoardSide_spying: currentUserSpying,
+      })}
+    >
       {isWinner && (
         <div className={styles.confetti}>
           <Confetti
