@@ -25,6 +25,7 @@ import {
   needNewRound,
   roundWinner,
   submittedRow,
+  summarizeGame,
   toasts,
   userMe,
 } from '../../lib/game/state';
@@ -45,6 +46,7 @@ const Game: NextPage = () => {
   const resetSubmittedRow = useResetRecoilState(submittedRow);
   const resetCurrentLetters = useResetRecoilState(currentLetters);
   const resetToasts = useResetRecoilState(toasts);
+  const resetSummarize = useResetRecoilState(summarizeGame);
   useEffect(() => {
     // Reset all this when we navigate away.
     return () => {
@@ -55,6 +57,7 @@ const Game: NextPage = () => {
       resetSubmittedRow();
       resetCurrentLetters();
       resetToasts();
+      resetSummarize();
     };
   }, [
     resetBackendGameState,
@@ -64,6 +67,7 @@ const Game: NextPage = () => {
     resetSubmittedRow,
     resetCurrentLetters,
     resetToasts,
+    resetSummarize,
   ]);
 
   useEffect(() => {
@@ -147,7 +151,6 @@ const PING_INTERVAL = 10000;
 const GameFlowDriver = () => {
   const needRound = useRecoilValue(needNewRound);
   const rwinner = useRecoilValue(roundWinner);
-  const gover = useRecoilValue(gameOver);
   const round = useRecoilValue(backendRoundState);
   const game = useRecoilValue(backendGameState);
   const me = useRecoilValue(userMe);
@@ -171,12 +174,13 @@ const GameFlowDriver = () => {
   // Check for winner to notify via toast.
   useEffect(() => {
     if (rwinner !== null && serverRows !== -1) {
-      addToast(
-        setToasts,
-        `${rwinner.winner} won the round! The word was ${rwinner.word}`,
-        'guessed',
-        6000
-      );
+      if (rwinner.overflow) {
+        addToast(setToasts, `The word was ${rwinner.word}`, 'guessed', 6000);
+      }
+      const winMessage = rwinner.overflow
+        ? `${rwinner.winner} wins by default!`
+        : `${rwinner.winner} correctly guessed ${rwinner.word}!`;
+      addToast(setToasts, winMessage, 'guessed', 6000);
       setServerRows(-1);
       setUser1Spying(false);
       setUser2Spying(false);
@@ -227,13 +231,6 @@ const GameFlowDriver = () => {
     needRound
   );
 
-  useTimeoutWhen(
-    () => {
-      router.push('/');
-    },
-    ROUND_START_DELAY,
-    gover
-  );
   useIntervalWhen(
     () => {
       pingGame(Id.fromString(gid!));

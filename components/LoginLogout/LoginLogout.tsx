@@ -15,8 +15,7 @@ function LoginLogout() {
       </Button>
     );
   }
-
-  return <Button onClick={loginWithRedirect}>Log in</Button>;
+  return <></>;
 }
 
 export default LoginLogout;

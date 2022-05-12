@@ -15,6 +15,30 @@ function PlayerBar({ user }: PlayerBarProps) {
     return null;
   }
 
+  const userInfo = (
+    <>
+      <div>{user.displayName}</div>
+      <div className={styles.stats}>
+        (<span className={styles.wins}>{user.stats.wins}</span>-
+        <span className={styles.losses}>{user.stats.losses}</span>-
+        <span className={styles.ties}>{user.stats.ties}</span>)
+      </div>
+    </>
+  );
+
+  const score = (
+    <>
+      <div className={styles.scorebox}>{user.score}</div>
+    </>
+  );
+
+  const pad = <div className={styles.padbox}></div>;
+
+  const textElements =
+    currentUser?.number === user.number
+      ? [userInfo, pad, score]
+      : [score, pad, userInfo];
+
   return (
     <div
       className={classNames(styles.root, {
@@ -30,7 +54,7 @@ function PlayerBar({ user }: PlayerBarProps) {
           referrerPolicy="no-referrer"
         />
       </div>
-      {user.displayName} | {user.score} points
+      {textElements}
     </div>
   );
 }

@@ -32,3 +32,32 @@
     right: -3px;
   }
 }
+
+.wins {
+  color: var(--color-neutral-2);
+}
+
+.losses {
+  color: var(--color-neutral-2);
+}
+
+.ties {
+  color: var(--color-neutral-2);
+}
+
+.scorebox {
+  margin: 0 12px;
+  font-size: var(--font-size-largest);
+  filter: drop-shadow(0 0 1.15rem var(--color-white));
+}
+
+.padbox {
+  margin: 0 8px;
+  height: 22px;
+  border-left: 1px solid;
+}
+
+.stats {
+  padding: 0 2px;
+  opacity: 80%;
+}

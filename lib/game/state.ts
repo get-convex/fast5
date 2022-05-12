@@ -1,5 +1,5 @@
 import { atom, RecoilState, RecoilValueReadOnly, selector } from 'recoil';
-import { BackendGame, BackendRound } from './proto';
+import { BackendGame, BackendRound, UserStats } from './proto';
 import { BoardSide, buildBoardSide, dlog } from './util';
 
 // Server-set atoms.
@@ -34,6 +34,11 @@ export const submittedRow: RecoilState<number> = atom({
 export const currentLetters: RecoilState<string[]> = atom({
   key: 'currentLetters',
   default: [] as string[],
+});
+
+export const summarizeGame: RecoilState<boolean> = atom({
+  key: 'summarizeGame',
+  default: false,
 });
 
 export interface Toast {
@@ -121,13 +126,13 @@ export const needNewRound: RecoilValueReadOnly<boolean> = selector({
     return game.board.winner !== null;
   },
 });
-
-interface WinInfo {
+interface RoundWinInfo {
   winner: string;
   word: string;
+  overflow: boolean;
 }
 
-export const roundWinner: RecoilValueReadOnly<WinInfo | null> = selector({
+export const roundWinner: RecoilValueReadOnly<RoundWinInfo | null> = selector({
   key: 'roundWinner',
   get: ({ get }) => {
     const game = get(gameState);
@@ -143,12 +148,44 @@ export const roundWinner: RecoilValueReadOnly<WinInfo | null> = selector({
       return {
         winner: game.user1.displayName,
         word: game.board.word!.toLocaleUpperCase(),
+        overflow: game.board.overflow,
       };
     }
     if (game.board.winner === 2) {
       return {
         winner: game.user2!.displayName,
         word: game.board.word!.toLocaleUpperCase(),
+        overflow: game.board.overflow,
+      };
+    }
+    return null;
+  },
+});
+
+interface GameWinInfo {
+  winner: string | null;
+}
+
+export const gameWinner: RecoilValueReadOnly<GameWinInfo | null> = selector({
+  key: 'gameWinner',
+  get: ({ get }) => {
+    const game = get(gameState);
+    if (game === null) {
+      return null;
+    }
+    if (game.winner === 1) {
+      return {
+        winner: game.user1.displayName,
+      };
+    }
+    if (game.winner === 2) {
+      return {
+        winner: game.user2!.displayName,
+      };
+    }
+    if (game.winner === 3) {
+      return {
+        winner: null,
       };
     }
     return null;
@@ -167,10 +204,12 @@ export interface GameState {
   user1: {
     displayName: string;
     score: number;
+    stats: UserStats;
   };
   user2: null | {
     displayName: string;
     score: number;
+    stats: UserStats;
   };
   public: boolean;
   inRound: boolean;
@@ -178,6 +217,7 @@ export interface GameState {
   over: boolean;
   winner: number;
   board: null | BoardState;
+  abandoned: boolean;
 }
 
 export const gameState: RecoilValueReadOnly<null | GameState> = selector({
@@ -271,6 +311,7 @@ export interface User {
   number: number;
   key: string;
   board: BoardSide | null;
+  stats: UserStats;
 }
 
 export const userMe: RecoilValueReadOnly<null | User> = selector({
@@ -316,6 +357,7 @@ function userGetter(get: any, them: boolean): null | User {
     number: number,
     key: key,
     board: uboard,
+    stats: grec.stats,
   };
 }
 
