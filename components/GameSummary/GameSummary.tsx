@@ -12,7 +12,7 @@ function GameSummary() {
       : `${wininfo!.winner} won the game!`;
   const abString =
     game?.abandoned ?? false
-      ? '(a player left the game and the game was forfeited)'
+      ? '(a player left and the game was forfeited)'
       : '';
 
   return (
