@@ -17,8 +17,10 @@ function App({ children }: AppProps) {
         <Footer />
       </div>
       <Modal className={styles.modal} open>
-        Fast5 is not yet playable on mobile devices. Please try again from a
-        larger screen.
+        <div className={styles.modalContent}>
+          Fast5 is not yet playable on mobile devices. Please try again from a
+          larger screen.
+        </div>
       </Modal>
     </>
   );

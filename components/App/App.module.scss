@@ -14,10 +14,14 @@
   }
 
   .modal {
-    display: block;
+    display: flex;
+  }
+
+  .modalContent {
     color: var(--color-white);
     font-size: var(--font-size-larger);
     font-weight: var(--font-weight-semibold);
-    max-width: 400px;
+    max-width: 300px;
+    text-align: center;
   }
 }
