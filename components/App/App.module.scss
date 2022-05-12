@@ -3,3 +3,21 @@
   grid-template-rows: min-content 1fr min-content;
   min-height: 100vh;
 }
+
+.modal {
+  display: none;
+}
+
+@media (max-width: 1200px), (max-height: 850px) {
+  .root {
+    display: none;
+  }
+
+  .modal {
+    display: block;
+    color: var(--color-white);
+    font-size: var(--font-size-larger);
+    font-weight: var(--font-weight-semibold);
+    max-width: 400px;
+  }
+}
