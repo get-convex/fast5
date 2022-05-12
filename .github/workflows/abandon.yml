@@ -15,6 +15,7 @@ jobs:
       with:
         node-version: 14
         cache: 'npm'
+    - run: npm i -g npm@latest
     - run: npm ci
     - name: Run idle game purge
       run: npm run purge
