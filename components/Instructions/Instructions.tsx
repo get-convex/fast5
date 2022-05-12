@@ -13,8 +13,8 @@ function Instructions() {
       <p>
         To play, when each round starts, just type your first guess and hit
         enter. For each new letter in your guess that exists in the secret word
-        (a "yellow" letter) you collect some round points. If you place the
-        correct letter in exactly the right spot in the word (a "green" letter)
+        (a yellow tile) you collect some round points. If you place the
+        correct letter in exactly the right spot in the word (a green tile)
         you collect even more.
       </p>
       <p>
