@@ -25,7 +25,6 @@ import {
   needNewRound,
   roundWinner,
   submittedRow,
-  summarizeGame,
   toasts,
   userMe,
 } from '../../lib/game/state';
@@ -46,7 +45,6 @@ const Game: NextPage = () => {
   const resetSubmittedRow = useResetRecoilState(submittedRow);
   const resetCurrentLetters = useResetRecoilState(currentLetters);
   const resetToasts = useResetRecoilState(toasts);
-  const resetSummarize = useResetRecoilState(summarizeGame);
   useEffect(() => {
     // Reset all this when we navigate away.
     return () => {
@@ -57,7 +55,6 @@ const Game: NextPage = () => {
       resetSubmittedRow();
       resetCurrentLetters();
       resetToasts();
-      resetSummarize();
     };
   }, [
     resetBackendGameState,
@@ -67,7 +64,6 @@ const Game: NextPage = () => {
     resetSubmittedRow,
     resetCurrentLetters,
     resetToasts,
-    resetSummarize,
   ]);
 
   useEffect(() => {

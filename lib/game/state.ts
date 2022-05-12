@@ -36,11 +36,6 @@ export const currentLetters: RecoilState<string[]> = atom({
   default: [] as string[],
 });
 
-export const summarizeGame: RecoilState<boolean> = atom({
-  key: 'summarizeGame',
-  default: false,
-});
-
 export interface Toast {
   message: string;
   category: string;
