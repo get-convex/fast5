@@ -7,12 +7,14 @@ export interface BackendGame {
     photoUrl: string;
     score: number;
     isYou: boolean;
+    stats: UserStats;
   };
   user2: {
     displayName: string;
     photoUrl: string;
     score: number;
     isYou: boolean;
+    stats: UserStats;
   };
   public: boolean;
   ready: boolean;
@@ -46,14 +48,7 @@ export interface User {
 }
 
 export interface UserStats {
-  user1: {
-    wins: number;
-    losses: number;
-    ties: number;
-  };
-  user2: {
-    wins: number;
-    losses: number;
-    ties: number;
-  };
+  wins: number;
+  losses: number;
+  ties: number;
 }

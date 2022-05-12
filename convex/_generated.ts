@@ -12,7 +12,6 @@ import type ping from "./ping";
 import type purgeAbandoned from "./purgeAbandoned";
 import type queryGame from "./queryGame";
 import type queryRound from "./queryRound";
-import type queryUserStats from "./queryUserStats";
 import type spy from "./spy";
 import type storeUser from "./storeUser";
 import type updateName from "./updateName";
@@ -49,7 +48,6 @@ export type ConvexAPI = {
   queries: {
     queryGame: ClientQuery<typeof queryGame>;
     queryRound: ClientQuery<typeof queryRound>;
-    queryUserStats: ClientQuery<typeof queryUserStats>;
     validateGame: ClientQuery<typeof validateGame>;
   };
   mutations: {

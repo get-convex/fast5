@@ -3,10 +3,17 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useMutation } from '../../convex/_generated';
-import { gameId, gameState, userMe, userThem } from '../../lib/game/state';
+import { useMutation, useQuery } from '../../convex/_generated';
+import {
+  gameId,
+  gameOver,
+  gameState,
+  userMe,
+  userThem,
+} from '../../lib/game/state';
 import Button from '../Button/Button';
 import Instructions from '../Instructions/Instructions';
+import GameSummary from '../GameSummary/GameSummary';
 import LoginLogout from '../LoginLogout/LoginLogout';
 import Modal from '../Modal/Modal';
 import PlayerBar from '../PlayerBar/PlayerBar';
@@ -17,12 +24,17 @@ function Header() {
   const me = useRecoilValue(userMe);
   const them = useRecoilValue(userThem);
   const gid = useRecoilValue(gameId);
+  const gover = useRecoilValue(gameOver);
   const router = useRouter();
   const [instructionsOpen, setInstructionsOpen] = useState(false);
   const leaveGame = useMutation('leaveGame');
   const leaveAndGoHome = (e: Event) => {
     e.preventDefault();
     leaveGame(Id.fromString(gid!));
+    router.push('/');
+  };
+  const goHome = (e: Event) => {
+    e.preventDefault();
     router.push('/');
   };
 
@@ -48,6 +60,12 @@ function Header() {
           <div className={styles.instructions}>
             <Instructions />
             <Button onClick={() => setInstructionsOpen(false)}>Close</Button>
+          </div>
+        </Modal>
+        <Modal open={gover}>
+          <div className={styles.instructions}>
+            <GameSummary />
+            <Button onClick={(e) => goHome(e)}>Play Again</Button>
           </div>
         </Modal>
       </>

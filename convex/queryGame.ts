@@ -19,12 +19,22 @@ export default query(async ({ db, auth }, gameId: Id): Promise<BackendGame> => {
       photoUrl: user1.photoUrl,
       score: game.score1,
       isYou: user._id.equals(game.user1),
+      stats: {
+        wins: user1?.wins ?? 0,
+        losses: user1?.losses ?? 0,
+        ties: user1?.ties ?? 0,
+      },
     },
     user2: {
       displayName: user2 === null ? '' : user2.displayName,
       photoUrl: user2 === null ? '' : user2.photoUrl,
       score: game.score2,
       isYou: user._id.equals(game.user2),
+      stats: {
+        wins: user2?.wins ?? 0,
+        losses: user2?.losses ?? 0,
+        ties: user2?.ties ?? 0,
+      },
     },
     ready: user2 !== null,
     inRound: game.currentRound !== -1,
