@@ -5,7 +5,7 @@ import styles from './Footer.module.scss';
 function Footer() {
   return (
     <footer className={styles.root}>
-      <a href="https://convex.dev/">
+      <a href="https://blog.convex.dev/introducing-fast5/">
         Built on{' '}
         <Image src="/convex.svg" width="94" height="17" alt="Convex logo" />
       </a>
