@@ -1,5 +1,5 @@
-import { query } from 'convex-dev/server';
-import { Id } from 'convex-dev/values';
+import { query } from './_generated/server';
+import { Id } from './_generated/dataModel';
 import { User } from '../lib/game/proto';
 import { getUser } from './common';
 
@@ -12,7 +12,7 @@ export default query(async ({ db, auth }, gameId: Id) => {
   }
   console.log('continuing...');
   const roundId = game.rounds[game.currentRound];
-  const round = await db.get(roundId.id());
+  const round = await db.get(roundId);
   return computeRoundState(user, game, round);
 });
 

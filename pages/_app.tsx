@@ -1,14 +1,14 @@
 import { Auth0Provider } from '@auth0/auth0-react';
-import { ConvexProvider, ConvexReactClient } from 'convex-dev/react';
+import { ConvexProvider, ConvexReactClient } from 'convex/react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { RecoilRoot } from 'recoil';
 import App from '../components/App/App';
-import convexConfig from '../convex.json';
+import clientConfig from "../convex/_generated/clientConfig";
 import '../dist/site.css';
 import '../styles/global.scss';
 
-const convex = new ConvexReactClient(convexConfig.origin);
+const convex = new ConvexReactClient(clientConfig);
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

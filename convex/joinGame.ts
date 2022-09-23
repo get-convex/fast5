@@ -1,5 +1,5 @@
-import { mutation } from 'convex-dev/server';
-import { Id } from 'convex-dev/values';
+import { mutation } from './_generated/server';
+import { Id } from './_generated/dataModel';
 import { getUser } from './common';
 
 export default mutation(
@@ -23,7 +23,7 @@ export default mutation(
     }
     existing.user2 = user._id;
     existing.ready = true;
-    await db.replace(existing._id, existing);
+    db.replace(existing._id, existing);
     var id = existing._id as Id;
 
     // We joined the game!

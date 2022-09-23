@@ -1,5 +1,5 @@
-import { mutation } from 'convex-dev/server';
-import { Id } from 'convex-dev/values';
+import { mutation } from './_generated/server';
+import { Id } from './_generated/dataModel';
 import { getUser } from './common';
 
 export default mutation(async ({ db, auth }, gameId: Id) => {
@@ -13,5 +13,5 @@ export default mutation(async ({ db, auth }, gameId: Id) => {
   } else if (game.user2 !== undefined && game.user2.equals(user._id)) {
     game.user2Ping = now;
   }
-  await db.update(game._id, game);
+  db.patch(game._id, game);
 });

@@ -1,4 +1,4 @@
-import { Id } from 'convex-dev/values';
+import { Id } from '../../convex/_generated/dataModel';
 import { addToast } from './flow';
 
 export const ALL_KEYS = [
@@ -99,7 +99,7 @@ export function handleGameInput(
         let letters = currentLetters;
         const tryGuess = async () => {
           let tryWord = letters.join('');
-          let validGuess = await guessWord(Id.fromString(gid!), tryWord);
+          let validGuess = await guessWord(new Id('games', gid!), tryWord);
           if (!validGuess) {
             addToast(setToasts, `Invalid word '${tryWord}'`, 'error', 5000);
             setSubmittedRow(-1);
@@ -112,7 +112,7 @@ export function handleGameInput(
       event.preventDefault();
       const doSpy = async () => {
         if (gid !== null) {
-          await spy(Id.fromString(gid));
+          await spy(new Id('games', gid));
         }
       };
       if (canEdit) {

@@ -58,6 +58,13 @@
   dependencies:
     "regenerator-runtime" "^0.13.4"
 
+"@convex-dev/common@0.1.10":
+  "integrity" "sha512-wLvIByndZyLZ292rzDahSm8mPXHl5ZrD0aBVKSNVWJeOX8x1zCD9gBtECBKLj8BbXfngW6rCcGZKcjmNzcbEZQ=="
+  "resolved" "https://registry.npmjs.org/@convex-dev/common/-/common-0.1.10.tgz"
+  "version" "0.1.10"
+  dependencies:
+    "base64-js" "^1.5.1"
+
 "@convex-dev/common@0.1.2":
   "integrity" "sha512-q8qKEZ9ervZCorqzzZKxUxAzqawm7sJ86VBmLuqxvegz199A+Uo1dIgtaDoCWdAa4EW+LHs4rnk6pl16j66joA=="
   "resolved" "https://registry.npmjs.org/@convex-dev/common/-/common-0.1.2.tgz"
@@ -550,6 +557,19 @@
     "uuid" "~8.3.2"
     "zod" "^3.15.1"
 
+"convex@^0.1.10":
+  "integrity" "sha512-PoINbkFD1g1H9DItfkTzPSMlcFrQf+7/6Kre3/l+fWUFqOpCTmTsLR7f5RLqyteAqDeLVLp/wcPtCOwZJEEMZw=="
+  "resolved" "https://registry.npmjs.org/convex/-/convex-0.1.10.tgz"
+  "version" "0.1.10"
+  dependencies:
+    "@convex-dev/common" "0.1.10"
+    "base64-js" "^1.5.1"
+    "chalk" "4"
+    "encoding" "^0.1.13"
+    "esbuild" "^0.14.16"
+    "node-fetch" "^2.6.1"
+    "uuid" "^8.3.2"
+
 "core-js-pure@^3.20.2":
   "integrity" "sha512-12VZfFIu+wyVbBebyHmRTuEE/tZrB4tJToWcwAMcsp3h4+sHR+fMJWbKpYiCRWlhFBq+KNyO8rIV9rTkeVmznQ=="
   "resolved" "https://registry.npmjs.org/core-js-pure/-/core-js-pure-3.21.1.tgz"
@@ -752,7 +772,7 @@
   "resolved" "https://registry.npmjs.org/esbuild-darwin-arm64/-/esbuild-darwin-arm64-0.14.39.tgz"
   "version" "0.14.39"
 
-"esbuild@^0.14.39", "esbuild@~0.14.16":
+"esbuild@^0.14.16", "esbuild@^0.14.39", "esbuild@~0.14.16":
   "integrity" "sha512-2kKujuzvRWYtwvNjYDY444LQIA3TyJhJIX3Yo4+qkFlDDtGlSicWgeHVJqMUP/2sSfH10PGwfsj+O2ro1m10xQ=="
   "resolved" "https://registry.npmjs.org/esbuild/-/esbuild-0.14.39.tgz"
   "version" "0.14.39"
@@ -2261,7 +2281,7 @@
   "resolved" "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   "version" "1.0.2"
 
-"uuid@~8.3.2":
+"uuid@^8.3.2", "uuid@~8.3.2":
   "integrity" "sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg=="
   "resolved" "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   "version" "8.3.2"

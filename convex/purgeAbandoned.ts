@@ -1,5 +1,4 @@
-import { mutation } from 'convex-dev/server';
-import { Id } from 'convex-dev/values';
+import { mutation } from './_generated/server';
 import {
   abandonGame,
   getUser,
@@ -24,7 +23,7 @@ export default mutation(async ({ db }) => {
       console.log(`Abandoning game ${game.name}`);
       abandonGame(game);
       await recordGameStats(db, game);
-      await db.update(game._id, game);
+      db.patch(game._id, game);
     }
   }
 });

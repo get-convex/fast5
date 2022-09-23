@@ -1,9 +1,9 @@
-import { Id } from 'convex-dev/values';
+import { Id } from '../../convex/_generated/dataModel';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useMutation, useQuery } from '../../convex/_generated';
+import { useMutation, useQuery } from '../../convex/_generated/react';
 import {
   gameId,
   gameOver,
@@ -30,7 +30,7 @@ function Header() {
   const leaveGame = useMutation('leaveGame');
   const leaveAndGoHome = (e: Event) => {
     e.preventDefault();
-    leaveGame(Id.fromString(gid!));
+    leaveGame(new Id('games', gid!));
     router.push('/');
   };
   const goHome = (e: Event) => {

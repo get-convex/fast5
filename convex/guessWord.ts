@@ -1,5 +1,5 @@
-import { DatabaseWriter, mutation } from 'convex-dev/server';
-import { Id } from 'convex-dev/values';
+import { DatabaseWriter, mutation } from './_generated/server';
+import { Id } from './_generated/dataModel';
 import { WORDS, ALL_WORDS } from '../lib/game/constants';
 import { determineGameWinner, getUser, recordGameStats } from './common';
 import queryRound, { computeRoundState } from './queryRound';
@@ -22,7 +22,7 @@ export default mutation(
       return true;
     }
     let roundId = game.rounds[game.currentRound];
-    var round = await db.get(roundId.id());
+    var round = await db.get(roundId);
 
     if (typeof round.winner === 'number') {
       return true; // Round is over.

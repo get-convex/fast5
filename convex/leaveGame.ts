@@ -1,5 +1,5 @@
-import { mutation } from 'convex-dev/server';
-import { Id } from 'convex-dev/values';
+import { mutation } from './_generated/server';
+import { Id } from './_generated/dataModel';
 import { abandonGame, getUser, recordGameStats } from './common';
 
 const LEAVE_PENALTY = 100;
@@ -23,5 +23,5 @@ export default mutation(async ({ db, auth }, gameId: Id) => {
   }
   abandonGame(game);
   await recordGameStats(db, game);
-  await db.update(game._id, game);
+  db.patch(game._id, game);
 });
