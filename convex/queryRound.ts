@@ -1,5 +1,5 @@
-import { query } from 'convex-dev/server';
-import { Id } from 'convex-dev/values';
+import { query } from './_generated/server';
+import { Id } from './_generated/dataModel';
 import { User } from '../lib/game/proto';
 import { getUser } from './common';
 

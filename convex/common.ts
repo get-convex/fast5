@@ -1,4 +1,4 @@
-import { DatabaseWriter } from 'convex-dev/server';
+import { DatabaseWriter } from './_generated/server';
 import { User } from '../lib/game/proto';
 
 export const getUser = async (db: any, auth: any): Promise<User> => {
@@ -91,8 +91,8 @@ export async function recordGameStats(db: DatabaseWriter, game: any) {
   } else {
     throw 'unknown winner code';
   }
-  db.update(user1._id, user1);
-  db.update(user2._id, user2);
+  db.patch(user1._id, user1);
+  db.patch(user2._id, user2);
 }
 
 export function defaultGame(

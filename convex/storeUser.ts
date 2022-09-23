@@ -1,7 +1,8 @@
-import { mutation, UserIdentity } from 'convex-dev/server';
+import { mutation } from './_generated/server';
+import { UserIdentity } from 'convex/server';
 import { User } from '../lib/game/proto';
 import md5 from 'md5';
-import { Id } from 'convex-dev/values';
+import { Id } from './_generated/dataModel';
 
 // Insert or update the user in a Convex table then return the document's Id.
 //
@@ -41,7 +42,7 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
     } else {
       user.photoUrl = createGravatarUrl(identity);
     }
-    db.update(user._id, user);
+    db.patch(user._id, user);
     return user._id;
   }
   // If it's a new identity, create a new `User`.

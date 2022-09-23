@@ -1,7 +1,7 @@
-import { mutation } from 'convex-dev/server';
+import { mutation } from './_generated/server';
 import { WORDS } from '../lib/game/constants';
+import { Id } from './_generated/dataModel';
 import { dlog } from '../lib/game/util';
-import { Id } from 'convex-dev/values';
 
 export default mutation(async ({ db }, gameId: Id, next: number) => {
   var game = await db.get(gameId);
@@ -39,8 +39,8 @@ export default mutation(async ({ db }, gameId: Id, next: number) => {
     winner: null,
     overflow: false,
   };
-  const id = await db.insert('rounds', round);
+  const id = db.insert('rounds', round);
   game.rounds.push(id);
   game.currentRound = game.rounds.length - 1;
-  await db.update(game._id, game);
+  db.patch(game._id, game);
 });

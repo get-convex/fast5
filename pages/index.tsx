@@ -4,7 +4,7 @@ import Head from 'next/head';
 import React, { useEffect } from 'react';
 import Splash from '../components/Splash/Splash';
 import StartGame from '../components/StartGame/StartGame';
-import { useConvex, useMutation } from '../convex/_generated';
+import { useConvex, useMutation } from '../convex/_generated/react';
 
 const Home: NextPage = () => {
   const convex = useConvex();

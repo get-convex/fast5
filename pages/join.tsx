@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Button from '../components/Button/Button';
 import Divider from '../components/Divider/Divider';
 import Modal from '../components/Modal/Modal';
-import { useConvex } from '../convex/_generated';
+import { useConvex } from '../convex/_generated/react';
 import styles from './join.module.scss';
 
 const Home: NextPage = () => {
@@ -37,7 +37,9 @@ const Home: NextPage = () => {
     e.preventDefault();
     const validateAndGo = async () => {
       // TODO -- need better support for one-offs from react-convex land.
-      convex.watchQuery('validateGame', game).onUpdate((err) => {
+      const watch = convex.watchQuery('validateGame', game);
+      watch.onUpdate(() => {
+        const err = watch.localQueryResult();
         if (typeof err === 'string') {
           setError(`Error joining game: ${err}`);
         } else {

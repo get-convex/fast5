@@ -1,5 +1,4 @@
-import { mutation } from 'convex-dev/server';
-import { Id } from 'convex-dev/values';
+import { mutation } from './_generated/server';
 import { defaultGame, getUser, randomGameName } from './common';
 
 export default mutation(async ({ db, auth }): Promise<string | null> => {
@@ -19,6 +18,6 @@ export default mutation(async ({ db, auth }): Promise<string | null> => {
     }
   }
   const game = defaultGame(gameName, user, false);
-  await db.insert('games', game);
+  db.insert('games', game);
   return gameName;
 });

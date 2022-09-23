@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Id } from 'convex-dev/values';
+import { Id } from '../../convex/_generated/dataModel';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -9,7 +9,7 @@ import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
 import Board from '../../components/Board/Board';
 import Toasts from '../../components/Toasts/Toasts';
 import ping from '../../convex/ping';
-import { useConvex, useMutation, useQuery } from '../../convex/_generated';
+import { useConvex, useMutation, useQuery } from '../../convex/_generated/react';
 import { addToast, boot } from '../../lib/game/flow';
 import { ALL_KEYS, handleGameInput } from '../../lib/game/input';
 import { BackendGame, BackendRound } from '../../lib/game/proto';
@@ -112,8 +112,8 @@ const MatchContainer = (props: any) => {
   const gid = props.gid;
 
   // Backend updates.
-  const gameQuery = useQuery('queryGame', Id.fromString(gid));
-  const roundQuery = useQuery('queryRound', Id.fromString(gid));
+  const gameQuery = useQuery('queryGame', new Id('games', gid));
+  const roundQuery = useQuery('queryRound', new Id('games', gid));
 
   // Connect to recoil atoms. TODO -- replace with nicer recoil-sync stuff
   const [, setBackendGame] = useRecoilState(backendGameState);
@@ -221,7 +221,7 @@ const GameFlowDriver = () => {
 
   useTimeoutWhen(
     () => {
-      createRound(Id.fromString(gid!), game!.round);
+      createRound(new Id('games', gid!), game!.round);
     },
     ROUND_START_DELAY,
     needRound
@@ -229,7 +229,7 @@ const GameFlowDriver = () => {
 
   useIntervalWhen(
     () => {
-      pingGame(Id.fromString(gid!));
+      pingGame(new Id('games', gid!));
     },
     PING_INTERVAL,
     true

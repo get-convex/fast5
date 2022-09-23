@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useRouter } from 'next/router';
-import { useMutation } from '../../convex/_generated';
+import { useMutation } from '../../convex/_generated/react';
 import Button from '../Button/Button';
 import Instructions from '../Instructions/Instructions';
 import Modal from '../Modal/Modal';

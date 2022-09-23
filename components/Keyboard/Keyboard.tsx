@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { Id } from 'convex-dev/values';
+import { Id } from '../../convex/_generated/dataModel';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { useMutation } from '../../convex/_generated';
+import { useMutation } from '../../convex/_generated/react';
 import { addToast } from '../../lib/game/flow';
 import {
   canEdit,
@@ -42,7 +42,7 @@ function Keyboard({}: KeyboardProps) {
       const tryGuess = async () => {
         const tryWord = currentLettersValue.join('');
         const validGuess = await guessWord(
-          Id.fromString(gameIdValue!),
+          new Id('games', gameIdValue!),
           tryWord
         );
         if (!validGuess) {
@@ -66,7 +66,7 @@ function Keyboard({}: KeyboardProps) {
     if (key === 'SPACE') {
       const doSpy = async () => {
         if (gameIdValue !== null) {
-          await spy(Id.fromString(gameIdValue));
+          await spy(new Id('games', gameIdValue));
         }
       };
       doSpy();

@@ -1,5 +1,5 @@
-import { DatabaseWriter, mutation } from 'convex-dev/server';
-import { Id } from 'convex-dev/values';
+import { DatabaseWriter, mutation } from './_generated/server';
+import { Id } from './_generated/dataModel';
 import { WORDS, ALL_WORDS } from '../lib/game/constants';
 import { determineGameWinner, getUser, recordGameStats } from './common';
 import queryRound, { computeRoundState } from './queryRound';
