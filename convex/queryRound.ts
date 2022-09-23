@@ -12,7 +12,7 @@ export default query(async ({ db, auth }, gameId: Id) => {
   }
   console.log('continuing...');
   const roundId = game.rounds[game.currentRound];
-  const round = await db.get(roundId.id());
+  const round = await db.get(roundId);
   return computeRoundState(user, game, round);
 });
 

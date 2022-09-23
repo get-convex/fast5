@@ -19,7 +19,7 @@ export default mutation(async ({ db }, gameId: Id, next: number) => {
   }
   if (game.rounds.length > 0) {
     const lastId = game.rounds[game.rounds.length - 1];
-    const lastRound = await db.get(lastId.id());
+    const lastRound = await db.get(lastId);
     if (typeof lastRound.winner !== 'number') {
       // Last round, no one won yet!
       return;

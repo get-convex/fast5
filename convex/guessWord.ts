@@ -22,7 +22,7 @@ export default mutation(
       return true;
     }
     let roundId = game.rounds[game.currentRound];
-    var round = await db.get(roundId.id());
+    var round = await db.get(roundId);
 
     if (typeof round.winner === 'number') {
       return true; // Round is over.

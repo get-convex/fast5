@@ -10,7 +10,7 @@ export default mutation(async ({ db, auth }, gameId: Id) => {
     return;
   }
   let roundId = game.rounds[game.currentRound];
-  var round = await db.get(roundId.id());
+  var round = await db.get(roundId);
   if (typeof round.winner === 'number') {
     return; // Round is over.
   }
