@@ -3,10 +3,11 @@ import { Id } from './_generated/dataModel';
 import { User } from '../lib/game/proto';
 import { getUser } from './common';
 
-export default query(async ({ db, auth }, gameId: Id) => {
+export default query(async ({ db, auth }, gameId: Id<'games'>) => {
   const user = await getUser(db, auth);
   console.log('query round...');
   const game = await db.get(gameId);
+  if (!game) throw Error('Game not found');
   if (game.currentRound === -1) {
     return null;
   }

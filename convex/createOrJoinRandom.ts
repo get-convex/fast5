@@ -5,6 +5,7 @@ import {
   randomGameName,
   TIMEOUT_THRESHOLD,
 } from './common';
+import { createGameHelper } from './createGame';
 
 export default mutation(async ({ db, auth }): Promise<string | null> => {
   const user = await getUser(db, auth);
@@ -14,7 +15,7 @@ export default mutation(async ({ db, auth }): Promise<string | null> => {
 
   // TODO -- use an index for this eventually!
   var waiting = await db
-    .table('games')
+    .query('games')
     .filter((q) =>
       q.and(
         q.eq(q.field('public'), true),
@@ -32,20 +33,5 @@ export default mutation(async ({ db, auth }): Promise<string | null> => {
   }
 
   // No one waiting? Well, let's create one...
-  while (true) {
-    var gameName = randomGameName();
-
-    var existing = await db
-      .table('games')
-      .filter((q) => q.eq(q.field('name'), gameName))
-      .first();
-
-    if (existing === null) {
-      // We're creating the game!
-      break;
-    }
-  }
-  const game = defaultGame(gameName, user, true);
-  db.insert('games', game);
-  return gameName;
+  return createGameHelper(db, user, true);
 });

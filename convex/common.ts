@@ -1,7 +1,12 @@
-import { DatabaseWriter } from './_generated/server';
+import { DatabaseReader, DatabaseWriter } from './_generated/server';
 import { User } from '../lib/game/proto';
+import { Document } from './_generated/dataModel';
+import type { Auth } from 'convex/server';
 
-export const getUser = async (db: any, auth: any): Promise<User> => {
+export const getUser = async (
+  db: DatabaseReader,
+  auth: Auth
+): Promise<User> => {
   const identity = await auth.getUserIdentity();
   if (!identity) {
     throw new Error(
@@ -9,11 +14,12 @@ export const getUser = async (db: any, auth: any): Promise<User> => {
     );
   }
   const user = await db
-    .table('users')
+    .query('users')
     .filter((q: any) =>
       q.eq(q.field('tokenIdentifier'), identity.tokenIdentifier)
     )
     .unique();
+  if (!user) throw new Error('User not found');
   return user;
 };
 
@@ -69,7 +75,10 @@ export function determineGameWinner(game: any) {
   }
 }
 
-export async function recordGameStats(db: DatabaseWriter, game: any) {
+export async function recordGameStats(
+  db: DatabaseWriter,
+  game: Document<'games'>
+) {
   if (!game.ready) {
     // Game was never started. No winning.
     return;
@@ -77,8 +86,8 @@ export async function recordGameStats(db: DatabaseWriter, game: any) {
   if (game.winner < 1) {
     throw "Game doesn't seem to be over";
   }
-  let user1 = await db.get(game.user1);
-  let user2 = await db.get(game.user2);
+  const user1 = (await db.get(game.user1))!;
+  const user2 = (await db.get(game.user2!))!;
   if (game.winner === 1) {
     user1.wins = (user1.wins ?? 0) + 1;
     user2.losses = (user2.losses ?? 0) + 1;
@@ -91,8 +100,8 @@ export async function recordGameStats(db: DatabaseWriter, game: any) {
   } else {
     throw 'unknown winner code';
   }
-  db.patch(user1._id, user1);
-  db.patch(user2._id, user2);
+  db.replace(user1._id, user1);
+  db.replace(user2._id, user2);
 }
 
 export function defaultGame(

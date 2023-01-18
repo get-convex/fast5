@@ -4,9 +4,10 @@ import { abandonGame, getUser, recordGameStats } from './common';
 
 const LEAVE_PENALTY = 100;
 
-export default mutation(async ({ db, auth }, gameId: Id) => {
+export default mutation(async ({ db, auth }, gameId: Id<'games'>) => {
   const user = await getUser(db, auth);
-  var game = await db.get(gameId);
+  const game = await db.get(gameId);
+  if (!game) throw Error('Game not found');
   if (game.winner > 0) {
     // Game already has an outcome.
     return;
@@ -23,5 +24,5 @@ export default mutation(async ({ db, auth }, gameId: Id) => {
   }
   abandonGame(game);
   await recordGameStats(db, game);
-  db.patch(game._id, game);
+  await db.patch(game._id, game);
 });

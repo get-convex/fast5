@@ -7,9 +7,9 @@ export default query(
     var gameName = gameName.toLocaleLowerCase().trim();
 
     var game = await db
-      .table('games')
+      .query('games')
       .filter((q) => q.eq(q.field('name'), gameName))
-      .first();
+      .unique();
 
     if (game === null) {
       return 'No such game';
@@ -17,10 +17,9 @@ export default query(
 
     // Already in the game, or game is available to join.
     if (
-      (user._id.equals(game.user1) ||
-        user._id.equals(game.user2) ||
-        game.user2) ??
-      true
+      user._id.equals(game.user1) ||
+      user._id.equals(game.user2) ||
+      !game.user2
     ) {
       return null;
     }

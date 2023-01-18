@@ -19,7 +19,7 @@ import { Id } from './_generated/dataModel';
 // presence of which depends on the identity provider chosen. It's up to the
 // application developer to determine which ones are available and to decide
 // which of those need to be persisted.
-export default mutation(async ({ db, auth }): Promise<Id> => {
+export default mutation(async ({ db, auth }): Promise<Id<'users'>> => {
   const identity = await auth.getUserIdentity();
   if (!identity) {
     throw new Error('Called storeUser without authentication present');
@@ -27,9 +27,9 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
 
   // Check if we've already stored this identity before.
   const user: User | null = await db
-    .table('users')
+    .query('users')
     .filter((q) => q.eq(q.field('tokenIdentifier'), identity.tokenIdentifier))
-    .first();
+    .unique();
   if (user !== null) {
     // If we've seen this identity before but the name has changed, update the value.
     if (user.name != identity.name) {
@@ -42,7 +42,7 @@ export default mutation(async ({ db, auth }): Promise<Id> => {
     } else {
       user.photoUrl = createGravatarUrl(identity);
     }
-    db.patch(user._id, user);
+    await db.patch(user._id, user);
     return user._id;
   }
   // If it's a new identity, create a new `User`.

@@ -3,12 +3,12 @@ import { Id } from './_generated/dataModel';
 import { getUser } from './common';
 
 export default mutation(
-  async ({ db, auth }, gameName: string): Promise<Id | null> => {
+  async ({ db, auth }, gameName: string): Promise<Id<'games'> | null> => {
     const user = await getUser(db, auth);
     var gameName = gameName.toLocaleLowerCase().trim();
 
     var existing = await db
-      .table('games')
+      .query('games')
       .filter((q) => q.eq(q.field('name'), gameName))
       .first();
 
@@ -24,7 +24,7 @@ export default mutation(
     existing.user2 = user._id;
     existing.ready = true;
     db.replace(existing._id, existing);
-    var id = existing._id as Id;
+    var id = existing._id;
 
     // We joined the game!
     console.log(`id is ${id}`);

@@ -40,7 +40,7 @@ export interface BackendRound {
   overflow: boolean;
 }
 export interface User {
-  _id: Id;
+  _id: Id<'users'>;
   name: string;
   displayName: string;
   photoUrl: string;

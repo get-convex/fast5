@@ -5,7 +5,7 @@ import { determineGameWinner, getUser, recordGameStats } from './common';
 import queryRound, { computeRoundState } from './queryRound';
 
 export default mutation(
-  async ({ db, auth }, gameId: Id, word: string): Promise<boolean> => {
+  async ({ db, auth }, gameId: Id<'games'>, word: string): Promise<boolean> => {
     const user = await getUser(db, auth);
     const lword = word.toLocaleLowerCase().trim();
     console.log('guess is ' + lword);
@@ -17,12 +17,13 @@ export default mutation(
       return false;
     }
 
-    var game = await db.get(gameId);
+    const game = await db.get(gameId);
+    if (!game) throw Error('Game not found');
     if (game.currentRound < 0) {
       return true;
     }
     let roundId = game.rounds[game.currentRound];
-    var round = await db.get(roundId);
+    const round = (await db.get(roundId))!;
 
     if (typeof round.winner === 'number') {
       return true; // Round is over.
@@ -38,7 +39,6 @@ export default mutation(
         game.score2 += computedRound?.user2.scores.reduce((a, n) => a + n, 0);
       };
       var userRound = round.user1;
-      var otherUserRound = round.user2;
       var userId = 1;
       var otherId = 2;
     } else if (user._id.equals(game.user2)) {
@@ -49,7 +49,6 @@ export default mutation(
         game.score1 += computedRound?.user1.scores.reduce((a, n) => a + n, 0);
       };
       var userRound = round.user2;
-      var otherUserRound = round.user1;
       var userId = 2;
       var otherId = 1;
     } else {

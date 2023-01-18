@@ -1,16 +1,16 @@
 import { mutation } from './_generated/server';
 import { Id } from './_generated/dataModel';
-import { WORDS } from '../lib/game/constants';
 import { getUser } from './common';
 
-export default mutation(async ({ db, auth }, gameId: Id) => {
+export default mutation(async ({ db, auth }, gameId: Id<'games'>) => {
   const user = await getUser(db, auth);
-  var game = await db.get(gameId);
+  const game = await db.get(gameId);
+  if (!game) throw Error('Game not found');
   if (game.currentRound < 0) {
     return;
   }
   let roundId = game.rounds[game.currentRound];
-  var round = await db.get(roundId);
+  const round = (await db.get(roundId))!;
   if (typeof round.winner === 'number') {
     return; // Round is over.
   }
@@ -20,6 +20,8 @@ export default mutation(async ({ db, auth }, gameId: Id) => {
     var userRound = round.user1;
   } else if (user._id.equals(game.user2)) {
     var userRound = round.user2;
+  } else {
+    throw Error("Trying to spy on someone else's game?");
   }
 
   // Must be room for another guess, if the winner is not decided.

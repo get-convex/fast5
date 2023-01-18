@@ -1,10 +1,10 @@
 import { mutation } from './_generated/server';
 import { WORDS } from '../lib/game/constants';
 import { Id } from './_generated/dataModel';
-import { dlog } from '../lib/game/util';
 
-export default mutation(async ({ db }, gameId: Id, next: number) => {
+export default mutation(async ({ db }, gameId: Id<'games'>, next: number) => {
   var game = await db.get(gameId);
+  if (!game) throw Error('Game not found');
   if (game.user2 == undefined) {
     // Still waiting on the other party.
     return;
@@ -19,7 +19,7 @@ export default mutation(async ({ db }, gameId: Id, next: number) => {
   }
   if (game.rounds.length > 0) {
     const lastId = game.rounds[game.rounds.length - 1];
-    const lastRound = await db.get(lastId);
+    const lastRound = (await db.get(lastId))!;
     if (typeof lastRound.winner !== 'number') {
       // Last round, no one won yet!
       return;
@@ -39,8 +39,8 @@ export default mutation(async ({ db }, gameId: Id, next: number) => {
     winner: null,
     overflow: false,
   };
-  const id = db.insert('rounds', round);
+  const id = await db.insert('rounds', round);
   game.rounds.push(id);
   game.currentRound = game.rounds.length - 1;
-  db.patch(game._id, game);
+  await db.patch(game._id, game);
 });
