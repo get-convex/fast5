@@ -21,8 +21,10 @@ export default mutation(
       )
       .first();
     if (waiting !== null) {
-      waiting.user2 = user._id;
-      waiting.ready = true;
+      await db.patch(waiting._id, {
+        user2: user._id,
+        ready: true,
+      });
       return waiting.name;
     }
 

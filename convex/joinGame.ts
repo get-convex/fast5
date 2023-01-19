@@ -21,9 +21,10 @@ export default mutation(
       if (existing.user2 !== undefined) {
         return null; // Already two players in the game!
       }
-      existing.user2 = user._id;
-      existing.ready = true;
-      db.replace(existing._id, existing);
+      db.patch(existing._id, {
+        user2: user._id,
+        ready: true,
+      });
       var id = existing._id;
 
       // We joined the game!
