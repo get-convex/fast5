@@ -1,11 +1,11 @@
-import { DatabaseWriter, mutation } from './_generated/server';
-import { defaultGame, randomGameName, withUser } from './common';
+import { DatabaseWriter } from './_generated/server';
+import { defaultGame, mutationWithUser, randomGameName } from './common';
 import { Document } from './_generated/dataModel';
 
-export default mutation(
-  withUser(async ({ db, user }): Promise<string | null> => {
+export default mutationWithUser(
+  async ({ db, user }): Promise<string | null> => {
     return createGameHelper(db, user, false);
-  })
+  }
 );
 
 export const createGameHelper = async (

@@ -1,4 +1,10 @@
-import { DatabaseWriter, QueryCtx, MutationCtx } from './_generated/server';
+import {
+  DatabaseWriter,
+  QueryCtx,
+  MutationCtx,
+  mutation,
+  query,
+} from './_generated/server';
 import { Document } from './_generated/dataModel';
 
 export const withUser = <
@@ -24,6 +30,21 @@ export const withUser = <
     if (!user) throw new Error('User not found');
     return func({ ...ctx, user }, ...args);
   };
+};
+
+export const mutationWithUser = <Args extends any[], Output>(
+  func: (
+    ctx: MutationCtx & { user: Document<'users'> },
+    ...args: Args
+  ) => Output
+) => {
+  return mutation(withUser(func));
+};
+
+export const queryWithUser = <Args extends any[], Output>(
+  func: (ctx: QueryCtx & { user: Document<'users'> }, ...args: Args) => Output
+) => {
+  return query(withUser(func));
 };
 
 const LETTERS = [

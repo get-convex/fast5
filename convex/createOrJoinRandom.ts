@@ -1,9 +1,8 @@
-import { mutation } from './_generated/server';
-import { withUser, TIMEOUT_THRESHOLD } from './common';
+import { mutationWithUser, TIMEOUT_THRESHOLD } from './common';
 import { createGameHelper } from './createGame';
 
-export default mutation(
-  withUser(async ({ db, user }): Promise<string | null> => {
+export default mutationWithUser(
+  async ({ db, user }): Promise<string | null> => {
     const now = Math.floor(Date.now() / 1000);
     const validLastPing = now - TIMEOUT_THRESHOLD;
 
@@ -30,5 +29,5 @@ export default mutation(
 
     // No one waiting? Well, let's create one...
     return createGameHelper(db, user, true);
-  })
+  }
 );

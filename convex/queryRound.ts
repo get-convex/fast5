@@ -1,21 +1,18 @@
-import { query } from './_generated/server';
 import { Id } from './_generated/dataModel';
-import { withUser } from './common';
+import { queryWithUser } from './common';
 
-export default query(
-  withUser(async ({ db, user }, gameId: Id<'games'>) => {
-    console.log('query round...');
-    const game = await db.get(gameId);
-    if (!game) throw Error('Game not found');
-    if (game.currentRound === -1) {
-      return null;
-    }
-    console.log('continuing...');
-    const roundId = game.rounds[game.currentRound];
-    const round = await db.get(roundId);
-    return computeRoundState(user, game, round);
-  })
-);
+export default queryWithUser(async ({ db, user }, gameId: Id<'games'>) => {
+  console.log('query round...');
+  const game = await db.get(gameId);
+  if (!game) throw Error('Game not found');
+  if (game.currentRound === -1) {
+    return null;
+  }
+  console.log('continuing...');
+  const roundId = game.rounds[game.currentRound];
+  const round = await db.get(roundId);
+  return computeRoundState(user, game, round);
+});
 
 export function computeRoundState(user: any, game: any, round: any) {
   const over = typeof round.winner === 'number';

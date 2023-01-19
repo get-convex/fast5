@@ -1,10 +1,9 @@
-import { query } from './_generated/server';
 import { Id } from './_generated/dataModel';
 import { BackendGame } from '../lib/game/proto';
-import { withUser } from './common';
+import { queryWithUser } from './common';
 
-export default query(
-  withUser(async ({ db, user }, gameId: Id<'games'>): Promise<BackendGame> => {
+export default queryWithUser(
+  async ({ db, user }, gameId: Id<'games'>): Promise<BackendGame> => {
     const game = await db.get(gameId);
     if (!game) throw Error('Game not found');
     const user1 = (await db.get(game.user1))!;
@@ -42,5 +41,5 @@ export default query(
       over: game.winner > 0,
     };
     return state;
-  })
+  }
 );

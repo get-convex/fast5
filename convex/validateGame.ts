@@ -1,8 +1,7 @@
-import { query } from './_generated/server';
-import { withUser } from './common';
+import { queryWithUser } from './common';
 
-export default query(
-  withUser(async ({ db, user }, gameName: string): Promise<string | null> => {
+export default queryWithUser(
+  async ({ db, user }, gameName: string): Promise<string | null> => {
     var gameName = gameName.toLocaleLowerCase().trim();
 
     var game = await db
@@ -23,5 +22,5 @@ export default query(
       return null;
     }
     return 'Game already has two players';
-  })
+  }
 );
