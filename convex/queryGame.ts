@@ -1,12 +1,10 @@
 import { query } from './_generated/server';
 import { Id } from './_generated/dataModel';
-import { WORDS } from '../lib/game/constants';
 import { BackendGame } from '../lib/game/proto';
-import { getUser } from './common';
+import { withUser } from './common';
 
 export default query(
-  async ({ db, auth }, gameId: Id<'games'>): Promise<BackendGame> => {
-    const user = await getUser(db, auth);
+  withUser(async ({ db, user }, gameId: Id<'games'>): Promise<BackendGame> => {
     const game = await db.get(gameId);
     if (!game) throw Error('Game not found');
     const user1 = (await db.get(game.user1))!;
@@ -44,5 +42,5 @@ export default query(
       over: game.winner > 0,
     };
     return state;
-  }
+  })
 );

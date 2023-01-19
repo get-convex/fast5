@@ -1,21 +1,21 @@
 import { query } from './_generated/server';
 import { Id } from './_generated/dataModel';
-import { User } from '../lib/game/proto';
-import { getUser } from './common';
+import { withUser } from './common';
 
-export default query(async ({ db, auth }, gameId: Id<'games'>) => {
-  const user = await getUser(db, auth);
-  console.log('query round...');
-  const game = await db.get(gameId);
-  if (!game) throw Error('Game not found');
-  if (game.currentRound === -1) {
-    return null;
-  }
-  console.log('continuing...');
-  const roundId = game.rounds[game.currentRound];
-  const round = await db.get(roundId);
-  return computeRoundState(user, game, round);
-});
+export default query(
+  withUser(async ({ db, user }, gameId: Id<'games'>) => {
+    console.log('query round...');
+    const game = await db.get(gameId);
+    if (!game) throw Error('Game not found');
+    if (game.currentRound === -1) {
+      return null;
+    }
+    console.log('continuing...');
+    const roundId = game.rounds[game.currentRound];
+    const round = await db.get(roundId);
+    return computeRoundState(user, game, round);
+  })
+);
 
 export function computeRoundState(user: any, game: any, round: any) {
   const over = typeof round.winner === 'number';

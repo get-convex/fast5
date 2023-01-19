@@ -1,8 +1,9 @@
 import { mutation } from './_generated/server';
-import { getUser } from './common';
+import { withUser } from './common';
 
-export default mutation(async ({ db, auth }, name: string) => {
-  const user = (await getUser(db, auth))!;
-  user.displayName = name;
-  await db.patch(user._id, user);
-});
+export default mutation(
+  withUser(async ({ db, user }, name: string) => {
+    user.displayName = name;
+    await db.patch(user._id, user);
+  })
+);

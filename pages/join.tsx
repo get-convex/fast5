@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   const [error, setError] = useState('');
   const router = useRouter();
   const convex = useConvex();
-  let { isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
+  let { isAuthenticated, isLoading } = useAuth0();
 
   useEffect(() => {
     if (isLoading) {

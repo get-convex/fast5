@@ -1,6 +1,5 @@
 import { mutation } from './_generated/server';
 import { UserIdentity } from 'convex/server';
-import { User } from '../lib/game/proto';
 import md5 from 'md5';
 import { Id } from './_generated/dataModel';
 
@@ -26,7 +25,7 @@ export default mutation(async ({ db, auth }): Promise<Id<'users'>> => {
   }
 
   // Check if we've already stored this identity before.
-  const user: User | null = await db
+  const user = await db
     .query('users')
     .filter((q) => q.eq(q.field('tokenIdentifier'), identity.tokenIdentifier))
     .unique();

@@ -1,5 +1,3 @@
-import { Id } from '../../convex/_generated/dataModel';
-
 export interface BackendGame {
   round: number;
   user1: {
@@ -38,13 +36,6 @@ export interface BackendRound {
   };
   winner: number | null;
   overflow: boolean;
-}
-export interface User {
-  _id: Id<'users'>;
-  name: string;
-  displayName: string;
-  photoUrl: string;
-  tokenIdentifier: string;
 }
 
 export interface UserStats {

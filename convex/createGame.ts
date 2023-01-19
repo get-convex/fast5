@@ -1,16 +1,16 @@
 import { DatabaseWriter, mutation } from './_generated/server';
-import { defaultGame, getUser, randomGameName } from './common';
-import { User } from '../lib/game/proto';
+import { defaultGame, randomGameName, withUser } from './common';
+import { Document } from './_generated/dataModel';
 
-export default mutation(async ({ db, auth }): Promise<string | null> => {
-  const user = await getUser(db, auth);
-
-  return createGameHelper(db, user, false);
-});
+export default mutation(
+  withUser(async ({ db, user }): Promise<string | null> => {
+    return createGameHelper(db, user, false);
+  })
+);
 
 export const createGameHelper = async (
   db: DatabaseWriter,
-  user: User,
+  user: Document<'users'>,
   pub: boolean
 ) => {
   while (true) {
