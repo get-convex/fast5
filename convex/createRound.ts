@@ -5,7 +5,7 @@ import { Id } from './_generated/dataModel';
 export default mutation(async ({ db }, gameId: Id<'games'>, next: number) => {
   var game = await db.get(gameId);
   if (!game) throw Error('Game not found');
-  if (game.user2 == undefined) {
+  if (!game.ready) {
     // Still waiting on the other party.
     return;
   }

@@ -36,7 +36,7 @@ export default query(
           ties: user2?.ties ?? 0,
         },
       },
-      ready: user2 !== null,
+      ready: game.ready,
       inRound: game.currentRound !== -1,
       winner: game.winner,
       over: game.winner > 0,
