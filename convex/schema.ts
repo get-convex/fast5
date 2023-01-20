@@ -31,5 +31,5 @@ export default defineSchema({
     ties: s.number(),
     tokenIdentifier: s.string(),
     wins: s.number(),
-  }),
+  }).index('by_token', ['tokenIdentifier']),
 });

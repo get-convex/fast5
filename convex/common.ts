@@ -23,8 +23,8 @@ export const withUser = <
     }
     const user = await ctx.db
       .query('users')
-      .filter((q: any) =>
-        q.eq(q.field('tokenIdentifier'), identity.tokenIdentifier)
+      .withIndex('by_token', (q) =>
+        q.eq('tokenIdentifier', identity.tokenIdentifier)
       )
       .unique();
     if (!user) throw new Error('User not found');
