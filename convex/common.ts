@@ -1,51 +1,5 @@
-import {
-  DatabaseWriter,
-  QueryCtx,
-  MutationCtx,
-  mutation,
-  query,
-} from './_generated/server';
+import { DatabaseWriter } from './_generated/server';
 import { Document } from './_generated/dataModel';
-
-export const withUser = <
-  Ctx extends QueryCtx | MutationCtx,
-  Args extends any[],
-  Output
->(
-  func: (ctx: Ctx & { user: Document<'users'> }, ...args: Args) => Output
-) => {
-  return async (ctx: Ctx, ...args: Args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new Error(
-        'Unauthenticated call to function requiring authentication'
-      );
-    }
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_token', (q) =>
-        q.eq('tokenIdentifier', identity.tokenIdentifier)
-      )
-      .unique();
-    if (!user) throw new Error('User not found');
-    return func({ ...ctx, user }, ...args);
-  };
-};
-
-export const mutationWithUser = <Args extends any[], Output>(
-  func: (
-    ctx: MutationCtx & { user: Document<'users'> },
-    ...args: Args
-  ) => Output
-) => {
-  return mutation(withUser(func));
-};
-
-export const queryWithUser = <Args extends any[], Output>(
-  func: (ctx: QueryCtx & { user: Document<'users'> }, ...args: Args) => Output
-) => {
-  return query(withUser(func));
-};
 
 const LETTERS = [
   'b',

@@ -1,11 +1,8 @@
 import { DatabaseWriter } from './_generated/server';
 import { Id } from './_generated/dataModel';
 import { ALL_WORDS } from '../lib/game/constants';
-import {
-  determineGameWinner,
-  recordGameStats,
-  mutationWithUser,
-} from './common';
+import { determineGameWinner, recordGameStats } from './common';
+import { mutationWithUser } from './lib/withUser';
 import { computeRoundState } from './queryRound';
 
 export default mutationWithUser(

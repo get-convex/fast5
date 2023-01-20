@@ -1,4 +1,4 @@
-import { mutationWithUser } from './common';
+import { mutationWithUser } from './lib/withUser';
 
 export default mutationWithUser(async ({ db, user }, name: string) => {
   user.displayName = name;

@@ -1,4 +1,5 @@
-import { mutationWithUser, TIMEOUT_THRESHOLD } from './common';
+import { TIMEOUT_THRESHOLD } from './common';
+import { mutationWithUser } from './lib/withUser';
 import { createGameHelper } from './createGame';
 
 export default mutationWithUser(

@@ -1,5 +1,6 @@
 import { Id } from './_generated/dataModel';
-import { abandonGame, mutationWithUser, recordGameStats } from './common';
+import { abandonGame, recordGameStats } from './common';
+import { mutationWithUser } from './lib/withUser';
 
 const LEAVE_PENALTY = 100;
 

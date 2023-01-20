@@ -1,5 +1,5 @@
 import { Id } from './_generated/dataModel';
-import { mutationWithUser } from './common';
+import { mutationWithUser } from './lib/withUser';
 
 export default mutationWithUser(async ({ db, user }, gameId: Id<'games'>) => {
   const game = await db.get(gameId);

@@ -1,5 +1,6 @@
 import { DatabaseWriter } from './_generated/server';
-import { defaultGame, mutationWithUser, randomGameName } from './common';
+import { defaultGame, randomGameName } from './common';
+import { mutationWithUser } from './lib/withUser';
 import { Document } from './_generated/dataModel';
 
 export default mutationWithUser(

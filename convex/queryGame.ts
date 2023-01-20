@@ -1,6 +1,6 @@
 import { Id } from './_generated/dataModel';
 import { BackendGame } from '../lib/game/proto';
-import { queryWithUser } from './common';
+import { queryWithUser } from './lib/withUser';
 
 export default queryWithUser(
   async ({ db, user }, gameId: Id<'games'>): Promise<BackendGame> => {

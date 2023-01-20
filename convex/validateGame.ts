@@ -1,4 +1,4 @@
-import { queryWithUser } from './common';
+import { queryWithUser } from './lib/withUser';
 
 export default queryWithUser(
   async ({ db, user }, gameName: string): Promise<string | null> => {

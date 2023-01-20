@@ -1,5 +1,5 @@
 import { Id } from './_generated/dataModel';
-import { queryWithUser } from './common';
+import { queryWithUser } from './lib/withUser';
 
 export default queryWithUser(async ({ db, user }, gameId: Id<'games'>) => {
   console.log('query round...');
