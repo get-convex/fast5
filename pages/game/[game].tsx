@@ -8,9 +8,12 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { useIntervalWhen, useKey, useTimeoutWhen } from 'rooks';
 import Board from '../../components/Board/Board';
 import Toasts from '../../components/Toasts/Toasts';
-import ping from '../../convex/ping';
-import { useConvex, useMutation, useQuery } from '../../convex/_generated/react';
-import { addToast, boot } from '../../lib/game/flow';
+import {
+  useConvex,
+  useMutation,
+  useQuery,
+} from '../../convex/_generated/react';
+import { addToast } from '../../lib/game/flow';
 import { ALL_KEYS, handleGameInput } from '../../lib/game/input';
 import { BackendGame, BackendRound } from '../../lib/game/proto';
 import {
@@ -21,13 +24,13 @@ import {
   currentRow,
   gameId,
   gameName,
-  gameOver,
   needNewRound,
   roundWinner,
   submittedRow,
   toasts,
   userMe,
 } from '../../lib/game/state';
+import { dlog } from '../../lib/game/util';
 
 const Game: NextPage = () => {
   const router = useRouter();
@@ -86,7 +89,17 @@ const Game: NextPage = () => {
   useEffect(() => {
     const params = router.query;
     if (isAuthenticated && Object.keys(params).length !== 0) {
-      boot(params, joinGame, setGid, setGameName);
+      void (async () => {
+        const gamename: string = params['game'] as string;
+        setGameName(gamename);
+        const gid = await joinGame(gamename);
+        dlog(`Got gid = ${gid}`);
+        if (gid === null) {
+          dlog('Failed to join game...');
+        } else {
+          setGid(gid.toString());
+        }
+      })();
     }
   }, [router, joinGame, setGid, isAuthenticated, setGameName]);
 

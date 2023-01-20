@@ -1,39 +1,5 @@
-import { create } from 'domain';
-import { BackendGame, BackendRound } from './proto';
-import {
-  backendGameState,
-  backendRoundState,
-  BoardState,
-  currentLetters,
-  currentRow,
-  gameId,
-  GameState,
-  gameState,
-  submittedRow,
-  Toast,
-  toasts,
-  User,
-  userMe,
-} from './state';
-import { BoardSide, dlog, enableDebugLogging } from './util';
-
-export async function boot(
-  params: any,
-  joinGame: any,
-  setGameId: any,
-  setGameName: any
-) {
-  // enableDebugLogging(); // hax
-  const gamename: string = params['game'] as string;
-  setGameName(gamename);
-  const gid = await joinGame(gamename);
-  dlog(`Got gid = ${gid}`);
-  if (gid === null) {
-    dlog('Failed to join game...');
-  } else {
-    setGameId(gid.toString());
-  }
-}
+import { Toast } from './state';
+import { dlog } from './util';
 
 export function addToast(
   setToasts: any,
