@@ -1,9 +1,31 @@
 import { WORDS } from '../lib/game/constants';
-import { Id } from './_generated/dataModel';
+import { Document, Id } from './_generated/dataModel';
 import { mutationWithUser } from './lib/withUser';
+import { z } from 'zod';
+import withZodArgs from './lib/withZod';
+import { MutationCtx } from './_generated/server';
 
-export default mutationWithUser(
-  async ({ db, user }, gameId: Id<'games'>, next: number) => {
+export const secureMutation = <
+  Args extends [z.ZodTypeAny, ...z.ZodTypeAny[]] | [],
+  Returns extends z.ZodTypeAny
+>(
+  zodArgs: Args,
+  func: (
+    ctx: MutationCtx & { user: Document<'users'> },
+    ...args: z.output<z.ZodTuple<Args>>
+  ) => z.input<z.ZodPromise<Returns>>,
+  zodReturn?: Returns
+) => mutationWithUser(withZodArgs(zodArgs, func, zodReturn));
+
+export default secureMutation(
+  [
+    z.custom<Id<'games'>>(
+      (val) => val instanceof Id && val.tableName === 'games'
+    ),
+    z.number(),
+  ],
+  async ({ db, user }, gameId, next) => {
+    console.log({ gameId, next });
     var game = await db.get(gameId);
     if (!game) throw Error('Game not found');
     if (!user._id.equals(game.user1) && !user._id.equals(game.user2)) {

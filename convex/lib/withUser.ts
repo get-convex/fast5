@@ -34,7 +34,7 @@ export const withUser = <Ctx extends QueryCtx, Args extends any[], Output>(
       )
       .unique();
     if (!user) throw new Error('User not found');
-    return await func({ ...ctx, user }, ...args);
+    return func({ ...ctx, user }, ...args);
   };
 };
 
