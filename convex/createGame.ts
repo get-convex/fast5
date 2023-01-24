@@ -1,12 +1,14 @@
 import { DatabaseWriter } from './_generated/server';
-import { defaultGame, randomGameName } from './common';
-import { mutationWithUser } from './lib/withUser';
+import { defaultGame, randomGameName, secureMutation } from './common';
 import { Document } from './_generated/dataModel';
+import { z } from 'zod';
 
-export default mutationWithUser(
-  async ({ db, user }): Promise<string | null> => {
+export default secureMutation(
+  [],
+  async ({ db, user }) => {
     return createGameHelper(db, user, false);
-  }
+  },
+  z.nullable(z.string())
 );
 
 export const createGameHelper = async (

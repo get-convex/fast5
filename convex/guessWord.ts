@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 export default secureMutation(
   [zid('games'), z.string()],
-  async ({ db, user }, gameId: Id<'games'>, word: string): Promise<boolean> => {
+  async ({ db, user }, gameId, word) => {
     const lword = word.toLocaleLowerCase().trim();
     console.log('guess is ' + lword);
     const matchesWord = (w: any) => {
@@ -78,7 +78,8 @@ export default secureMutation(
 
     await db.replace(round._id, round);
     return true;
-  }
+  },
+  z.boolean()
 );
 
 async function checkForFinishedGame(db: DatabaseWriter, game: any) {

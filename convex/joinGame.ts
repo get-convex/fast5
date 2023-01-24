@@ -1,10 +1,11 @@
 import { Id } from './_generated/dataModel';
 import { secureMutation } from './common';
 import { z } from 'zod';
+import { zid } from './lib/withZod';
 
 export default secureMutation(
   [z.string()],
-  async ({ db, user }, gameName: string): Promise<Id<'games'> | null> => {
+  async ({ db, user }, gameName) => {
     var gameName = gameName.toLocaleLowerCase().trim();
 
     var existing = await db
@@ -30,5 +31,6 @@ export default secureMutation(
     // We joined the game!
     console.log(`id is ${id}`);
     return id;
-  }
+  },
+  z.nullable(zid('games'))
 );

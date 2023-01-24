@@ -3,7 +3,7 @@ import { secureQuery } from './common';
 
 export default secureQuery(
   [z.string()],
-  async ({ db, user }, gameName: string): Promise<string | null> => {
+  async ({ db, user }, gameName): Promise<string | null> => {
     var gameName = gameName.toLocaleLowerCase().trim();
 
     var game = await db

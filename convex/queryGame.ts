@@ -1,11 +1,10 @@
-import { Id } from './_generated/dataModel';
-import { BackendGame } from '../lib/game/proto';
+import { BackendGameZod } from '../lib/game/proto';
 import { secureQuery } from './common';
 import { zid } from './lib/withZod';
 
 export default secureQuery(
   [zid('games')],
-  async ({ db, user }, gameId: Id<'games'>): Promise<BackendGame> => {
+  async ({ db, user }, gameId) => {
     const game = await db.get(gameId);
     if (!game) throw Error('Game not found');
     const user1 = (await db.get(game.user1))!;
@@ -43,5 +42,6 @@ export default secureQuery(
       over: game.winner > 0,
     };
     return state;
-  }
+  },
+  BackendGameZod
 );

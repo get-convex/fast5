@@ -1,26 +1,32 @@
-export interface BackendGame {
-  round: number;
-  user1: {
-    displayName: string;
-    photoUrl: string;
-    score: number;
-    isYou: boolean;
-    stats: UserStats;
-  };
-  user2: {
-    displayName: string;
-    photoUrl: string;
-    score: number;
-    isYou: boolean;
-    stats: UserStats;
-  };
-  public: boolean;
-  ready: boolean;
-  abandoned: boolean;
-  inRound: boolean;
-  winner: number;
-  over: boolean;
-}
+import { z } from 'zod';
+
+const UserStatsZod = z.object({
+  wins: z.number(),
+  losses: z.number(),
+  ties: z.number(),
+});
+export type UserStats = z.infer<typeof UserStatsZod>;
+
+const GameUser = z.object({
+  displayName: z.string(),
+  photoUrl: z.string(),
+  score: z.number(),
+  isYou: z.boolean(),
+  stats: UserStatsZod,
+});
+
+export const BackendGameZod = z.object({
+  round: z.number(),
+  user1: GameUser,
+  user2: GameUser,
+  public: z.boolean(),
+  ready: z.boolean(),
+  abandoned: z.boolean(),
+  inRound: z.boolean(),
+  winner: z.number(),
+  over: z.boolean(),
+});
+export type BackendGame = z.infer<typeof BackendGameZod>;
 
 export interface BackendRound {
   word: null | string;
@@ -36,10 +42,4 @@ export interface BackendRound {
   };
   winner: number | null;
   overflow: boolean;
-}
-
-export interface UserStats {
-  wins: number;
-  losses: number;
-  ties: number;
 }

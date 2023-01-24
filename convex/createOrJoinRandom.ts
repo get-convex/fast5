@@ -1,9 +1,10 @@
-import { TIMEOUT_THRESHOLD } from './common';
-import { mutationWithUser } from './lib/withUser';
+import { secureMutation, TIMEOUT_THRESHOLD } from './common';
 import { createGameHelper } from './createGame';
+import { z } from 'zod';
 
-export default mutationWithUser(
-  async ({ db, user }): Promise<string | null> => {
+export default secureMutation(
+  [],
+  async ({ db, user }) => {
     const now = Math.floor(Date.now() / 1000);
     const validLastPing = now - TIMEOUT_THRESHOLD;
 
@@ -30,5 +31,6 @@ export default mutationWithUser(
 
     // No one waiting? Well, let's create one...
     return createGameHelper(db, user, true);
-  }
+  },
+  z.nullable(z.string())
 );
