@@ -78,7 +78,7 @@ const Game: NextPage = () => {
         // Get the raw ID token from the claims.
         let token = claims!.__raw;
         // Pass it to the Convex client.
-        convex.setAuth(token);
+        convex.setAuth(async () => token);
       });
     } else {
       // Tell the Convex client to clear all authentication state.

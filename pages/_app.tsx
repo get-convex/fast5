@@ -4,11 +4,10 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { RecoilRoot } from 'recoil';
 import App from '../components/App/App';
-import clientConfig from "../convex/_generated/clientConfig";
 import '../dist/site.css';
 import '../styles/global.scss';
 
-const convex = new ConvexReactClient(clientConfig);
+const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
