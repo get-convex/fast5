@@ -1,8 +1,10 @@
 import { Id } from './_generated/dataModel';
 import { BackendGame } from '../lib/game/proto';
-import { queryWithUser } from './lib/withUser';
+import { secureQuery } from './common';
+import { zid } from './lib/withZod';
 
-export default queryWithUser(
+export default secureQuery(
+  [zid('games')],
   async ({ db, user }, gameId: Id<'games'>): Promise<BackendGame> => {
     const game = await db.get(gameId);
     if (!game) throw Error('Game not found');

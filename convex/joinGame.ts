@@ -1,7 +1,9 @@
 import { Id } from './_generated/dataModel';
-import { mutationWithUser } from './lib/withUser';
+import { secureMutation } from './common';
+import { z } from 'zod';
 
-export default mutationWithUser(
+export default secureMutation(
+  [z.string()],
   async ({ db, user }, gameName: string): Promise<Id<'games'> | null> => {
     var gameName = gameName.toLocaleLowerCase().trim();
 

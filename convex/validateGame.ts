@@ -1,6 +1,8 @@
-import { queryWithUser } from './lib/withUser';
+import { z } from 'zod';
+import { secureQuery } from './common';
 
-export default queryWithUser(
+export default secureQuery(
+  [z.string()],
   async ({ db, user }, gameName: string): Promise<string | null> => {
     var gameName = gameName.toLocaleLowerCase().trim();
 

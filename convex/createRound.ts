@@ -1,21 +1,7 @@
 import { WORDS } from '../lib/game/constants';
-import { Document, Id } from './_generated/dataModel';
-import { mutationWithUser } from './lib/withUser';
+import { Id } from './_generated/dataModel';
 import { z } from 'zod';
-import withZodArgs from './lib/withZod';
-import { MutationCtx } from './_generated/server';
-
-export const secureMutation = <
-  Args extends [z.ZodTypeAny, ...z.ZodTypeAny[]] | [],
-  Returns extends z.ZodTypeAny
->(
-  zodArgs: Args,
-  func: (
-    ctx: MutationCtx & { user: Document<'users'> },
-    ...args: z.output<z.ZodTuple<Args>>
-  ) => z.input<z.ZodPromise<Returns>>,
-  zodReturn?: Returns
-) => mutationWithUser(withZodArgs(zodArgs, func, zodReturn));
+import { secureMutation } from './common';
 
 export default secureMutation(
   [

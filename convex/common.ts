@@ -1,5 +1,33 @@
-import { DatabaseWriter } from './_generated/server';
+import { DatabaseWriter, QueryCtx } from './_generated/server';
 import { Document } from './_generated/dataModel';
+import { mutationWithUser, queryWithUser } from './lib/withUser';
+import { z } from 'zod';
+import withZodArgs from './lib/withZod';
+import { MutationCtx } from './_generated/server';
+
+export const secureMutation = <
+  Args extends [z.ZodTypeAny, ...z.ZodTypeAny[]] | [],
+  Returns extends z.ZodTypeAny
+>(
+  zodArgs: Args,
+  func: (
+    ctx: MutationCtx & { user: Document<'users'> },
+    ...args: z.output<z.ZodTuple<Args>>
+  ) => z.input<z.ZodPromise<Returns>>,
+  zodReturn?: Returns
+) => mutationWithUser(withZodArgs(zodArgs, func, zodReturn));
+
+export const secureQuery = <
+  Args extends [z.ZodTypeAny, ...z.ZodTypeAny[]] | [],
+  Returns extends z.ZodTypeAny
+>(
+  zodArgs: Args,
+  func: (
+    ctx: QueryCtx & { user: Document<'users'> },
+    ...args: z.output<z.ZodTuple<Args>>
+  ) => z.input<z.ZodPromise<Returns>>,
+  zodReturn?: Returns
+) => queryWithUser(withZodArgs(zodArgs, func, zodReturn));
 
 const LETTERS = [
   'b',

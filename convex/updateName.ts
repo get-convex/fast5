@@ -1,6 +1,9 @@
-import { mutationWithUser } from './lib/withUser';
+import { z } from 'zod';
+import { secureMutation } from './common';
 
-export default mutationWithUser(async ({ db, user }, name: string) => {
-  user.displayName = name;
-  await db.patch(user._id, user);
-});
+export default secureMutation(
+  [z.string()],
+  async ({ db, user }, name: string) => {
+    await db.patch(user._id, { displayName: name });
+  }
+);

@@ -1,11 +1,13 @@
 import { DatabaseWriter } from './_generated/server';
 import { Id } from './_generated/dataModel';
 import { ALL_WORDS } from '../lib/game/constants';
-import { determineGameWinner, recordGameStats } from './common';
-import { mutationWithUser } from './lib/withUser';
+import { determineGameWinner, recordGameStats, secureMutation } from './common';
 import { computeRoundState } from './queryRound';
+import { zid } from './lib/withZod';
+import { z } from 'zod';
 
-export default mutationWithUser(
+export default secureMutation(
+  [zid('games'), z.string()],
   async ({ db, user }, gameId: Id<'games'>, word: string): Promise<boolean> => {
     const lword = word.toLocaleLowerCase().trim();
     console.log('guess is ' + lword);
