@@ -10,13 +10,13 @@
     "purge": "tsc --esModuleInterop --resolveJsonModule ./scripts/purge.ts && node ./scripts/purge.js"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^1.9.0",
+    "@auth0/auth0-react": "^2.0.1",
     "@headlessui/react": "^1.5.0",
     "@heroicons/react": "^1.0.6",
     "animate.css": "^4.1.1",
     "autoprefixer": "^10.4.2",
     "classnames": "^2.3.1",
-    "convex": "^0.7.0",
+    "convex": "^0.13.0",
     "esbuild": "^0.14.39",
     "md5": "^2.3.0",
     "next": "12.1.0",
