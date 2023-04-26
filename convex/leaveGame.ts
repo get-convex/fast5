@@ -6,7 +6,7 @@ import { withUser } from './lib/withUser';
 const LEAVE_PENALTY = 100;
 
 export default mutation({
-  args: { gameId: v.id('games'), word: v.string() },
+  args: { gameId: v.id('games') },
   handler: withUser(async ({ db, user }, { gameId }) => {
     const game = await db.get(gameId);
     if (!game) throw Error('Game not found');

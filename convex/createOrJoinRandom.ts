@@ -1,7 +1,7 @@
 import { mutation } from './_generated/server';
 import { TIMEOUT_THRESHOLD } from './common';
 import { createGameHelper } from './createGame';
-import { mutationWithUser, withUser } from './lib/withUser';
+import { mutationWithUser } from './lib/withUser';
 
 export default mutationWithUser(async ({ db, user }) => {
   const now = Math.floor(Date.now() / 1000);

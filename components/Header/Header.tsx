@@ -30,7 +30,7 @@ function Header() {
   const leaveGame = useMutation('leaveGame');
   const leaveAndGoHome = (e: Event) => {
     e.preventDefault();
-    leaveGame(new Id('games', gid!));
+    leaveGame({ gameId: new Id('games', gid!) });
     router.push('/');
   };
   const goHome = (e: Event) => {

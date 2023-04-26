@@ -41,10 +41,10 @@ function Keyboard({}: KeyboardProps) {
     if (key === 'ENTER') {
       const tryGuess = async () => {
         const tryWord = currentLettersValue.join('');
-        const validGuess = await guessWord(
-          new Id('games', gameIdValue!),
-          tryWord
-        );
+        const validGuess = await guessWord({
+          gameId: new Id('games', gameIdValue!),
+          word: tryWord,
+        });
         if (!validGuess) {
           addToast(setToasts, `Invalid word '${tryWord}'`, 'error', 5000);
           setSubmittedRow(-1);
@@ -66,7 +66,7 @@ function Keyboard({}: KeyboardProps) {
     if (key === 'SPACE') {
       const doSpy = async () => {
         if (gameIdValue !== null) {
-          await spy(new Id('games', gameIdValue));
+          await spy({ gameId: new Id('games', gameIdValue) });
         }
       };
       doSpy();
