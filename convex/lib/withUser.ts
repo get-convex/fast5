@@ -6,7 +6,9 @@ import { Doc } from '../_generated/dataModel';
  *
  * Throws an exception if there isn't a user logged in.
  * Pass this to `query`, `mutation`, or another wrapper. E.g.:
- * export default mutation(withUser(async ({ db, auth, user }, arg1) => {...}));
+ * export default mutation({
+ *   handler: withUser(async ({ db, auth, user }, {args}) => {...})
+ * });
  * @param func - Your function that can now take in a `user` in the first param.
  * @returns A function to be passed to `query` or `mutation`.
  */
