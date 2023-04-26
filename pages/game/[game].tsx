@@ -90,9 +90,9 @@ const Game: NextPage = () => {
     const params = router.query;
     if (isAuthenticated && Object.keys(params).length !== 0) {
       void (async () => {
-        const gamename: string = params['game'] as string;
-        setGameName(gamename);
-        const gid = await joinGame(gamename);
+        const gameName: string = params['game'] as string;
+        setGameName(gameName);
+        const gid = await joinGame({ gameName });
         dlog(`Got gid = ${gid}`);
         if (gid === null) {
           dlog('Failed to join game...');
@@ -125,8 +125,8 @@ const MatchContainer = (props: any) => {
   const gid = props.gid;
 
   // Backend updates.
-  const gameQuery = useQuery('queryGame', new Id('games', gid));
-  const roundQuery = useQuery('queryRound', new Id('games', gid));
+  const gameQuery = useQuery('queryGame', { gameId: new Id('games', gid) });
+  const roundQuery = useQuery('queryRound', { gameId: new Id('games', gid) });
 
   // Connect to recoil atoms. TODO -- replace with nicer recoil-sync stuff
   const [, setBackendGame] = useRecoilState(backendGameState);
@@ -234,7 +234,7 @@ const GameFlowDriver = () => {
 
   useTimeoutWhen(
     () => {
-      createRound(new Id('games', gid!), game!.round);
+      createRound({ gameId: new Id('games', gid!), next: game!.round });
     },
     ROUND_START_DELAY,
     needRound
@@ -242,7 +242,7 @@ const GameFlowDriver = () => {
 
   useIntervalWhen(
     () => {
-      pingGame(new Id('games', gid!));
+      pingGame({ gameId: new Id('games', gid!) });
     },
     PING_INTERVAL,
     true

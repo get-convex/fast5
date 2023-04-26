@@ -1,5 +1,6 @@
 import { Auth0Provider } from '@auth0/auth0-react';
 import { ConvexProvider, ConvexReactClient } from 'convex/react';
+import { ConvexProviderWithAuth0 } from 'convex/react-auth0';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { RecoilRoot } from 'recoil';
@@ -21,19 +22,22 @@ function MyApp({ Component, pageProps }: AppProps) {
         // domain and clientId come from your Auth0 app dashboard
         domain="fast5game.us.auth0.com"
         clientId="6KEk73Smc7EYgNTgHQCflY94ZoFx3Zz8"
-        redirectUri={
-          typeof window !== 'undefined' ? window.location.origin : ''
-        }
+        authorizationParams={{
+          redirect_uri:
+            typeof window !== 'undefined' ? window.location.origin : '',
+        }}
         // allows auth0 to cache the authentication state locally
         cacheLocation="localstorage"
       >
-        <ConvexProvider client={convex}>
-          <RecoilRoot>
-            <App>
-              <Component {...pageProps} />
-            </App>
-          </RecoilRoot>
-        </ConvexProvider>
+        <ConvexProviderWithAuth0 client={convex}>
+          <ConvexProvider client={convex}>
+            <RecoilRoot>
+              <App>
+                <Component {...pageProps} />
+              </App>
+            </RecoilRoot>
+          </ConvexProvider>
+        </ConvexProviderWithAuth0>
       </Auth0Provider>
     </>
   );

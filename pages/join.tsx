@@ -37,7 +37,7 @@ const Home: NextPage = () => {
     e.preventDefault();
     const validateAndGo = async () => {
       // TODO -- need better support for one-offs from react-convex land.
-      const watch = convex.watchQuery('validateGame', [game]);
+      const watch = convex.watchQuery('validateGame', { gameName: game });
       watch.onUpdate(() => {
         const err = watch.localQueryResult();
         if (typeof err === 'string') {

@@ -1,14 +1,13 @@
-import { DatabaseWriter } from './_generated/server';
-import { Id } from './_generated/dataModel';
+import { DatabaseWriter, mutation } from './_generated/server';
 import { ALL_WORDS } from '../lib/game/constants';
-import { determineGameWinner, recordGameStats, secureMutation } from './common';
+import { determineGameWinner, recordGameStats } from './common';
 import { computeRoundState } from './queryRound';
-import { zid } from './lib/withZod';
-import { z } from 'zod';
+import { v } from 'convex/values';
+import { withUser } from './lib/withUser';
 
-export default secureMutation(
-  [zid('games'), z.string()],
-  async ({ db, user }, gameId, word) => {
+export default mutation({
+  args: { gameId: v.id('games'), word: v.string() },
+  handler: withUser(async ({ db, user }, { gameId, word }) => {
     const lword = word.toLocaleLowerCase().trim();
     console.log('guess is ' + lword);
     const matchesWord = (w: any) => {
@@ -78,9 +77,8 @@ export default secureMutation(
 
     await db.replace(round._id, round);
     return true;
-  },
-  z.boolean()
-);
+  }),
+});
 
 async function checkForFinishedGame(db: DatabaseWriter, game: any) {
   // Check for end of game.

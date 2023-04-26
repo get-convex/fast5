@@ -1,16 +1,14 @@
 import { WORDS } from '../lib/game/constants';
-import { Id } from './_generated/dataModel';
-import { z } from 'zod';
-import { secureMutation } from './common';
+import { mutation } from './_generated/server';
+import { withUser } from './lib/withUser';
+import { v } from 'convex/values';
 
-export default secureMutation(
-  [
-    z.custom<Id<'games'>>(
-      (val) => val instanceof Id && val.tableName === 'games'
-    ),
-    z.number(),
-  ],
-  async ({ db, user }, gameId, next) => {
+export default mutation({
+  args: {
+    gameId: v.id('games'),
+    next: v.number(),
+  },
+  handler: withUser(async ({ db, user }, { gameId, next }): Promise<void> => {
     console.log({ gameId, next });
     var game = await db.get(gameId);
     if (!game) throw Error('Game not found');
@@ -55,5 +53,5 @@ export default secureMutation(
     game.rounds.push(id);
     game.currentRound = game.rounds.length - 1;
     await db.patch(game._id, game);
-  }
-);
+  }),
+});

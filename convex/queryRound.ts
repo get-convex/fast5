@@ -1,24 +1,28 @@
-import { Document, Id } from './_generated/dataModel';
-import { secureQuery } from './common';
-import { zid } from './lib/withZod';
+import { v } from 'convex/values';
+import { Doc } from './_generated/dataModel';
+import { withUser } from './lib/withUser';
+import { query } from './_generated/server';
 
-export default secureQuery([zid('games')], async ({ db, user }, gameId) => {
-  console.log('query round...');
-  const game = await db.get(gameId);
-  if (!game) throw Error('Game not found');
-  if (game.currentRound === -1) {
-    return null;
-  }
-  console.log('continuing...');
-  const roundId = game.rounds[game.currentRound];
-  const round = await db.get(roundId);
-  return computeRoundState(user, game, round!);
+export default query({
+  args: { gameId: v.id('games') },
+  handler: withUser(async ({ db, user }, { gameId }) => {
+    console.log('query round...');
+    const game = await db.get(gameId);
+    if (!game) throw Error('Game not found');
+    if (game.currentRound === -1) {
+      return null;
+    }
+    console.log('continuing...');
+    const roundId = game.rounds[game.currentRound];
+    const round = await db.get(roundId);
+    return computeRoundState(user, game, round!);
+  }),
 });
 
 export function computeRoundState(
-  user: Document<'users'>,
-  game: Document<'games'>,
-  round: Document<'rounds'>
+  user: Doc<'users'>,
+  game: Doc<'games'>,
+  round: Doc<'rounds'>
 ) {
   const over = typeof round.winner === 'number';
 

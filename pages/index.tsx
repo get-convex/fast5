@@ -1,14 +1,13 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
 import Splash from '../components/Splash/Splash';
 import StartGame from '../components/StartGame/StartGame';
-import { useConvex, useMutation } from '../convex/_generated/react';
+import { useMutation } from '../convex/_generated/react';
+import { useConvexAuth } from 'convex/react';
 
 const Home: NextPage = () => {
-  const convex = useConvex();
-  let { isAuthenticated, isLoading, getIdTokenClaims } = useAuth0();
+  let { isAuthenticated, isLoading } = useConvexAuth();
   const storeUser = useMutation('storeUser');
 
   useEffect(() => {
@@ -16,21 +15,9 @@ const Home: NextPage = () => {
       return;
     }
     if (isAuthenticated) {
-      getIdTokenClaims().then(async (claims) => {
-        // Get the raw ID token from the claims.
-        let token = claims!.__raw;
-        // Pass it to the Convex client.
-        convex.setAuth(token);
-        // Store the user in the database.
-        // Recall that `storeUser` gets the user information via the `auth`
-        // object on the server. You don't need to pass anything manually here.
-        let id = await storeUser();
-      });
-    } else {
-      // Tell the Convex client to clear all authentication state.
-      convex.clearAuth();
+      storeUser();
     }
-  }, [isAuthenticated, isLoading, getIdTokenClaims, convex, storeUser]);
+  }, [isAuthenticated, isLoading, storeUser]);
 
   return (
     <div>

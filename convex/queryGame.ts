@@ -1,10 +1,13 @@
-import { BackendGameZod } from '../lib/game/proto';
-import { secureQuery } from './common';
-import { zid } from './lib/withZod';
+import { v } from 'convex/values';
+import { BackendGame } from '../lib/game/proto';
+import { query } from './_generated/server';
+import { withUser } from './lib/withUser';
 
-export default secureQuery(
-  [zid('games')],
-  async ({ db, user }, gameId) => {
+export default query({
+  args: {
+    gameId: v.id('games'),
+  },
+  handler: withUser(async ({ db, user }, { gameId }): Promise<BackendGame> => {
     const game = await db.get(gameId);
     if (!game) throw Error('Game not found');
     const user1 = (await db.get(game.user1))!;
@@ -42,6 +45,5 @@ export default secureQuery(
       over: game.winner > 0,
     };
     return state;
-  },
-  BackendGameZod
-);
+  }),
+});

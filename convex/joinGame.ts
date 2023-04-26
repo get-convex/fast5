@@ -1,11 +1,10 @@
-import { Id } from './_generated/dataModel';
-import { secureMutation } from './common';
-import { z } from 'zod';
-import { zid } from './lib/withZod';
+import { v } from 'convex/values';
+import { withUser } from './lib/withUser';
+import { mutation } from './_generated/server';
 
-export default secureMutation(
-  [z.string()],
-  async ({ db, user }, gameName) => {
+export default mutation({
+  args: { gameName: v.string() },
+  handler: withUser(async ({ db, user }, { gameName }) => {
     var gameName = gameName.toLocaleLowerCase().trim();
 
     var existing = await db
@@ -31,6 +30,5 @@ export default secureMutation(
     // We joined the game!
     console.log(`id is ${id}`);
     return id;
-  },
-  z.nullable(zid('games'))
-);
+  }),
+});

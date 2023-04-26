@@ -1,33 +1,5 @@
 import { DatabaseWriter, QueryCtx } from './_generated/server';
-import { Document } from './_generated/dataModel';
-import { mutationWithUser, queryWithUser } from './lib/withUser';
-import { z } from 'zod';
-import withZodArgs from './lib/withZod';
-import { MutationCtx } from './_generated/server';
-
-export const secureMutation = <
-  Args extends [z.ZodTypeAny, ...z.ZodTypeAny[]] | [],
-  Returns extends z.ZodTypeAny
->(
-  zodArgs: Args,
-  func: (
-    ctx: MutationCtx & { user: Document<'users'> },
-    ...args: z.output<z.ZodTuple<Args>>
-  ) => z.input<z.ZodPromise<Returns>>,
-  zodReturn?: Returns
-) => mutationWithUser(withZodArgs(zodArgs, func, zodReturn));
-
-export const secureQuery = <
-  Args extends [z.ZodTypeAny, ...z.ZodTypeAny[]] | [],
-  Returns extends z.ZodTypeAny
->(
-  zodArgs: Args,
-  func: (
-    ctx: QueryCtx & { user: Document<'users'> },
-    ...args: z.output<z.ZodTuple<Args>>
-  ) => z.input<z.ZodPromise<Returns>>,
-  zodReturn?: Returns
-) => queryWithUser(withZodArgs(zodArgs, func, zodReturn));
+import { Doc } from './_generated/dataModel';
 
 const LETTERS = [
   'b',
@@ -81,10 +53,7 @@ export function determineGameWinner(game: any) {
   }
 }
 
-export async function recordGameStats(
-  db: DatabaseWriter,
-  game: Document<'games'>
-) {
+export async function recordGameStats(db: DatabaseWriter, game: Doc<'games'>) {
   if (!game.ready) {
     // Game was never started. No winning.
     return;
@@ -112,7 +81,7 @@ export async function recordGameStats(
 
 export function defaultGame(
   gameName: string,
-  creator: Document<'users'>,
+  creator: Doc<'users'>,
   pub: boolean
 ): any {
   const game = {

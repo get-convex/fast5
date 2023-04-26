@@ -18,7 +18,6 @@ import type * as guessWord from "../guessWord";
 import type * as joinGame from "../joinGame";
 import type * as leaveGame from "../leaveGame";
 import type * as lib_withUser from "../lib/withUser";
-import type * as lib_withZod from "../lib/withZod";
 import type * as ping from "../ping";
 import type * as purgeAbandoned from "../purgeAbandoned";
 import type * as queryGame from "../queryGame";
@@ -46,7 +45,6 @@ export type API = ApiFromModules<{
   joinGame: typeof joinGame;
   leaveGame: typeof leaveGame;
   "lib/withUser": typeof lib_withUser;
-  "lib/withZod": typeof lib_withZod;
   ping: typeof ping;
   purgeAbandoned: typeof purgeAbandoned;
   queryGame: typeof queryGame;
