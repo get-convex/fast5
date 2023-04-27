@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { withUser } from './lib/withUser';
