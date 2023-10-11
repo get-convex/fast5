@@ -10,9 +10,9 @@ export default mutation({
 
     const now = Math.floor(Date.now() / 1000);
 
-    if (game.user1.equals(user._id)) {
+    if (game.user1 === user._id) {
       game.user1Ping = now;
-    } else if (game.user2 !== undefined && game.user2?.equals(user._id)) {
+    } else if (game.user2 !== undefined && game.user2 === user._id) {
       game.user2Ping = now;
     }
     await db.patch(game._id, game);

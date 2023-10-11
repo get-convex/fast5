@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import Button from '../components/Button/Button';
 import Divider from '../components/Divider/Divider';
 import Modal from '../components/Modal/Modal';
-import { useConvex } from '../convex/_generated/react';
+import { useConvex } from 'convex/react';
+import { api } from '../convex/_generated/api';
 import styles from './join.module.scss';
 
 const Home: NextPage = () => {
@@ -36,16 +37,12 @@ const Home: NextPage = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const validateAndGo = async () => {
-      // TODO -- need better support for one-offs from react-convex land.
-      const watch = convex.watchQuery('validateGame', { gameName: game });
-      watch.onUpdate(() => {
-        const err = watch.localQueryResult();
-        if (typeof err === 'string') {
-          setError(`Error joining game: ${err}`);
-        } else {
-          router.push(`game/${game.toLocaleLowerCase().trim()}`);
-        }
-      });
+      const err = await convex.query(api.validateGame.default, { gameName: game });
+      if (typeof err === 'string') {
+        setError(`Error joining game: ${err}`);
+      } else {
+        router.push(`game/${game.toLocaleLowerCase().trim()}`);
+      }
     };
     validateAndGo();
   };

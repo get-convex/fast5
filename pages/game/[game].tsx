@@ -12,7 +12,7 @@ import {
   useConvex,
   useMutation,
   useQuery,
-} from '../../convex/_generated/react';
+} from 'convex/react';
 import { addToast } from '../../lib/game/flow';
 import { ALL_KEYS, handleGameInput } from '../../lib/game/input';
 import { BackendGame, BackendRound } from '../../lib/game/proto';
@@ -31,10 +31,11 @@ import {
   userMe,
 } from '../../lib/game/state';
 import { dlog } from '../../lib/game/util';
+import { api } from '../../convex/_generated/api';
 
 const Game: NextPage = () => {
   const router = useRouter();
-  const joinGame = useMutation('joinGame');
+  const joinGame = useMutation(api.joinGame.default);
   const convex = useConvex();
   const [gid, setGid] = useRecoilState(gameId);
   const [_, setGameName] = useRecoilState(gameName);
@@ -125,8 +126,8 @@ const MatchContainer = (props: any) => {
   const gid = props.gid;
 
   // Backend updates.
-  const gameQuery = useQuery('queryGame', { gameId: new Id('games', gid) });
-  const roundQuery = useQuery('queryRound', { gameId: new Id('games', gid) });
+  const gameQuery = useQuery(api.queryGame.default, { gameId: gid as Id<"games"> });
+  const roundQuery = useQuery(api.queryRound.default, { gameId: gid as Id<"games"> });
 
   // Connect to recoil atoms. TODO -- replace with nicer recoil-sync stuff
   const [, setBackendGame] = useRecoilState(backendGameState);
@@ -177,8 +178,8 @@ const GameFlowDriver = () => {
   const [, setToasts] = useRecoilState(toasts);
 
   // Convex mutations
-  const createRound = useMutation('createRound');
-  const pingGame = useMutation('ping');
+  const createRound = useMutation(api.createRound.default);
+  const pingGame = useMutation(api.ping.default);
 
   // Check for winner to notify via toast.
   useEffect(() => {
@@ -234,7 +235,7 @@ const GameFlowDriver = () => {
 
   useTimeoutWhen(
     () => {
-      createRound({ gameId: new Id('games', gid!), next: game!.round });
+      createRound({ gameId: gid! as Id<"games">, next: game!.round });
     },
     ROUND_START_DELAY,
     needRound
@@ -242,7 +243,7 @@ const GameFlowDriver = () => {
 
   useIntervalWhen(
     () => {
-      pingGame({ gameId: new Id('games', gid!) });
+      pingGame({ gameId: gid! as Id<"games"> });
     },
     PING_INTERVAL,
     true
@@ -261,8 +262,8 @@ const InputHandler = () => {
   const [, setToasts] = useRecoilState(toasts);
 
   // Methods we might invoke in response to input.
-  const guessWord = useMutation('guessWord');
-  const spy = useMutation('spy');
+  const guessWord = useMutation(api.guessWord.default);
+  const spy = useMutation(api.spy.default);
 
   useKey(
     ALL_KEYS,

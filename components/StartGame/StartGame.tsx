@@ -1,16 +1,17 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useRouter } from 'next/router';
-import { useMutation } from '../../convex/_generated/react';
+import { useMutation } from 'convex/react';
 import Button from '../Button/Button';
 import Instructions from '../Instructions/Instructions';
 import Modal from '../Modal/Modal';
 import Spinner from '../Spinner/Spinner';
 import styles from './StartGame.module.scss';
+import { api } from '../../convex/_generated/api';
 
 function StartGame() {
   const router = useRouter();
-  const createGame = useMutation('createGame');
-  const createOrJoinRandom = useMutation('createOrJoinRandom');
+  const createGame = useMutation(api.createGame.default);
+  const createOrJoinRandom = useMutation(api.createOrJoinRandom.default);
   let { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
   const handleCreateGame = (e: any) => {

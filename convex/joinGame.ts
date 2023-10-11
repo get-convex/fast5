@@ -15,7 +15,7 @@ export default mutation({
     if (existing === null) {
       return null; // This is not the place to create games.
     }
-    if (user._id.equals(existing.user1) || user._id.equals(existing.user2)) {
+    if (user._id === existing.user1 || user._id === existing.user2) {
       return existing._id; // They're already in.
     }
     if (existing.user2 !== undefined) {

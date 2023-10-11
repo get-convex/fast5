@@ -10,7 +10,7 @@ function LoginLogout() {
 
   if (isAuthenticated) {
     return (
-      <Button onClick={() => logout({ returnTo: window.location.origin })}>
+      <Button onClick={() => logout()}>
         Log out
       </Button>
     );

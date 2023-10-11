@@ -12,7 +12,7 @@ export default mutation({
     console.log({ gameId, next });
     var game = await db.get(gameId);
     if (!game) throw Error('Game not found');
-    if (!user._id.equals(game.user1) && !user._id.equals(game.user2)) {
+    if (user._id !== game.user1 && user._id !== game.user2) {
       throw Error("User trying to start someone else's round");
     }
     if (!game.ready) {

@@ -21,8 +21,8 @@ export default query({
 
       // Already in the game, or game is available to join.
       if (
-        user._id.equals(game.user1) ||
-        user._id.equals(game.user2) ||
+        user._id === game.user1 ||
+        user._id === game.user2 ||
         !game.user2
       ) {
         return null;

@@ -1,5 +1,5 @@
 import { ReactMutation } from 'convex/react';
-import { API } from '../../convex/_generated/api';
+import { api } from '../../convex/_generated/api';
 import { Id } from '../../convex/_generated/dataModel';
 import { addToast } from './flow';
 
@@ -62,8 +62,8 @@ export const ALL_KEYS = [
 ];
 
 export function handleGameInput(
-  guessWord: ReactMutation<API, 'guessWord'>,
-  spy: ReactMutation<API, 'spy'>,
+  guessWord: ReactMutation<typeof api.guessWord.default>,
+  spy: ReactMutation<typeof api.spy.default>,
   gid: any,
   canEdit: any,
   currentLetters: any,
@@ -102,7 +102,7 @@ export function handleGameInput(
         const tryGuess = async () => {
           let tryWord = letters.join('');
           let validGuess = await guessWord({
-            gameId: new Id('games', gid!),
+            gameId: gid! as Id<"games">,
             word: tryWord,
           });
           if (!validGuess) {
@@ -117,7 +117,7 @@ export function handleGameInput(
       event.preventDefault();
       const doSpy = async () => {
         if (gid !== null) {
-          await spy({ gameId: new Id('games', gid) });
+          await spy({ gameId: gid as Id<"games"> });
         }
       };
       if (canEdit) {

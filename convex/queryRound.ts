@@ -30,7 +30,7 @@ export function computeRoundState(
     round,
     round.user1,
     round.user2.spying,
-    user._id.equals(game.user1),
+    user._id === game.user1,
     over
   );
   penalizeScores(round.user1.spying, scores);
@@ -41,7 +41,7 @@ export function computeRoundState(
     round,
     round.user2,
     round.user1.spying,
-    user._id.equals(game.user2),
+    user._id === game.user2,
     over
   );
   penalizeScores(round.user2.spying, scores);

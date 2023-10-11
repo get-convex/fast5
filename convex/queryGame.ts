@@ -21,7 +21,7 @@ export default query({
         displayName: user1.displayName,
         photoUrl: user1.photoUrl,
         score: game.score1,
-        isYou: user._id.equals(game.user1),
+        isYou: user._id === game.user1,
         stats: {
           wins: user1?.wins ?? 0,
           losses: user1?.losses ?? 0,
@@ -32,7 +32,7 @@ export default query({
         displayName: user2 === null ? '' : user2.displayName,
         photoUrl: user2 === null ? '' : user2.photoUrl,
         score: game.score2,
-        isYou: user._id.equals(game.user2),
+        isYou: user._id === game.user2,
         stats: {
           wins: user2?.wins ?? 0,
           losses: user2?.losses ?? 0,

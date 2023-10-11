@@ -1,4 +1,4 @@
-import { defineSchema, defineTable } from 'convex/schema';
+import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 
 export default defineSchema({
@@ -13,8 +13,8 @@ export default defineSchema({
     score2: v.number(),
     user1: v.id('users'),
     user1Ping: v.number(),
-    user2: v.union(v.id('users'), v.null()),
-    user2Ping: v.union(v.number(), v.null()),
+    user2: v.optional(v.union(v.id('users'), v.null())),
+    user2Ping: v.optional(v.union(v.number(), v.null())),
     winner: v.number(),
   }),
   rounds: defineTable({

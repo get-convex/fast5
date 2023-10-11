@@ -17,9 +17,9 @@ export default mutation({
     }
 
     // Which user is this?
-    if (user._id.equals(game.user1)) {
+    if (user._id === game.user1) {
       var userRound = round.user1;
-    } else if (user._id.equals(game.user2)) {
+    } else if (user._id === game.user2) {
       var userRound = round.user2;
     } else {
       throw Error("Trying to spy on someone else's game?");

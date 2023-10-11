@@ -16,9 +16,9 @@ export default mutation({
     }
     if (game.ready) {
       // Penalize the user for leaving the game if it's in progress.
-      if (user._id.equals(game.user1)) {
+      if (user._id === game.user1) {
         game.score2 += LEAVE_PENALTY;
-      } else if (user._id.equals(game.user2)) {
+      } else if (user._id === game.user2) {
         game.score1 += LEAVE_PENALTY;
       } else {
         throw 'user is not a member of game, cannot leave game';

@@ -31,7 +31,7 @@ export default mutation({
     }
 
     // Which user is this?
-    if (user._id.equals(game.user1)) {
+    if (user._id === game.user1) {
       var incScore = () => {
         // Get the computed round information.
         game.score1 += computedRound?.user1.scores.reduce((a, n) => a + n, 0);
@@ -42,7 +42,7 @@ export default mutation({
       var userRound = round.user1;
       var userId = 1;
       var otherId = 2;
-    } else if (user._id.equals(game.user2)) {
+    } else if (user._id === game.user2) {
       var incScore = () => {
         game.score2 += computedRound?.user2.scores.reduce((a, n) => a + n, 0);
       };

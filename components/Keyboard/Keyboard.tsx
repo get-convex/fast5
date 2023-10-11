@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { Id } from '../../convex/_generated/dataModel';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { useMutation } from '../../convex/_generated/react';
+import { useMutation } from 'convex/react';
 import { addToast } from '../../lib/game/flow';
 import {
   canEdit,
@@ -12,6 +12,7 @@ import {
   toasts,
 } from '../../lib/game/state';
 import styles from './Keyboard.module.scss';
+import { api } from '../../convex/_generated/api';
 
 type KeyboardProps = {};
 
@@ -30,8 +31,8 @@ function Keyboard({}: KeyboardProps) {
     useRecoilState(currentLetters);
   const [, setSubmittedRow] = useRecoilState(submittedRow);
   const [, setToasts] = useRecoilState(toasts);
-  const guessWord = useMutation('guessWord');
-  const spy = useMutation('spy');
+  const guessWord = useMutation(api.guessWord.default);
+  const spy = useMutation(api.spy.default);
 
   const handleKeyPress = (key: string) => {
     if (!canEditValue) {
@@ -42,7 +43,7 @@ function Keyboard({}: KeyboardProps) {
       const tryGuess = async () => {
         const tryWord = currentLettersValue.join('');
         const validGuess = await guessWord({
-          gameId: new Id('games', gameIdValue!),
+          gameId: gameIdValue! as Id<"games">,
           word: tryWord,
         });
         if (!validGuess) {
@@ -66,7 +67,7 @@ function Keyboard({}: KeyboardProps) {
     if (key === 'SPACE') {
       const doSpy = async () => {
         if (gameIdValue !== null) {
-          await spy({ gameId: new Id('games', gameIdValue) });
+          await spy({ gameId: gameIdValue as Id<"games"> });
         }
       };
       doSpy();

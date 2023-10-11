@@ -1,9 +1,7 @@
-import { Id } from '../../convex/_generated/dataModel';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { useMutation, useQuery } from '../../convex/_generated/react';
 import {
   gameId,
   gameOver,
@@ -18,6 +16,9 @@ import LoginLogout from '../LoginLogout/LoginLogout';
 import Modal from '../Modal/Modal';
 import PlayerBar from '../PlayerBar/PlayerBar';
 import styles from './Header.module.scss';
+import { useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import { Id } from '../../convex/_generated/dataModel';
 
 function Header() {
   const game = useRecoilValue(gameState);
@@ -27,10 +28,10 @@ function Header() {
   const gover = useRecoilValue(gameOver);
   const router = useRouter();
   const [instructionsOpen, setInstructionsOpen] = useState(false);
-  const leaveGame = useMutation('leaveGame');
+  const leaveGame = useMutation(api.leaveGame.default);
   const leaveAndGoHome = (e: Event) => {
     e.preventDefault();
-    leaveGame({ gameId: new Id('games', gid!) });
+    leaveGame({ gameId: gid! as Id<"games"> });
     router.push('/');
   };
   const goHome = (e: Event) => {

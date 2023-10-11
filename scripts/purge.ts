@@ -1,10 +1,10 @@
 import { ConvexHttpClient } from 'convex/browser';
-import clientConfig from "../convex/_generated/clientConfig";
+import { api } from '../convex/_generated/api';
 
-const convex = new ConvexHttpClient(clientConfig);
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 async function go() {
-  await convex.mutation('purgeAbandoned')();
+  await convex.mutation(api.purgeAbandoned.default);
 }
 
 go();
